@@ -218,7 +218,7 @@ namespace bdUnit.Core
 
         #region TextTemplates
 
-        public readonly string TestFixtureText = "#region Using Statements\nusing MbUnit.Core.Framework;\nusing MbUnit.Framework;\n#endregion\n\nnamespace <<ProjectName>>.bdUnit.Interfaces \n{##interfaces##\n}\n\nnamespace <<Namespace>>.Tests \n{\n\t[TestFixture]\n\t[FixtureCategory(\"BDD Tests\")]\n\tpublic class ##fixturename##\n\t{\n##tests##\t}\n}";
+        public readonly string TestFixtureText = "#region Using Statements\nusing MbUnit.Core.Framework;\nusing MbUnit.Framework;\n#endregion\n\nnamespace bdUnit.Interfaces \n{##interfaces##\n}\n\nnamespace bdUnit.Tests \n{\n\t[TestFixture]\n\t[FixtureCategory(\"BDD Tests\")]\n\tpublic class ##fixturename##\n\t{\n##tests##\t}\n}";
 
         public readonly string TestText = "\t\t[Test]\n\t\tpublic void ##testname##()";
 

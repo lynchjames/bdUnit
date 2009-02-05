@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using bdUnit.Core;
 using Core.Enum;
 using ScintillaNet;
@@ -26,49 +29,56 @@ namespace Preview
 
         private void Window1_Loaded(object sender, RoutedEventArgs e)
         {
+            CurrentFramework = UnitTestFrameworkEnum.NUnit;
             LoadEditor();
-            Editor.KeyDown += Editor_KeyDown;
+            InputEditor.KeyDown += Editor_KeyDown;
             Paste.Click += Paste_Click;
             XUnitPreview.Click += XUnitPreview_Click;
             NUnitPreview.Click += NUnitPreview_Click;
             MbUnitPreview.Click += MbUnitPreview_Click;
-            Editor.Document.TextAlignment = TextAlignment.Justify;
+            var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            var defaultText = File.ReadAllText("../../../Core//Inputs/LogansRun.input");
+            var msOut = new MemoryStream();
+            var sw = new StreamWriter(msOut);
+            sw.Write(defaultText);
+            range.Load(msOut, DataFormats.Text);
+            InputEditor.Document.TextAlignment = TextAlignment.Justify;
         }
 
         private void MbUnitPreview_Click(object sender, RoutedEventArgs e)
         {
             CurrentFramework = UnitTestFrameworkEnum.MbUnit;
             UpdatePreview(CurrentFramework);
-            Title = "BDUnit Preview - " + UnitTestFrameworkEnum.MbUnit;
+            Title = "bdUnit Preview - " + UnitTestFrameworkEnum.MbUnit;
         }
 
         private void NUnitPreview_Click(object sender, RoutedEventArgs e)
         {
             CurrentFramework = UnitTestFrameworkEnum.NUnit;
             UpdatePreview(CurrentFramework);
-            Title = "BDUnit Preview - " + UnitTestFrameworkEnum.NUnit;
+            Title = "bdUnit Preview - " + UnitTestFrameworkEnum.NUnit;
         }
 
         private void XUnitPreview_Click(object sender, RoutedEventArgs e)
         {
             CurrentFramework = UnitTestFrameworkEnum.XUnit;
             UpdatePreview(CurrentFramework);
-            Title = "BDUnit Preview - " + UnitTestFrameworkEnum.XUnit;
+            Title = "bdUnit Preview - " + UnitTestFrameworkEnum.XUnit;
         }
 
         private void Paste_Click(object sender, RoutedEventArgs e)
         {
-            Editor.Paste();
+            InputEditor.Paste();
         }
 
         private void LoadEditor()
         {
-            //Editor.Document.Foreground = new SolidColorBrush(Colors.White);
-            //Editor.Background = new SolidColorBrush(Colors.Black);
-            var editor = new Scintilla {Name = "sciEditor", AcceptsReturn = true, AcceptsTab = true};
-            editor.Encoding = Encoding.UTF8;
-            editor.ConfigurationManager.Language = "cs";
-            editor.LineWrap.Mode = WrapMode.None;
+            //InputEditor.Document.Foreground = new SolidColorBrush(Colors.White);
+            //InputEditor.Background = new SolidColorBrush(Colors.Black);
+            var sciEditor = new Scintilla {Name = "sciEditor", AcceptsReturn = true, AcceptsTab = true};
+            sciEditor.Encoding = Encoding.UTF8;
+            sciEditor.ConfigurationManager.Language = "cs";
+            sciEditor.LineWrap.Mode = WrapMode.None;
             
             //editor.Styles[editor.Lexing.StyleNameMap["OPERATOR"]].ForeColor = Color.Brown;
             //editor.Styles[editor.Lexing.StyleNameMap["GLOBALCLASS"]].ForeColor = Color.Yellow;
@@ -77,7 +87,7 @@ namespace Preview
             //editor.ForeColor = Color.Black;
             //editor.Caret.Color = Color.White;
 
-            var host = new WindowsFormsHost {Child = editor};
+            var host = new WindowsFormsHost {Child = sciEditor};
             Preview.Content = host;
         }
 
@@ -99,7 +109,7 @@ namespace Preview
         private void UpdatePreview(UnitTestFrameworkEnum framework)
         {
             var paths = new Dictionary<string, string> {{"grammar", "../../../Core//Grammar/TestWrapper.mg"}};
-            var textRange = new TextRange(Editor.Document.ContentStart, Editor.Document.ContentEnd);
+            var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
             if (!textRange.IsEmpty)
             {
                 var parser = new Parser(textRange.Text, paths);
