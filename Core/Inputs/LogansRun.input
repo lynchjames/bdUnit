@@ -1,0 +1,30 @@
+begin story "LogansRun_Marriage":
+    begin setup 
+    @User
+        To have a ~Spouse and a ~IsARunner(true) and an ~Age(10) and an ~IsDead(false) and several ~Children.
+        I want a @User to be able to #Kill another @User.
+        I want a @User to be able to #Marry another @User.
+        I want a @User to be able to #Visit a @SleepShop.
+        I want to be able to #Total all @User.
+        I want to be able to #Total @User ~Age. 
+    @SleepShop
+        To have a ~Location and an ~IsOpen(true).
+        I want to be able to #Locate @SleepShop ~Location.
+    end setup
+    When a @User(Peter) #Marry another @User(Eve), each @User should have ~Spouse as the other @User and should have ~IsARunner as (false) and should have ~Age less than (30).
+    When a @User(a) #Kill another @User(b), @User(b) should have ~IsDead as (true) and @User(a) should have ~IsDead as (false).
+    When a @User(John) #Visit another @SleepShop(CentralSleepShop), each @User should have ~IsDead as (true).
+/*Each @User ~username should be unique.
+When I #Total all @User's, the result should be all @User's ~age.
+if a @User and another @User #Marry, they should have the same ~lastname.*/
+end story
+
+/*begin story "THE_RETURN":
+    begin setup @User
+        To have a ~Spouse and a ~IsARunner and an ~Age and an ~IsDead(false).
+        I want a @User to be able to #Kill another @User.
+        I want to be able to #Total all @User.
+    end setup
+    When a @User(a) #Kill another @User(b), each @User should have ~IsDead equal to (true).
+end story
+*/

@@ -1,0 +1,66 @@
+﻿<act:Exports xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
+             xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
+             xmlns:act='clr-namespace:System.ComponentModel.Activation;assembly=Activation'
+             xmlns:mvstc='clr-namespace:Microsoft.VisualStudio.Text.Classification;assembly=Microsoft.VisualStudio.Platform.Editor'
+             xmlns:ls='clr-namespace:Microsoft.Intellipad.LanguageServices;assembly=Microsoft.Intellipad.Core'>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Keyword' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Identifier' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Whitespace' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Comment' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Operator' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='TestOperator' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Connective' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Type' DerivesFrom='text' />
+  </act:Export>
+ <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Method' DerivesFrom='text' />
+  </act:Export>
+ <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Property' DerivesFrom='text' />
+  </act:Export>
+ <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Value' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Delimiter' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Literal' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='String' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Character' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Number' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Unknown' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='Hyperlink' DerivesFrom='text' />
+  </act:Export>
+  <act:Export Type='mvstc:ClassificationTypeDefinition'>
+    <ls:ClassificationType Name='line number' DerivesFrom='text' />
+  </act:Export>
+</act:Exports>

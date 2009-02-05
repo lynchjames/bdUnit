@@ -1,0 +1,95 @@
+﻿<act:Exports
+      xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
+      xmlns:scg='clr-namespace:System.Collections.Generic;assembly=mscorlib'
+      xmlns:s='clr-namespace:System;assembly=mscorlib'
+      xmlns:xl='clr-namespace:System.Xml.Linq;assembly=System.Xml.Linq'
+      xmlns:act='clr-namespace:System.ComponentModel.Activation;assembly=Activation'
+      xmlns:mi='Microsoft.Intellipad'
+      xmlns:mm='Microsoft.M'
+      >
+    <act:Export Name='{}{Microsoft.Intellipad}KeyboardBindings' xmlns:mg='Microsoft.G'>
+        <scg:Dictionary x:TypeArguments='xl:XName,s:String'>
+            <s:String x:Key='mi:HelpCommands'>Ctrl+H,B | Alt+F1</s:String>
+            <s:String x:Key='mi:SplitVertically'>Ctrl+X,2</s:String>
+            <s:String x:Key='mi:SplitHorizontally'>Ctrl+X,3</s:String>
+            <s:String x:Key='mi:TransposeLine'>Ctrl+X,Ctrl+T</s:String>
+            <s:String x:Key='mi:CloseBuffer'>Ctrl+X,K</s:String>
+            <s:String x:Key='mi:Save'>Ctrl+X,Ctrl+S | Ctrl+S</s:String>
+            <s:String x:Key='mi:MoveToEndOfLine'>Ctrl+E | Shift+End | End</s:String>
+            <s:String x:Key='mi:MoveToPreviousWord'>Escape,B | Ctrl+Shift+Left</s:String>
+            <s:String x:Key='mi:MoveToNextWord'>Escape,F | Ctrl+Shift+Right</s:String>
+            <s:String x:Key='mi:MoveLineDown'>Ctrl+N | Down</s:String>
+            <s:String x:Key='mi:MakeUppercase'>Ctrl+X,Ctrl+U</s:String>
+            <s:String x:Key='mi:Delete'>Ctrl+D | Delete</s:String>
+            <s:String x:Key='mi:CutSelection'>Shift+Delete</s:String>
+            <s:String x:Key='mi:CopySelection'>Ctrl+Insert</s:String>
+            <s:String x:Key='mi:Paste'>Shift+Insert</s:String>
+            <s:String x:Key='mi:ResetSelection'>Escape,Escape</s:String>
+            <s:String x:Key='mi:Replace'>Escape,Shift+5</s:String>
+            <s:String x:Key='mm:ReformatDocument'>Alt+G</s:String>
+
+          <!--
+            <s:String x:Key='mi:Unindent'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:Undo'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:TransposeCharacter'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:ToggleOverwriteMode'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:ToggleLineNumber'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:ToggleBehavior'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:ShrinkBufferViewVertical'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:ShrinkBufferViewHorizontal'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SetStandardMode'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectToStartOfLine'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectToStartOfDocument'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectToPreviousWord'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectToPreviousCharacter'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectToNextWord'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectToNextCharacter'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectToEndOfLine'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectToEndOfDocument'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectPreviousSiblingExtendSelection'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectPreviousSibling'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectPageUp'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectPageDown'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectNextSiblingExtendSelection'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectNextSibling'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectLineUp'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectLineDown'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectFirstChild'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectEnclosing'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectCurrentWord'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SelectAll'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:ScrollUpAndMoveCaretIfNecessary'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:ScrollDownAndMoveCaretIfNecessary'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:SaveAs'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:RouteMiniBuffer'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:Redo'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:PageUp'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:PageDown'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:OpenProject'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:MoveToStartOfLine'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:MoveToStartOfDocument'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:MoveToPreviousCharacter'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:MoveToNextCharacter'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:MoveToEndOfDocument'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:MoveLineUp'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:MoveCurrentLineToTop'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:MoveCurrentLineToBottom'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:MakeLowercase'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:InsertNewline'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:InsertNewline'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:Indent'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:FocusBufferViewUp'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:FocusBufferViewRight'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:FocusBufferViewLeft'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:FocusBufferViewDown'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:ExpandBufferViewVertical'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:ExpandBufferViewHorizontal'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:DeleteWordToRight'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:DeleteWordToLeft'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:CreateVerticalSplit'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:CreateHorizontalSplit'>Ctrl+X,1</s:String>
+            <s:String x:Key='mi:Backspace'>Ctrl+X,1</s:String>
+-->            
+        </scg:Dictionary>
+    </act:Export>
+</act:Exports>
