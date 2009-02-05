@@ -5,6 +5,8 @@
         OneToOne,
         OneToMany,
         ManyToOne,
-        ManyToMany
+        ManyToMany,
+        Reciprocal,
+        None
     }
 }

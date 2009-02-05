@@ -69,9 +69,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AST\DefaultValue.cs" />
+    <Compile Include="AST\Instance.cs" />
     <Compile Include="AST\Operator.cs" />
     <Compile Include="AST\Type.cs" />
     <Compile Include="AST\Object.cs" />
+    <Compile Include="Code Generation\CodeGeneratorBase.cs" />
     <Compile Include="Code Generation\ICodeGenerator.cs" />
     <Compile Include="Code Generation\MbUnitCodeGenerator.cs" />
     <Compile Include="Code Generation\XUnitCodeGenerator.cs" />
@@ -83,6 +86,7 @@
     <Compile Include="Enum\AccessEnum.cs" />
     <Compile Include="Enum\UnitTestFrameworkEnum.cs" />
     <Compile Include="ExampleUnitTests\Test_LogansRun.cs" />
+    <Compile Include="Utility\CodeUtility.cs" />
     <Compile Include="Utility\ReflectionExtensionMethods.cs" />
     <Compile Include="AST\Constraint.cs" />
     <Compile Include="AST\CreateMethod.cs" />

@@ -54,6 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="anrControls.Markdown.NET, Version=1.0.1.0, Culture=neutral, PublicKeyToken=0b3305902db7183f" />
     <Reference Include="ScintillaNet, Version=2.0.3138.25704, Culture=neutral, PublicKeyToken=948d6c9751444115, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\Scintilla\ScintillaNet.dll</HintPath>
@@ -71,7 +72,6 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

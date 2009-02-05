@@ -4,6 +4,7 @@
     {
         Inheritance,
         Composition,
-        Subsumption
+        Subsumption,
+        None
     }
 }

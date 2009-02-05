@@ -78,11 +78,11 @@ module Test
         = TConstraint p:TestLanguage.Property Connectives.TOther o:TestLanguage.Object
         => Constraint{Objects[o],Property[p]}
         | TConstraint p:TestLanguage.Property x:TestLanguage.Operators Connectives.TOther o:TestLanguage.Object
-        => Constraint{Property{Name{p},o,x,Relation{"OneToOne"}}}
+        => Constraint{Property{Name{p},o,x,Relation{"Reciprocal"}}}
         | TConstraint p:TestLanguage.Property x:TestLanguage.Operators v:TestLanguage.Value
-        => Constraint{Property{Name{p},Value{v},x}}
+        => Constraint{Property{Name{p},v,x}}
         | o:TestLanguage.Object TConstraint p:TestLanguage.Property x:TestLanguage.Operators v:TestLanguage.Value 
-        => Constraint{Property{Name{p},Value{v},o,x}};
+        => Constraint{Property{Name{p},v,o,x}};
         //| TConstraint TAll o:Object "'s" p:Property
         //=> [Property{p}]);
         
@@ -121,8 +121,8 @@ module Test
         | (' ')* TProperty item:Property v:Value => ProperyList[Property{Name{item}, DefaultValue{v}}]
         | list:PropertyList Connectives.TAnd? item:Property v:Value (".")? => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}}]
          | list:PropertyList Connectives.TAnd Connectives.TMany item:Property (".")? => PropertyList[valuesof(list), Property{Name{item}}]
-        | (' ')* TProperty Connectives.TAnd? Connectives.TMany item:Property v:Value => ProperyList[Property{Name{item}, DefaultValue{v}}]
-        | list:PropertyList Connectives.TAnd? Connectives.TMany item:Property v:Value (".")? => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}}];
+        | (' ')* TProperty Connectives.TAnd? Connectives.TMany item:Property v:Value ('.')? => ProperyList[Property{Name{item}, DefaultValue{v}}]
+        | list:PropertyList Connectives.TAnd? Connectives.TMany item:Property v:Value (".")? => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}, Relation{"ManyToOne"}}];
             
         syntax WhenStatement 
             = TWhen o:Object m:Method Connectives.TAnother o2:Object"," TEach l:Loop"."
@@ -147,7 +147,8 @@ module Test
         syntax Method = name:MethodId => name;
         syntax Property = name:PropertyId => name;
         syntax Value = " " '(' v:ValueId ')'=> Value{v}
-        | '(' v:ValueId ')'=> v;
+        | '(' v:ValueId ')'=> Value{v}
+        | '(' o:Object ')' => o;
         syntax Loop = o:Object c:Asserts.Constraints 
         => Loop{Objects[o],c};
         syntax Operators = x:TestLanguage.Equal | x:TestLanguage.Greater | x:TestLanguage.GreaterOrEqual | x:TestLanguage.Lesser | x:TestLanguage.LesserOrEqual

@@ -14,7 +14,7 @@
         <StackPanel Height="32" Margin="10,10,81,0" Name="EditorButtons" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0">
             <Button Height="23" Name="Paste" Content="Paste" Width="75" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         </StackPanel>
-        <RichTextBox x:Name="InputEditor" AcceptsReturn="True" AcceptsTab="True" Grid.Row="1" Grid.Column="0" AllowDrop="True"  FontFamily="Calibri" FontSize="10" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0"></RichTextBox>
+        <RichTextBox x:Name="InputEditor" AcceptsReturn="True" AcceptsTab="True" Grid.Row="1" Grid.Column="0" AllowDrop="True"  FontFamily="Calibri" FontSize="12" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0"></RichTextBox>
         <StackPanel Height="32" Margin="10,10,81,0" Name="PreviewButtons" Orientation="Horizontal" VerticalAlignment="Top" Grid.Row="0" Grid.Column="1">
             <Button Height="23" Content="NUnit Preview" Name="NUnitPreview" Width="95" Margin="10px,0px,0px,0px" VerticalAlignment="Top" HorizontalAlignment="Left"/>
             <Button Height="23" Content="XUnit Preview" Name="XUnitPreview" Width="95" Margin="10px,0px,0px,0px" VerticalAlignment="Top" HorizontalAlignment="Left"/>

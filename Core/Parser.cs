@@ -97,7 +97,6 @@ namespace bdUnit.Core
 
             var tests = deserializer.Deserialize(root) as IList<object>;
             var list = new List<Test>();
-            var codegen = new object();
             if (tests != null)
             {
                 foreach (var test in tests)
@@ -107,16 +106,15 @@ namespace bdUnit.Core
                 switch(framework)
                 {
                     case UnitTestFrameworkEnum.NUnit:
-                        codegen = new NUnitCodeGenerator();
-                        break;
+                        var nUnit = new NUnitCodeGenerator();
+                        return nUnit.GenerateTestFixture(list, TestFileName);
                     case UnitTestFrameworkEnum.XUnit:
-                        codegen = new XUnitCodeGenerator();
-                        break;
+                        var xUnit = new XUnitCodeGenerator();
+                        return xUnit.GenerateTestFixture(list, TestFileName);
                     case UnitTestFrameworkEnum.MbUnit:
-                        codegen = new MbUnitCodeGenerator();
-                        break;
+                        var mbUnit = new MbUnitCodeGenerator();
+                        return mbUnit.GenerateTestFixture(list, TestFileName);
                 }
-                return ((ICodeGenerator)codegen).GenerateTestFixture(list, TestFileName);
             }
             return "The input is invalid - exception message to go here";
         }

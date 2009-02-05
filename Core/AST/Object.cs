@@ -8,12 +8,12 @@ namespace bdUnit.Core.AST
 {
     public class Object
     {
-        public string Name { get; set; }
-        public string Instance { get; set; }
-
-        public void Print()
+        public Object()
         {
-            Debug.WriteLine("\t\tI am Object -- Name: " + Name + " InstanceName: " + Instance);
+            Instance = new Instance();
         }
+
+        public string Name { get; set; }
+        public Instance Instance { get; set; }
     }
 }

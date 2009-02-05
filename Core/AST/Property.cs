@@ -1,5 +1,6 @@
 ﻿#region Using Statements
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Core.Enum;
@@ -14,22 +15,26 @@ namespace bdUnit.Core.AST
         {
             Object = new Object();
             Operators = new List<Operator>();
+            DefaultValue = new DefaultValue();
         }
 
         public string Name { get; set; }
         public string Value { get; set; }
-        public string DefaultValue { get; set; }
+        public DefaultValue DefaultValue { get; set; }
         public Object Object { get; set; }
         public List<Operator> Operators { get; set; }
         public string Relation { get; set; }
-        public RelationEnum _Relation { get { return (RelationEnum)System.Enum.Parse(typeof(RelationEnum), Relation); } }
 
-        public void Print()
+        public RelationQualifiedEnum GetRelationQualifiedEnum()
         {
-            Debug.WriteLine("\t\t\tName: " + Name);
-            Debug.WriteLine("\t\t\tValue: " + Value);
-            Debug.WriteLine("\t\t\tObject: " + Object.Name);
-            Debug.WriteLine("\t\t\tOperator: " + Operators);
+            try
+            {
+                return (RelationQualifiedEnum)System.Enum.Parse(typeof(RelationQualifiedEnum), Relation);
+            }
+            catch (Exception)
+            {
+                return RelationQualifiedEnum.None;
+            }
         }
     }
 }
