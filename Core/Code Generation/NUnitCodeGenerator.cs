@@ -19,7 +19,7 @@ namespace bdUnit.Core
     {
         #region TextTemplates
 
-        public readonly string TestFixtureText = "#region Using Statements\nusing NUnit.Framework;\n#endregion\n\nnamespace bdUnit.Interfaces \n{##interfaces##\n}\n\nnamespace bdUnit.Tests \n{\n\t[TestFixture]\n\tpublic class ##fixturename##\n\t{\n##tests##\t}\n}";
+        public readonly string TestFixtureText = "#region Using Statements\nusing System.Collections.Generic;\nusing bdUnit.Interfaces;\nusing NUnit.Framework;\nusing Rhino.Mocks;\n#endregion\n\nnamespace bdUnit.Interfaces \n{##interfaces##\n}\n\nnamespace bdUnit.Tests \n{\n\t[TestFixture]\n\tpublic class ##fixturename##\n\t{\n##tests##\t}\n}";
 
         public readonly string TestText = "\n\t\t[Test]\n\t\tpublic void ##testname##()";
 

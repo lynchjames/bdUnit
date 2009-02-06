@@ -77,14 +77,15 @@ namespace bdUnit.Core
                     if (statement.GetType() == when.GetType())
                     {
                         var count = method.Objects.Count;
+                        var variables = new StringBuilder();
+                        variables.Append("\t\t\tvar mocks = new MockRepository();\n");
                         for (var j = 0; j < count - 1; j++)
                         {
                             var objects = method.Objects;
                             var obj = objects[j];
                             var otherObj = objects[j == 0 ? 1 : 0];
-                            var variables = string.Empty;
-                            variables += string.Format("\t\t\tvar {0} = new {1};\n", obj.Instance.Value, obj.Name);
-                            variables += string.Format("\t\t\tvar {0} = new {1};\n", otherObj.Instance.Value, otherObj.Name);
+                            variables.Append(string.Format("\t\t\tI{1} {0} = (I{1})mocks.Stub(typeof(I{1}));\n", obj.Instance.Value, obj.Name));
+                            variables.Append(string.Format("\t\t\tI{1} {0} = (I{1})mocks.Stub(typeof(I{1}));\n", otherObj.Instance.Value, otherObj.Name));
                             var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, method.Name, otherObj.Instance.Value);
 
                             //TODO: Add logic to determine type constuctor @User(Name = Jim, Age = 25) should correspond to var Jim = new User() {Name = "Jim", Age = 25};
@@ -155,6 +156,10 @@ namespace bdUnit.Core
                 }
                 else if (string.IsNullOrEmpty(property.DefaultValue.Value))
                 {
+                    if (property.DefaultValue.Object.Name != null)
+                    {
+                        propertyText = CodeUtility.Parameterize(RelationQualifiedEnum.OneToOne, new List<Property>() {property}, propertyText, null);
+                    }
                     propertyText = propertyText.Replace("##typename##", "string");
                 }
                 else if (RegexUtility.IsString(property.DefaultValue.Value))
@@ -173,20 +178,20 @@ namespace bdUnit.Core
                         propertyText = OverrideDefault(propertyText, "\"" + property.DefaultValue.Value + "\"", property.Name, "string");
                     }
                 }
-                else if (RegexUtility.IsInteger(property.DefaultValue.Value))
-                {
-                    propertyText = propertyText.Replace("##typename##", "int");
-                    if (property.DefaultValue.Value != "0")
-                    {
-                        propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name, "int");
-                    }
-                }
                 else if (RegexUtility.IsDecimal(property.DefaultValue.Value))
                 {
                     propertyText = propertyText.Replace("##typename##", "decimal");
                     if (property.DefaultValue.Value != "0.0")
                     {
                         propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name, "decimal");
+                    }
+                }
+                else if (RegexUtility.IsInteger(property.DefaultValue.Value))
+                {
+                    propertyText = propertyText.Replace("##typename##", "int");
+                    if (property.DefaultValue.Value != "0")
+                    {
+                        propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name, "int");
                     }
                 }
                 stringBuilder.Append(propertyText);
@@ -212,11 +217,10 @@ namespace bdUnit.Core
                 }
                 else
                 {
-                    instanceName = parameter.Name.ToLower() + InstanceIdentifier;
-                    InstanceIdentifier++;
+                    instanceName = parameter.Name.ToLower();
                 }
                 var delimiter = j < (paramCount - 1) ? ", " : string.Empty;
-                _params.Append(string.Format("{0} {1}{2}", parameter.Name, instanceName, delimiter));
+                _params.Append(string.Format("I{0} {1}{2}", parameter.Name, instanceName, delimiter));
             }
             signature = signature.Replace("##params##", _params.ToString());
             return signature;
@@ -232,7 +236,16 @@ namespace bdUnit.Core
                 var property = constraint.Property;
                 if (string.IsNullOrEmpty(constraint.Property.Relation))
                 {
-                    text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}.{1} {2} {3}", _object.Instance.Value, property.Name, property.Operators[0].Value, property.Value)));
+                    if (property.Value == "true" | property.Value == "false")
+                    {
+                        var value = Boolean.Parse(property.Value);
+                        var boolQualifier = value ? string.Empty : "!";
+                        text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}{1}.{2}", boolQualifier, _object.Instance.Value, property.Name)));
+                    }
+                    else
+                    {
+                        text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}.{1} {2} {3}", _object.Instance.Value, property.Name, property.Operators[0].Value, property.Value)));
+                    }
                 }
             }
             return text.ToString();

@@ -16,13 +16,18 @@ namespace bdUnit.Core.Utility
             switch (relation)
                     {
                         case RelationQualifiedEnum.OneToOne:
+                            output.Append(input.Replace("##typename##",
+                                                        string.Format("I{0}",
+                                                        properties.ElementAt(0).DefaultValue.Object.Name)));
                             break;
 
                         case RelationQualifiedEnum.OneToMany:
                             break;
                     
                         case RelationQualifiedEnum.ManyToOne:
-                            output.Append(input.Replace("##typename##", string.Format("IList<I{0}>", properties.ElementAt(0).DefaultValue.Object.Name)));
+                            output.Append(input.Replace("##typename##",
+                                                        string.Format("IList<I{0}>", 
+                                                        properties.ElementAt(0).DefaultValue.Object.Name)));
                             break;
                 
                         case RelationQualifiedEnum.ManyToMany:
@@ -35,7 +40,12 @@ namespace bdUnit.Core.Utility
                                 var other = i == 0 ? 1 : 0;
                                 var property = properties.ElementAt(0);
                                 var value = objects[other].Instance.Value;
-                                output.AppendLine(input.Replace("##clause##", string.Format("{0}.{1} {2} {3}", objects[i].Instance.Value, property.Name, property.Operators[0].Value, value)));
+                                output.AppendLine(input.Replace("##clause##", 
+                                                                string.Format("{0}.{1} {2} {3}", 
+                                                                objects[i].Instance.Value, 
+                                                                property.Name, 
+                                                                property.Operators[0].Value, 
+                                                                value)));
                             }
                             break;
 

@@ -44,6 +44,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\NUnit\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Rhino Mocks\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -85,7 +89,9 @@
     <Compile Include="Deserializer.cs" />
     <Compile Include="Enum\AccessEnum.cs" />
     <Compile Include="Enum\UnitTestFrameworkEnum.cs" />
+    <Compile Include="ExampleInterfaces\Person.cs" />
     <Compile Include="ExampleUnitTests\Test_LogansRun.cs" />
+    <Compile Include="ExampleUnitTests\Test_LogansRun_Generated.cs" />
     <Compile Include="Utility\CodeUtility.cs" />
     <Compile Include="Utility\ReflectionExtensionMethods.cs" />
     <Compile Include="AST\Constraint.cs" />

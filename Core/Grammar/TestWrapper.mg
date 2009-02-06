@@ -113,7 +113,7 @@ module Test
         | list:SetupList item:Setup => TypeList[valuesof(list),item];
         
         syntax Setup
-            = o:Object prop:PropertyList sl:StatementList
+            = o:Object prop:PropertyList sl:StatementList?
             => Type{o, prop, sl};
             
         syntax PropertyList = (' ')* TProperty item:Property => ProperyList[Property{Name{item}}]
