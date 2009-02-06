@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
+﻿#region Using Statements
+
 using System.Windows;
+
+#endregion
 
 namespace Preview
 {

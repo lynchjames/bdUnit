@@ -1,10 +1,12 @@
-﻿using System;
+﻿#region Using Statements
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using bdUnit.Core.AST;
 using Core.Enum;
-using Object=bdUnit.Core.AST.Object;
+
+#endregion
 
 namespace bdUnit.Core.Utility
 {
@@ -35,7 +37,7 @@ namespace bdUnit.Core.Utility
 
                         case RelationQualifiedEnum.Reciprocal:
                             // Only used with 2 objects
-                            for (int i = 0; i < 2; i++)
+                            for (var i = 0; i < 2; i++)
                             {
                                 var other = i == 0 ? 1 : 0;
                                 var property = properties.ElementAt(0);

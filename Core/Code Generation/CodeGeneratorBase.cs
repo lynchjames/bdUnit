@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region Using Statements
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,8 @@ using bdUnit.Core.Utility;
 using Core.Enum;
 using Object=bdUnit.Core.AST.Object;
 using Type=bdUnit.Core.AST.Type;
+
+#endregion
 
 namespace bdUnit.Core
 {
@@ -104,7 +108,7 @@ namespace bdUnit.Core
                                 {
                                     reciprocalRelationships.ForEach(
                                         r =>
-                                        stringBuilder.Append(CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal, new List<Property>() { r.Property }, AssertText, method.Objects)));
+                                        stringBuilder.Append(CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal, new List<Property> { r.Property }, AssertText, method.Objects)));
                                 }
                             }
                             else if (method.Constraints.Count > 0)
@@ -112,7 +116,7 @@ namespace bdUnit.Core
                                 for (var k = 0; k < method.Constraints.Count; k++)
                                 {
                                     var constraint = method.Constraints[k];
-                                    stringBuilder.Append(GenerateAsserts(constraint.Property.Object, new List<Constraint>() { constraint }));
+                                    stringBuilder.Append(GenerateAsserts(constraint.Property.Object, new List<Constraint> { constraint }));
                                 }
                             }
                             stringBuilder.AppendLine("\t\t}");
@@ -149,7 +153,7 @@ namespace bdUnit.Core
                 propertyText = propertyText.Replace("##propertyname##", property.Name);
                 if (!string.IsNullOrEmpty(property.Relation) && property.GetRelationQualifiedEnum() != RelationQualifiedEnum.None && property.DefaultValue != null && property.DefaultValue.Object != null)
                 {
-                    propertyText = CodeUtility.Parameterize(property.GetRelationQualifiedEnum(), new List<Property>() { property },
+                    propertyText = CodeUtility.Parameterize(property.GetRelationQualifiedEnum(), new List<Property> { property },
                                              propertyText, null);
 
                 }
@@ -157,7 +161,7 @@ namespace bdUnit.Core
                 {
                     if (property.DefaultValue.Object.Name != null)
                     {
-                        propertyText = CodeUtility.Parameterize(RelationQualifiedEnum.OneToOne, new List<Property>() {property}, propertyText, null);
+                        propertyText = CodeUtility.Parameterize(RelationQualifiedEnum.OneToOne, new List<Property> {property}, propertyText, null);
                     }
                     propertyText = propertyText.Replace("##typename##", "string");
                 }

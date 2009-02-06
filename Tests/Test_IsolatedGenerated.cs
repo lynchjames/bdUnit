@@ -3,11 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
 using bdUnit.Interfaces;
 using NUnit.Framework;
 using StructureMap;
-using bdUnit.Interfaces;
+
 #endregion
 
 namespace bdUnit.Interfaces
@@ -58,29 +57,25 @@ namespace bdUnit.Tests
     [TestFixture]
     public class LogansRun_Marriage
     {
-        [SetUpFixture]
-        public class Setup
+        [TestFixtureSetUp]
+        
+        public void Set()
         {
-            [SetUp]
-            public void Set()
+            ObjectFactory.Initialize(
+            x => x.Scan(scanner =>
             {
-                
-            }
+                var location = AppDomain.CurrentDomain.BaseDirectory;
+                scanner.AssembliesFromPath(location);
+                scanner.WithDefaultConventions();
+            }));
         }
 
         [Test]
         public void When_User_Marry_User()
         {
-            ObjectFactory.Initialize(
-                x => x.Scan(scanner =>
-                {
-                    var location = AppDomain.CurrentDomain.BaseDirectory;
-                    scanner.AssembliesFromPath(location);
-                    scanner.WithDefaultConventions();
-                }));
             Debug.Write(ObjectFactory.WhatDoIHave());
-            IUser Peter = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
-            IUser Eve = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
+            var Peter = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
+            var Eve = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
             Peter.Marry(Eve);
             Assert.IsTrue(!Peter.IsARunner);
             Assert.IsTrue(Peter.Age < 30);
@@ -91,15 +86,15 @@ namespace bdUnit.Tests
         [Test]
         public void When_User_Kill_User()
         {
-            ObjectFactory.Initialize(
-                x => x.Scan(scanner =>
-                {
-                    var location = AppDomain.CurrentDomain.BaseDirectory;
-                    scanner.AssembliesFromPath(location);
-                    scanner.WithDefaultConventions();
-                }));
-            IUser a = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
-            IUser b = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
+            //ObjectFactory.Initialize(
+            //    x => x.Scan(scanner =>
+            //    {
+            //        var location = AppDomain.CurrentDomain.BaseDirectory;
+            //        scanner.AssembliesFromPath(location);
+            //        scanner.WithDefaultConventions();
+            //    }));
+            var a = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
+            var b = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
             a.Kill(b);
             Assert.IsTrue(b.IsDead);
             Assert.IsTrue(!a.IsDead);
@@ -108,15 +103,15 @@ namespace bdUnit.Tests
         [Test]
         public void When_User_Visit_SleepShop()
         {
-            ObjectFactory.Initialize(
-                x => x.Scan(scanner =>
-                {
-                    var location = AppDomain.CurrentDomain.BaseDirectory;
-                    scanner.AssembliesFromPath(location);
-                    scanner.WithDefaultConventions();
-                }));
-            IUser John = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
-            ISleepShop CentralSleepShop = ObjectFactory.GetNamedInstance<ISleepShop>("bdUnit");
+            //ObjectFactory.Initialize(
+            //    x => x.Scan(scanner =>
+            //    {
+            //        var location = AppDomain.CurrentDomain.BaseDirectory;
+            //        scanner.AssembliesFromPath(location);
+            //        scanner.WithDefaultConventions();
+            //    }));
+            var John = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
+            var CentralSleepShop = ObjectFactory.GetNamedInstance<ISleepShop>("bdUnit");
             John.Visit(CentralSleepShop);
             Assert.IsTrue(John.IsDead);
         }

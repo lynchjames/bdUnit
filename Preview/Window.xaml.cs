@@ -1,17 +1,18 @@
-﻿using System;
+﻿#region Using Statements
+
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using bdUnit.Core;
 using Core.Enum;
 using ScintillaNet;
 using TextRange=System.Windows.Documents.TextRange;
+
+#endregion
 
 namespace Preview
 {

@@ -1,15 +1,7 @@
 ﻿#region Using Statements
 
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using bdUnit.Core.AST;
-using bdUnit.Core.Enum;
-using bdUnit.Core.Utility;
-using bdUnit.Core.AST;
-using bdUnit.Core.Enum;
-using bdUnit.Core.Utility;
-using Core.Enum;
 
 #endregion
 

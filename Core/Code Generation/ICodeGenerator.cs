@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿#region Using Statements
+
+using System.Collections.Generic;
 using System.Text;
 using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
+
+#endregion
 
 namespace bdUnit.Core
 {
