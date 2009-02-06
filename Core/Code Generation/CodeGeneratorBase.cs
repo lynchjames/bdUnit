@@ -78,14 +78,13 @@ namespace bdUnit.Core
                     {
                         var count = method.Objects.Count;
                         var variables = new StringBuilder();
-                        variables.Append("\t\t\tvar mocks = new MockRepository();\n");
                         for (var j = 0; j < count - 1; j++)
                         {
                             var objects = method.Objects;
                             var obj = objects[j];
                             var otherObj = objects[j == 0 ? 1 : 0];
-                            variables.Append(string.Format("\t\t\tI{1} {0} = (I{1})mocks.Stub(typeof(I{1}));\n", obj.Instance.Value, obj.Name));
-                            variables.Append(string.Format("\t\t\tI{1} {0} = (I{1})mocks.Stub(typeof(I{1}));\n", otherObj.Instance.Value, otherObj.Name));
+                            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n", obj.Instance.Value, obj.Name));
+                            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n", otherObj.Instance.Value, otherObj.Name));
                             var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, method.Name, otherObj.Instance.Value);
 
                             //TODO: Add logic to determine type constuctor @User(Name = Jim, Age = 25) should correspond to var Jim = new User() {Name = "Jim", Age = 25};

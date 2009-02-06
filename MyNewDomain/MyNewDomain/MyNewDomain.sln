@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNewDomain", "MyNewDomain.csproj", "{189D2D87-821C-4B5F-81B8-F66FF17B3067}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A647528-ADDD-47EF-B250-5985539AC215}"
+	ProjectSection(SolutionItems) = preProject
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		MyNewDomain.vsmdi = MyNewDomain.vsmdi
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = MyNewDomain.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{189D2D87-821C-4B5F-81B8-F66FF17B3067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{189D2D87-821C-4B5F-81B8-F66FF17B3067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{189D2D87-821C-4B5F-81B8-F66FF17B3067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{189D2D87-821C-4B5F-81B8-F66FF17B3067}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

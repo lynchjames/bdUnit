@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="eaa1733c-d28e-4dbc-9df9-da42fd30a426" name="james@DSK-JAMES 2009-02-06 14:33:58" runUser="STORM\james" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2006">
+  <TestRunConfiguration name="Local Test Run" id="b5fcdaa6-732e-4a2e-b232-f10f51ae816b">
+    <Description>This is a default test run configuration for a local test run.</Description>
+    <Deployment runDeploymentRoot="C:\Development\MyNewDomain\MyNewDomain\TestResults\james_DSK-JAMES 2009-02-06 14_33_58">
+      <DeploymentItem filename="C:\Development\bdUnit\Tests\bin\Debug\nunit.core.dll" />
+      <DeploymentItem filename="C:\Development\bdUnit\Tests\bin\Debug\nunit.core.interfaces.dll" />
+      <DeploymentItem filename="C:\Development\bdUnit\Tests\bin\Debug\nunit.framework.dll" />
+      <DeploymentItem filename="C:\Development\bdUnit\Tests\bin\Debug\StructureMap.dll" />
+      <DeploymentItem filename="C:\Development\bdUnit\Tests\bin\Debug\Tests.dll" />
+    </Deployment>
+    <TestTypeSpecific />
+  </TestRunConfiguration>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" error="0" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <Times creation="2009-02-06T14:33:58.2541893+00:00" queuing="2009-02-06T14:34:01.6781893+00:00" start="2009-02-06T14:34:02.0641893+00:00" finish="2009-02-06T14:34:02.8541893+00:00" />
+  <TestDefinitions>
+    <UnitTest name="TestMethod1" storage="c:\development\mynewdomain\test\bin\debug\test.dll" id="02bd63ea-c986-6226-d5cc-5ef0d874b5d1">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="86c77914-8787-4a33-8e18-f3b0e742c325" />
+      <TestMethod codeBase="C:\Development\MyNewDomain\Test\bin\Debug\Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Test.UnitTest1, Test" name="TestMethod1" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="02bd63ea-c986-6226-d5cc-5ef0d874b5d1" executionId="86c77914-8787-4a33-8e18-f3b0e742c325" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="86c77914-8787-4a33-8e18-f3b0e742c325" testId="02bd63ea-c986-6226-d5cc-5ef0d874b5d1" testName="TestMethod1" computerName="DSK-JAMES" duration="00:00:00.0067234" startTime="2009-02-06T14:34:02.2081893+00:00" endTime="2009-02-06T14:34:02.6871893+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+  </Results>
+</TestRun>

@@ -122,9 +122,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj">
+    <ProjectReference Include="..\Core\bdUnit.Core.csproj">
       <Project>{32E60B67-03A6-4189-9E24-79629D286BB1}</Project>
-      <Name>Core</Name>
+      <Name>bdUnit.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -17,7 +17,7 @@ namespace bdUnit.Core
     {
         #region TextTemplates
 
-        public readonly string TestFixtureText = "#region Using Statements\nusing System.Collections.Generic;\nusing bdUnit.Interfaces;\nusing Rhino.Mocks;\nusing MbUnit.Framework;\n#endregion\n\nnamespace bdUnit.Interfaces \n{##interfaces##\n}\n\nnamespace bdUnit.Tests \n{\n\t[TestFixture]\n\t[FixtureCategory(\"BDD Tests\")]\n\tpublic class ##fixturename##\n\t{\n##tests##\t}\n}";
+        public readonly string TestFixtureText = "#region Using Statements\nusing System.Collections.Generic;\nusing bdUnit.Interfaces;\nusing Rhino.Mocks;\nusing StructureMap;\nusing MbUnit.Framework;\n#endregion\n\nnamespace bdUnit.Interfaces \n{##interfaces##\n}\n\nnamespace bdUnit.Tests \n{\n\t[TestFixture]\n\t[FixtureCategory(\"BDD Tests\")]\n\tpublic class ##fixturename##\n\t{\n##tests##\t}\n}";
 
         public readonly string TestText = "\t\t[Test]\n\t\tpublic void ##testname##()";
 
@@ -25,7 +25,7 @@ namespace bdUnit.Core
 
         public readonly string PropertyText = "\t\t##typename## ##propertyname## { get; set; }\n";
 
-        public readonly string TypeText = "\n\n\tpublic interface I##typename##\n\t{\n##content##\t}";
+        public readonly string TypeText = "\n\n\t[PluginFamily(\"bdUnit\")]\n\tpublic interface I##typename##\n\t{\n##content##\t}";
 
         public readonly string AssertText = "\t\t\tAssert.IsTrue(##clause##);";
 
