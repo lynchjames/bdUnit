@@ -19,9 +19,8 @@ namespace bdUnit.Core
                                               "StructureMap"
                                           };
       
-        public void CompileDll()//string folderPath)
+        public void CompileDll(string folderPath)
         {
-            var folderPath = @"C:\Development\Example";
             CodeDomProvider compiler = new CSharpCodeProvider(new Dictionary<string, string> {{"CompilerVersion","v3.5"}});
             var compilerParameters = new CompilerParameters
                                          {
@@ -39,7 +38,7 @@ namespace bdUnit.Core
             var ass = Assembly.GetExecutingAssembly().Location;
             var results = compiler.CompileAssemblyFromSource(compilerParameters, source);
             Debug.WriteLine(results.PathToAssembly);
-            File.Copy(AppDomain.CurrentDomain.BaseDirectory + "\\" + compilerParameters.OutputAssembly, folderPath + "\\" + compilerParameters.OutputAssembly, true);
+            //File.Copy(AppDomain.CurrentDomain.BaseDirectory + "\\" + compilerParameters.OutputAssembly, folderPath + "\\" + compilerParameters.OutputAssembly, true);
             //return results.PathToAssembly;
         }
 

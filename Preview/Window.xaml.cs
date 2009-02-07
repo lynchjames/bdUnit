@@ -1,5 +1,6 @@
 ﻿#region Using Statements
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -9,6 +10,7 @@ using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using bdUnit.Core;
 using Core.Enum;
+using Microsoft.Win32;
 using ScintillaNet;
 using TextRange=System.Windows.Documents.TextRange;
 
@@ -21,6 +23,8 @@ namespace Preview
     /// </summary>
     public partial class Window1
     {
+        private string SelectedDirectory { get; set; }
+
         public Window1()
         {
             InitializeComponent();
@@ -34,6 +38,7 @@ namespace Preview
             CurrentFramework = UnitTestFrameworkEnum.NUnit;
             LoadEditor();
             InputEditor.KeyDown += InputEditor_KeyDown;
+            SelectFolder.Click += SelectFolder_Click;
             Paste.Click += Paste_Click;
             Dll.Click += Dll_Click;
             XUnitPreview.Click += XUnitPreview_Click;
@@ -47,10 +52,25 @@ namespace Preview
             InputEditor.Document.LineHeight = 5;
         }
 
+        void SelectFolder_Click(object sender, RoutedEventArgs e)
+        {
+            var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            folderDialog.ShowDialog();
+            SelectedDirectory = folderDialog.SelectedPath;
+            // Add code to load up inputs in tabs within the preview windows
+        }
+
         void Dll_Click(object sender, RoutedEventArgs e)
         {
-            var dllBuilder = new DllBuilder();
-            dllBuilder.CompileDll();
+            if (!string.IsNullOrEmpty(SelectedDirectory))
+            {
+                var dllBuilder = new DllBuilder();
+                dllBuilder.CompileDll(SelectedDirectory);
+            }
+            else
+            {
+               MessageBox.Show("Please select a folder", "bdUnit - No Inputs Selected", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
         }
 
         private void MbUnitPreview_Click(object sender, RoutedEventArgs e)

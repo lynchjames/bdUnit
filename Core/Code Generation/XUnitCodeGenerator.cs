@@ -15,7 +15,7 @@ namespace bdUnit.Core
 
         public readonly string TestText = "\t\t[Fact]\n\t\tpublic void ##testname##()";
 
-        public readonly string MethodText = "\t\t##returntype## ##methodname##(##params##) {}";
+        public readonly string MethodText = "\t\t##returntype## ##methodname##(##params##);";
 
         public readonly string PropertyText = "\t\t##typename## ##propertyname## { get; set; }\n";
 
