@@ -8,57 +8,8 @@ using StructureMap;
 namespace MyNewDomain
 {
     [Pluggable("bdUnit")]
-    public class Car : ICar
+    public class Car 
     {
-        public void Kill(ICar car)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Marry(ICar car)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Visit(IGarage garage)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Total()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public ICar Spouse
-        {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
-        }
-
-        public bool IsARunner
-        {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
-        }
-
-        public int Age
-        {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
-        }
-
-        public bool IsDead
-        {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
-        }
-
-        public IList<IUser> Children
-        {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
-        }
     }
 
     [Pluggable("bdUnit")]
