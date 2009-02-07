@@ -78,7 +78,7 @@ namespace bdUnit.Core
             return dynamicParser;
         }
 
-        public string Preview(UnitTestFrameworkEnum framework)
+        public string Parse(UnitTestFrameworkEnum framework)
         {
             var parser = LoadGrammar();
             var deserializer = new Deserializer();

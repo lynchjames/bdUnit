@@ -8,13 +8,67 @@ using StructureMap;
 namespace MyNewDomain
 {
     [Pluggable("bdUnit")]
+    public class Car : ICar
+    {
+        public void Kill(ICar car)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Marry(ICar car)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Visit(IGarage garage)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Total()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ICar Spouse
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        public bool IsARunner
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        public int Age
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        public bool IsDead
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+
+        public IList<IUser> Children
+        {
+            get { throw new System.NotImplementedException(); }
+            set { throw new System.NotImplementedException(); }
+        }
+    }
+
+    [Pluggable("bdUnit")]
     public class User : IUser
     {
         // bdUnit
         [DefaultConstructor]
         public User()
         {
-            Age = 20;
+            Age = 21;
         }
 
         public User(string name)
@@ -30,7 +84,7 @@ namespace MyNewDomain
 
         public bool IsDead { get; set; }
 
-        public IList<IPerson> Children { get; set; }
+        public IList<IUser> Children { get; set; }
 
         public void Kill(IUser user)
         {

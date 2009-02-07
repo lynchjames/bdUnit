@@ -35,6 +35,7 @@ namespace Preview
             LoadEditor();
             InputEditor.KeyDown += InputEditor_KeyDown;
             Paste.Click += Paste_Click;
+            Dll.Click += Dll_Click;
             XUnitPreview.Click += XUnitPreview_Click;
             NUnitPreview.Click += NUnitPreview_Click;
             MbUnitPreview.Click += MbUnitPreview_Click;
@@ -44,6 +45,12 @@ namespace Preview
             range.Text = defaultText;
             InputEditor.Document.TextAlignment = TextAlignment.Justify;
             InputEditor.Document.LineHeight = 5;
+        }
+
+        void Dll_Click(object sender, RoutedEventArgs e)
+        {
+            var dllBuilder = new DllBuilder();
+            dllBuilder.CompileDll();
         }
 
         private void MbUnitPreview_Click(object sender, RoutedEventArgs e)
@@ -119,7 +126,7 @@ namespace Preview
                 if (sciEditor != null)
                 {
                     sciEditor.ResetText();
-                    sciEditor.InsertText(0, parser.Preview(framework));
+                    sciEditor.InsertText(0, parser.Parse(framework));
                 }
             }
         }
