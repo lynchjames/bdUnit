@@ -6,16 +6,7 @@ module Common
     export Connectives;
     
     language Common
-    {
-        // Parameterized List rule        
-        /*syntax List(element) 
-            = n:element => [n] 
-            | n:element l:List(element) => [n, valuesof(l)];
-        
-        syntax List(element, separator) 
-            = n:element => [n] 
-            | n:element separator l:List(element, separator) => [n, valuesof(l)];*/
-            
+    {            
         @{Classification["String"]} 
         token SingleQuotedText = QuotedText('"');
         token DoubleQuotedText = QuotedText("'");
@@ -129,7 +120,7 @@ module Test
             => When{TargetMethod{Name{m}, Objects[o,o2], l}}
             | TWhen m:Method (Connectives.TAll|TEach|" ") o:Object TResult c:Asserts.Constraints
             => When{TargetMethod{Name{m}, Objects[o]}, c}
-            | TWhen o:Object m:Method (Connectives.TAnother | "a") o2:Object"," c:Asserts.Constraints
+            | TWhen o:Object m:Method (Connectives.TAnother | " a ") o2:Object"," c:Asserts.Constraints
             => When{TargetMethod{Name{m}, Objects[o,o2], c}};
             
         syntax CreateMethodStatement

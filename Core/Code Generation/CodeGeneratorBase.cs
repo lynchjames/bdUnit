@@ -207,7 +207,6 @@ namespace bdUnit.Core
             var methodText = MethodText.Replace("##accesslevel##", Access.ToString());
             var _params = new StringBuilder();
             var signature = methodText.Replace("##methodname##", method.TargetMethod.Name);
-            //TODO: Add support for methods with a return type - is this needed?
             signature = signature.Replace("##returntype##", "void");
             var paramCount = method.TargetMethod.Objects.Count;
             for (var j = 1; j < paramCount; j++)

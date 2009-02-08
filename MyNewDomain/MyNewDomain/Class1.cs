@@ -15,28 +15,17 @@ namespace MyNewDomain
     [Pluggable("bdUnit")]
     public class User : IUser
     {
-        // bdUnit
-        [DefaultConstructor]
         public User()
         {
-            Age = 21;
-        }
 
-        public User(string name)
-        {
-            Age = 13;
         }
 
         public IUser Spouse { get; set; }
-
         public bool IsARunner { get; set; }
-
         public int Age { get; set; }
-
         public bool IsDead { get; set; }
-
         public IList<IUser> Children { get; set; }
-
+        
         public void Kill(IUser user)
         {
             user.IsDead = true;

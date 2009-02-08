@@ -11,7 +11,7 @@ namespace bdUnit.Core
     {
         #region TextTemplates
 
-        public readonly string TestFixtureText = "#region Using Statements\nusing System.Collections.Generic;\nusing bdUnit.Interfaces;\nusing Rhino.Mocks;\nusing StructureMap;\nusing Xunit;\n#endregion\n\nnamespace bdUnit.Interfaces \n{##interfaces##\n}\n\nnamespace bdUnit.Tests \n{\n\tpublic class ##fixturename##\n\t{\n##tests##\t}\n}";
+        public readonly string TestFixtureText = ("#region Using Statements\nusing System.Collections.Generic;\nusing bdUnit.Interfaces;\nusing Rhino.Mocks;\nusing StructureMap;\nusing Xunit;\nusing System;\n#endregion\n\nnamespace bdUnit.Interfaces \n{##interfaces##\n}\n\nnamespace bdUnit.Tests \n{\n\tpublic class ##fixturename##\n\t{\n##structuremap##\n##tests##\t}\n}").Replace("##structuremap##", StructureMap);
 
         public readonly string TestText = "\t\t[Fact]\n\t\tpublic void ##testname##()";
 
@@ -21,7 +21,19 @@ namespace bdUnit.Core
 
         public readonly string TypeText = "\n\n\t[PluginFamily(\"bdUnit\")]\n\tpublic interface I##typename##\n\t{\n##content##\t}";
 
-        public readonly string AssertText = "\t\t\tAssert.IsTrue(##clause##);";
+        public readonly string AssertText = "\t\t\tAssert.True(##clause##);";
+
+        public static readonly string StructureMap =
+            @"        public void SetUpFixture()
+        {
+            ObjectFactory.Initialize(
+            x => x.Scan(scanner =>
+            {
+                var location = AppDomain.CurrentDomain.BaseDirectory;
+                scanner.AssembliesFromPath(location);
+                scanner.WithDefaultConventions();
+            }));
+        }";
 
         #endregion
 

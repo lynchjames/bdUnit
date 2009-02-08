@@ -25,7 +25,7 @@ namespace bdUnit.Core
 
         public static readonly string StructureMap =
             @"      [TestFixtureSetUp]
-        public void Set()
+        public void Setup()
         {
             ObjectFactory.Initialize(
             x => x.Scan(scanner =>

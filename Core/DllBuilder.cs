@@ -16,7 +16,7 @@ namespace bdUnit.Core
         private string[] References = new[]
                                           {
                                               "Rhino.Mocks", "nunit.core", "nunit.core.interfaces", "nunit.framework",
-                                              "StructureMap", "StructureMap.AutoMocking"
+                                              "xunit", "MbUnit.Framework.2.0", "StructureMap", "StructureMap.AutoMocking"
                                           };
       
         public void CompileDll(string folderPath)
@@ -34,7 +34,7 @@ namespace bdUnit.Core
                 compilerParameters.ReferencedAssemblies.Add(AppDomain.CurrentDomain.BaseDirectory + "\\" + string.Format("{0}.dll", reference));
             }
             compilerParameters.ReferencedAssemblies.Add("System.dll");
-            var source = GetSource(folderPath, UnitTestFrameworkEnum.NUnit);
+            var source = GetSource(folderPath, UnitTestFrameworkEnum.XUnit);
             var results = compiler.CompileAssemblyFromSource(compilerParameters, source);
         }
 
