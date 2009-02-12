@@ -65,7 +65,7 @@ namespace Preview
             if (!string.IsNullOrEmpty(SelectedDirectory))
             {
                 var dllBuilder = new DllBuilder();
-                dllBuilder.CompileDll(SelectedDirectory, CurrentFramework);
+                MessageBox.Show(dllBuilder.CompileDll(SelectedDirectory, CurrentFramework));
             }
             else
             {
@@ -136,7 +136,7 @@ namespace Preview
 
         private void UpdatePreview(UnitTestFrameworkEnum framework)
         {
-            var paths = new Dictionary<string, string> {{"grammar", "../../../Core/Grammar/TestWrapper.mg"}};
+            var paths = new Dictionary<string, string> {{"grammar", Settings.GrammarPath}};
             var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
             if (!textRange.IsEmpty)
             {
