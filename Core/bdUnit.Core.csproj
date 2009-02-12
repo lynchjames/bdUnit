@@ -103,6 +103,7 @@
     <Compile Include="Deserializer.cs" />
     <Compile Include="Enum\AccessEnum.cs" />
     <Compile Include="Enum\UnitTestFrameworkEnum.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Utility\CodeUtility.cs" />
     <Compile Include="Utility\ReflectionExtensionMethods.cs" />
     <Compile Include="AST\Constraint.cs" />

@@ -3,8 +3,6 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Text;
 using bdUnit.Core;
 using Core.Enum;
 using Microsoft.CSharp;
@@ -19,7 +17,7 @@ namespace bdUnit.Core
                                               "xunit", "MbUnit.Framework.2.0", "StructureMap", "StructureMap.AutoMocking"
                                           };
       
-        public void CompileDll(string folderPath)
+        public void CompileDll(string folderPath, UnitTestFrameworkEnum currentFramework)
         {
             CodeDomProvider compiler = new CSharpCodeProvider(new Dictionary<string, string> {{"CompilerVersion","v3.5"}});
             var compilerParameters = new CompilerParameters
@@ -34,8 +32,20 @@ namespace bdUnit.Core
                 compilerParameters.ReferencedAssemblies.Add(AppDomain.CurrentDomain.BaseDirectory + "\\" + string.Format("{0}.dll", reference));
             }
             compilerParameters.ReferencedAssemblies.Add("System.dll");
-            var source = GetSource(folderPath, UnitTestFrameworkEnum.XUnit);
+            var source = GetSource(folderPath, currentFramework);
             var results = compiler.CompileAssemblyFromSource(compilerParameters, source);
+            
+            // Print errors if they are present
+            if (results.Errors.HasErrors)
+            {
+                var errors = new CompilerError[results.Errors.Count];
+                results.Errors.CopyTo(errors, 0);
+                var count = errors.Length;
+                for (var i = 0; i < count; i++)
+                {
+                    Debug.WriteLine("Compilation Error: " + errors[i].ErrorText);
+                }
+            }
         }
 
         private string[] GetSource(string folderPath, UnitTestFrameworkEnum framework)
@@ -48,7 +58,7 @@ namespace bdUnit.Core
             {
                 var paths = new Dictionary<string, string>();
                 paths.Add("input", string.Format("{0}", files[i]));
-                paths.Add("grammar", "/Development/bdUnit/Core/Grammar/TestWrapper.mg");
+                paths.Add("grammar", Settings.GrammarPath);
                 var parser = new Parser(paths);
                 source[i] = parser.Parse(framework);
             }

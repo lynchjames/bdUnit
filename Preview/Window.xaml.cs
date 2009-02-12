@@ -65,7 +65,7 @@ namespace Preview
             if (!string.IsNullOrEmpty(SelectedDirectory))
             {
                 var dllBuilder = new DllBuilder();
-                dllBuilder.CompileDll(SelectedDirectory);
+                dllBuilder.CompileDll(SelectedDirectory, CurrentFramework);
             }
             else
             {
