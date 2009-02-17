@@ -1,13 +1,16 @@
 ﻿#region Using Statements
 
+using System;
 using System.Collections.Generic;
 using System.Dataflow;
 using System.Diagnostics;
 using System.IO;
 using System.Xml.Linq;
 using bdUnit.Core.AST;
+using bdUnit.Core.Utility;
 using Core.Enum;
 using Microsoft.M.Grammar;
+using Type=bdUnit.Core.AST.Type;
 
 #endregion
 
@@ -80,40 +83,54 @@ namespace bdUnit.Core
 
         public string Parse(UnitTestFrameworkEnum framework)
         {
-            var parser = LoadGrammar();
-            var deserializer = new Deserializer();
-
-            object root;
-
-            if (Input != null)
+            try
             {
-                root = parser.ParseObject(new StringReader(Input), ErrorReporter.Standard);
-            }
-            else
-            {
-                root = parser.ParseObject(InputPath, ErrorReporter.Standard);
-            }
+                var parser = LoadGrammar();
+                var deserializer = new Deserializer();
 
-            var tests = deserializer.Deserialize(root) as IList<object>;
-            var list = new List<Test>();
-            if (tests != null)
-            {
-                foreach (var test in tests)
+                object root;
+                var reporter = new DynamicParserExtensions.ExceptionErrorReporter();
+
+                if (Input != null)
                 {
-                    list.Add((Test)test);
+                    root = parser.ParseObject(new StringReader(Input), reporter);
                 }
-                switch(framework)
+                else
                 {
-                    case UnitTestFrameworkEnum.NUnit:
-                        var nUnit = new NUnitCodeGenerator();
-                        return nUnit.GenerateTestFixture(list, TestFileName);
-                    case UnitTestFrameworkEnum.XUnit:
-                        var xUnit = new XUnitCodeGenerator();
-                        return xUnit.GenerateTestFixture(list, TestFileName);
-                    case UnitTestFrameworkEnum.MbUnit:
-                        var mbUnit = new MbUnitCodeGenerator();
-                        return mbUnit.GenerateTestFixture(list, TestFileName);
+                    root = parser.ParseObject(InputPath, reporter);
                 }
+
+                if (reporter.HasErrors)
+                {
+                    reporter.Error("", new string[10]);
+                }
+
+                var tests = deserializer.Deserialize(root) as IList<object>;
+                var list = new List<Test>();
+                if (tests != null)
+                {
+                    foreach (var test in tests)
+                    {
+                        list.Add((Test)test);
+                    }
+                    switch (framework)
+                    {
+                        case UnitTestFrameworkEnum.NUnit:
+                            var nUnit = new NUnitCodeGenerator();
+                            return nUnit.GenerateTestFixture(list, TestFileName);
+                        case UnitTestFrameworkEnum.XUnit:
+                            var xUnit = new XUnitCodeGenerator();
+                            return xUnit.GenerateTestFixture(list, TestFileName);
+                        case UnitTestFrameworkEnum.MbUnit:
+                            var mbUnit = new MbUnitCodeGenerator();
+                            return mbUnit.GenerateTestFixture(list, TestFileName);
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
             return "The input is invalid - exception message to go here";
         }

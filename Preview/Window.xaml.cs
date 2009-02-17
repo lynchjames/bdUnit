@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using bdUnit.Core;
@@ -147,6 +148,10 @@ namespace Preview
                 {
                     sciEditor.ResetText();
                     sciEditor.InsertText(0, parser.Parse(framework));
+                    
+                    //TODO Modify input text if parsing exception is raised
+                    var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+                    //var reader = new TextReader();
                 }
             }
         }

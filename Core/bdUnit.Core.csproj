@@ -35,6 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gallio, Version=3.0.5.546, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
+    <Reference Include="MbUnit, Version=3.0.5.546, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.M.Grammar, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -105,6 +107,7 @@
     <Compile Include="Enum\UnitTestFrameworkEnum.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utility\CodeUtility.cs" />
+    <Compile Include="Utility\DynamicParserExtensions.cs" />
     <Compile Include="Utility\ReflectionExtensionMethods.cs" />
     <Compile Include="AST\Constraint.cs" />
     <Compile Include="AST\CreateMethod.cs" />
