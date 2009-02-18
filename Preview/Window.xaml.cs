@@ -148,10 +148,9 @@ namespace Preview
                 {
                     sciEditor.ResetText();
                     sciEditor.InsertText(0, parser.Parse(framework));
-                    
+
                     //TODO Modify input text if parsing exception is raised
-                    var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-                    //var reader = new TextReader();
+                    TextPointer point = InputEditor.Document.ContentStart;
                 }
             }
         }
