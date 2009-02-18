@@ -106,6 +106,7 @@
     <Compile Include="Enum\AccessEnum.cs" />
     <Compile Include="Enum\UnitTestFrameworkEnum.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Utility\bdUnitSyntaxProvider.cs" />
     <Compile Include="Utility\CodeUtility.cs" />
     <Compile Include="Utility\DynamicParserExtensions.cs" />
     <Compile Include="Utility\ReflectionExtensionMethods.cs" />

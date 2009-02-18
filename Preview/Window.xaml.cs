@@ -3,10 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
@@ -15,6 +17,7 @@ using bdUnit.Core;
 using bdUnit.Core.Utility;
 using Core.Enum;
 using ScintillaNet;
+using Brushes=System.Windows.Media.Brushes;
 using TextRange=System.Windows.Documents.TextRange;
 
 #endregion
@@ -54,6 +57,7 @@ namespace Preview
             InputEditor.Document.TextAlignment = TextAlignment.Justify;
             InputEditor.Document.LineHeight = 5;
             Closed += Window1_Closed;
+            HighlightInputSyntax();
         }
 
         void SelectFolder_Click(object sender, RoutedEventArgs e)
@@ -99,8 +103,8 @@ namespace Preview
 
         private void LoadEditor()
         {
-            //InputEditor.Document.Foreground = new SolidColorBrush(Colors.White);
-            //InputEditor.Background = new SolidColorBrush(Colors.Black);
+            InputEditor.Document.Foreground = new SolidColorBrush(Colors.White);
+            InputEditor.Background = new SolidColorBrush(Colors.Black);
             var sciEditor = new Scintilla {Name = "sciEditor", AcceptsReturn = true, AcceptsTab = true};
             sciEditor.Encoding = Encoding.UTF8;
             sciEditor.ConfigurationManager.Language = "cs";
@@ -120,7 +124,7 @@ namespace Preview
         private void InputEditor_KeyDown(object sender, KeyEventArgs e)
         {
             var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-            textRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
+            textRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
             var host = Preview.Content as WindowsFormsHost;
             var sciEditor = host.Child as Scintilla;
             if (e.Key == Key.F5 || e.Key == Key.OemPeriod || e.Key == Key.Return || e.Key == Key.Enter)
@@ -134,6 +138,80 @@ namespace Preview
             }
         }
 
+        private void HighlightInputSyntax()
+        {
+            if (InputEditor.Document == null)
+                return;
+
+            TextRange documentRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            documentRange.ClearAllProperties();
+
+            TextPointer navigator = InputEditor.Document.ContentStart;
+            while (navigator.CompareTo(InputEditor.Document.ContentEnd) < 0)
+            {
+                TextPointerContext context = navigator.GetPointerContext(LogicalDirection.Backward);
+                if (context == TextPointerContext.ElementStart && navigator.Parent is Run)
+                {
+                    CheckWordsInRun((Run)navigator.Parent);
+                }
+                navigator = navigator.GetNextContextPosition(LogicalDirection.Forward);
+            }
+
+            Format();
+        }
+
+        List<bdUnitSyntaxProvider.Tag> m_tags = new List<bdUnitSyntaxProvider.Tag>();
+        void Format()
+        {
+            for(var i = 0; i< m_tags.Count; i++)
+            {
+                var range = new TextRange(m_tags[i].StartPosition, m_tags[i].EndPosition);
+                var syntaxColor = bdUnitSyntaxProvider.GetBrushColor(m_tags[i].Word);
+                range.ApplyPropertyValue(TextElement.ForegroundProperty, syntaxColor);
+                range.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
+            }
+            m_tags.Clear();
+        }
+
+        void CheckWordsInRun(Run run)
+        {
+            string text = run.Text;
+
+            int sIndex = 0;
+            int eIndex = 0;
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (Char.IsWhiteSpace(text[i]) | bdUnitSyntaxProvider.GetSpecials.Contains(text[i]))
+                {
+                    if (i > 0 && !(Char.IsWhiteSpace(text[i - 1]) | bdUnitSyntaxProvider.GetSpecials.Contains(text[i - 1])))
+                    {
+                        eIndex = i - 1;
+                        string word = text.Substring(sIndex, eIndex - sIndex + 1);
+
+                        if (bdUnitSyntaxProvider.IsKnownTag(word))
+                        {
+                            bdUnitSyntaxProvider.Tag t = new bdUnitSyntaxProvider.Tag();
+                            t.StartPosition = run.ContentStart.GetPositionAtOffset(sIndex, LogicalDirection.Forward);
+                            t.EndPosition = run.ContentStart.GetPositionAtOffset(eIndex + 1, LogicalDirection.Backward);
+                            t.Word = word;
+                            m_tags.Add(t);
+                        }
+                    }
+                    sIndex = i + 1;
+                }
+            }
+
+            string lastWord = text.Substring(sIndex, text.Length - sIndex);
+            if (bdUnitSyntaxProvider.IsKnownTag(lastWord))
+            {
+                bdUnitSyntaxProvider.Tag t = new bdUnitSyntaxProvider.Tag();
+                t.StartPosition = run.ContentStart.GetPositionAtOffset(sIndex, LogicalDirection.Forward);
+                t.EndPosition = run.ContentStart.GetPositionAtOffset(eIndex + lastWord.Length + 2, LogicalDirection.Backward);
+                t.Word = lastWord;
+                m_tags.Add(t);
+            }
+        }
+
         private void UpdatePreview(UnitTestFrameworkEnum framework)
         {
             var paths = new Dictionary<string, string> {{"grammar", Settings.GrammarPath}};
@@ -144,6 +222,7 @@ namespace Preview
                 var outputCode = string.Empty;
                 try
                 {
+                    HighlightInputSyntax();
                     var parser = new Parser(textRange.Text, paths);
                     outputCode = parser.Parse(framework);
                 }

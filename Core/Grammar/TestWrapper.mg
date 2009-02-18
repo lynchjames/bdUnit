@@ -155,7 +155,8 @@ module Test
         = "I want a " 
         | "I want" TMethod;
         token TMethod = " to be able to " | " the ability to ";
-        token TProperty = "To have " ("a"|"an") " ";
+        @{CaseSensitive[false]}
+        token TProperty = "to have " ("a"|"an") " ";
         token TEqual = " of " | "equal to " | " as ";
         token TGreater = " greater than ";
         token TGreaterOrEqual = " greater than or" TEqual;
@@ -173,7 +174,7 @@ module Test
         @{Classification["Type"]} token ObjectId = '@' (Base.Letter|'-'|'_')+;
         @{Classification["Method"]} token MethodId = '#' (Base.Letter|'-'|'_')+;
         @{Classification["Property"]} token PropertyId = '~' (Base.Letter|'-'|'_')+;
-        @{Classification["Value"]} token ValueId = (Base.Letter|'-'|'_'|Base.Digit|'.')+;
+        @{Classification["Value"]} token ValueId = (Base.Letter|'_'|Base.Digit|'.')+;
               
         syntax StringLiteral
           = val:Language.Grammar.TextLiteral => val;    
