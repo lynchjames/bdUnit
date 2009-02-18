@@ -83,55 +83,49 @@ namespace bdUnit.Core
 
         public string Parse(UnitTestFrameworkEnum framework)
         {
-            try
+            
+            var parser = LoadGrammar();
+            var deserializer = new Deserializer();
+
+            object root;
+            var reporter = new DynamicParserExtensions.ExceptionErrorReporter();
+
+            if (Input != null)
             {
-                var parser = LoadGrammar();
-                var deserializer = new Deserializer();
+                root = parser.ParseObject(new StringReader(Input), reporter);
+            }
+            else
+            {
+                root = parser.ParseObject(InputPath, reporter);
+            }
 
-                object root;
-                var reporter = new DynamicParserExtensions.ExceptionErrorReporter();
+            if (reporter.HasErrors)
+            {
+                reporter.Error("", new string[10]);
+            }
 
-                if (Input != null)
+            var tests = deserializer.Deserialize(root) as IList<object>;
+            var list = new List<Test>();
+            if (tests != null)
+            {
+                foreach (var test in tests)
                 {
-                    root = parser.ParseObject(new StringReader(Input), reporter);
+                    list.Add((Test)test);
                 }
-                else
+                switch (framework)
                 {
-                    root = parser.ParseObject(InputPath, reporter);
-                }
-
-                if (reporter.HasErrors)
-                {
-                    reporter.Error("", new string[10]);
-                }
-
-                var tests = deserializer.Deserialize(root) as IList<object>;
-                var list = new List<Test>();
-                if (tests != null)
-                {
-                    foreach (var test in tests)
-                    {
-                        list.Add((Test)test);
-                    }
-                    switch (framework)
-                    {
-                        case UnitTestFrameworkEnum.NUnit:
-                            var nUnit = new NUnitCodeGenerator();
-                            return nUnit.GenerateTestFixture(list, TestFileName);
-                        case UnitTestFrameworkEnum.XUnit:
-                            var xUnit = new XUnitCodeGenerator();
-                            return xUnit.GenerateTestFixture(list, TestFileName);
-                        case UnitTestFrameworkEnum.MbUnit:
-                            var mbUnit = new MbUnitCodeGenerator();
-                            return mbUnit.GenerateTestFixture(list, TestFileName);
-                    }
+                    case UnitTestFrameworkEnum.NUnit:
+                        var nUnit = new NUnitCodeGenerator();
+                        return nUnit.GenerateTestFixture(list, TestFileName);
+                    case UnitTestFrameworkEnum.XUnit:
+                        var xUnit = new XUnitCodeGenerator();
+                        return xUnit.GenerateTestFixture(list, TestFileName);
+                    case UnitTestFrameworkEnum.MbUnit:
+                        var mbUnit = new MbUnitCodeGenerator();
+                        return mbUnit.GenerateTestFixture(list, TestFileName);
                 }
             }
 
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
             return "The input is invalid - exception message to go here";
         }
 

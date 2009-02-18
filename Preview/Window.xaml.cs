@@ -5,13 +5,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
+using System.Windows.Media;
 using bdUnit.Core;
+using bdUnit.Core.Utility;
 using Core.Enum;
-using Microsoft.Win32;
 using ScintillaNet;
 using TextRange=System.Windows.Documents.TextRange;
 
@@ -51,6 +53,7 @@ namespace Preview
             range.Text = defaultText;
             InputEditor.Document.TextAlignment = TextAlignment.Justify;
             InputEditor.Document.LineHeight = 5;
+            Closed += Window1_Closed;
         }
 
         void SelectFolder_Click(object sender, RoutedEventArgs e)
@@ -76,23 +79,17 @@ namespace Preview
 
         private void MbUnitPreview_Click(object sender, RoutedEventArgs e)
         {
-            CurrentFramework = UnitTestFrameworkEnum.MbUnit;
-            UpdatePreview(CurrentFramework);
-            Title = "bdUnit Preview - " + UnitTestFrameworkEnum.MbUnit;
+            UpdatePreview(UnitTestFrameworkEnum.MbUnit);
         }
 
         private void NUnitPreview_Click(object sender, RoutedEventArgs e)
         {
-            CurrentFramework = UnitTestFrameworkEnum.NUnit;
-            UpdatePreview(CurrentFramework);
-            Title = "bdUnit Preview - " + UnitTestFrameworkEnum.NUnit;
+            UpdatePreview(UnitTestFrameworkEnum.NUnit);
         }
 
         private void XUnitPreview_Click(object sender, RoutedEventArgs e)
         {
-            CurrentFramework = UnitTestFrameworkEnum.XUnit;
-            UpdatePreview(CurrentFramework);
-            Title = "bdUnit Preview - " + UnitTestFrameworkEnum.XUnit;
+            UpdatePreview(UnitTestFrameworkEnum.XUnit);
         }
 
         private void Paste_Click(object sender, RoutedEventArgs e)
@@ -122,6 +119,8 @@ namespace Preview
 
         private void InputEditor_KeyDown(object sender, KeyEventArgs e)
         {
+            var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            textRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
             var host = Preview.Content as WindowsFormsHost;
             var sciEditor = host.Child as Scintilla;
             if (e.Key == Key.F5 || e.Key == Key.OemPeriod || e.Key == Key.Return || e.Key == Key.Enter)
@@ -139,19 +138,49 @@ namespace Preview
         {
             var paths = new Dictionary<string, string> {{"grammar", Settings.GrammarPath}};
             var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            textRange.ClearAllProperties();
             if (!textRange.IsEmpty)
             {
-                var parser = new Parser(textRange.Text, paths);
-                var host = Preview.Content as WindowsFormsHost;
-                var sciEditor = host.Child as Scintilla;
-                if (sciEditor != null)
+                var outputCode = string.Empty;
+                try
                 {
-                    sciEditor.ResetText();
-                    sciEditor.InsertText(0, parser.Parse(framework));
-
-                    //TODO Modify input text if parsing exception is raised
-                    TextPointer point = InputEditor.Document.ContentStart;
+                    var parser = new Parser(textRange.Text, paths);
+                    outputCode = parser.Parse(framework);
                 }
+                catch (DynamicParserExtensions.ErrorException ex)
+                {
+                    //TODO Modify input text if parsing exception is raised
+                    var errorStartPoint = textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1).GetPositionAtOffset(ex.Location.Span.Start.Column);
+                    var errorEndPoint = errorStartPoint.GetPositionAtOffset(ex.Location.Span.Length + 4);
+                    var errorRange = new TextRange(errorStartPoint, errorEndPoint);
+                    errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Red);
+                    outputCode = ex.Message;
+                }
+                finally
+                {
+                    var host = Preview.Content as WindowsFormsHost;
+                    var sciEditor = host.Child as Scintilla;
+                    if (sciEditor != null)
+                    {
+                        sciEditor.ResetText();
+                        sciEditor.InsertText(0, outputCode);
+                    }
+                }
+            }
+            CurrentFramework = framework;
+            Title = "bdUnit Preview - " + framework;
+        }
+
+        void Window1_Closed(object sender, System.EventArgs e)
+        {
+            try
+            {
+                var host = (WindowsFormsHost)Preview.Content;
+                host.Dispose();
+            }
+            catch (Exception)
+            {
+
             }
         }
     }
