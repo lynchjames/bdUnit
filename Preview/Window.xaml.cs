@@ -268,7 +268,7 @@ namespace Preview
                     var errorRange = new TextRange(errorStartPoint, errorEndPoint);
                     errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Red);
                     ErrorPoint = errorEndPoint;
-                    ErrorVerticalOffset = ex.Location.Span.Start.Line - 1;
+                    ErrorVerticalOffset = ex.Location.Span.Start.Line * 8;
                     error = ex.Message;
                     ErrorOutput.Cursor = Cursors.Hand;
                 }
