@@ -262,12 +262,14 @@ namespace Preview
                 }
                 catch (DynamicParserExtensions.ErrorException ex)
                 {
-                    //TODO Modify input text if parsing exception is raised
-                    var errorStartPoint = textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1).GetPositionAtOffset(ex.Location.Span.Start.Column);
-                    var errorEndPoint = errorStartPoint.GetPositionAtOffset(ex.Location.Span.Length + 4);
-                    var errorRange = new TextRange(errorStartPoint, errorEndPoint);
-                    errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Red);
-                    ErrorPoint = errorEndPoint;
+                    if (ex.Location != null)
+                    {
+                        var errorStartPoint = textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1).GetPositionAtOffset(ex.Location.Span.Start.Column);
+                        var errorEndPoint = errorStartPoint.GetPositionAtOffset(ex.Location.Span.Length + 4);
+                        var errorRange = new TextRange(errorStartPoint, errorEndPoint);
+                        errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Red);
+                        ErrorPoint = errorEndPoint;
+                    }
                     ErrorVerticalOffset = ex.Location.Span.Start.Line * 8;
                     error = ex.Message;
                     ErrorOutput.Cursor = Cursors.Hand;
