@@ -66,8 +66,8 @@ namespace bdUnit.Core.Utility
         }
 
         private static readonly SolidColorBrush TypeColor = new SolidColorBrush(Colors.Yellow);
-        private static readonly SolidColorBrush PropertyColor = new SolidColorBrush(Colors.PaleVioletRed);
-        private static readonly SolidColorBrush MethodColor = new SolidColorBrush(Colors.BlueViolet);
+        private static readonly SolidColorBrush PropertyColor = new SolidColorBrush(Colors.Purple);
+        private static readonly SolidColorBrush MethodColor = new SolidColorBrush(Colors.LightSkyBlue);
         private static readonly SolidColorBrush SetupColor = new SolidColorBrush(Colors.Red);
         private static readonly SolidColorBrush DefaultKeywordColor = new SolidColorBrush(Colors.Orange);
 

@@ -81,6 +81,7 @@ namespace Preview
             {
                 ErrorOutput.FontWeight = FontWeights.Bold;
                 ErrorOutput.FontStyle = FontStyles.Italic;
+                ErrorOutput.Background = Brushes.LightSlateGray;
             }
         }
 
@@ -201,7 +202,7 @@ namespace Preview
                 var range = new TextRange(m_tags[i].StartPosition, m_tags[i].EndPosition);
                 var syntaxColor = bdUnitSyntaxProvider.GetBrushColor(m_tags[i].Word);
                 range.ApplyPropertyValue(TextElement.ForegroundProperty, syntaxColor);
-                range.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
+                //range.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
             }
             m_tags.Clear();
         }
@@ -259,6 +260,7 @@ namespace Preview
                     HighlightInputSyntax();
                     var parser = new Parser(textRange.Text, paths);
                     outputCode = parser.Parse(framework);
+                    error = "Successfully parsed input";
                 }
                 catch (DynamicParserExtensions.ErrorException ex)
                 {
@@ -287,7 +289,7 @@ namespace Preview
                 }
             }
             CurrentFramework = framework;
-            Title = "bdUnit Preview - " + framework;
+            Title = string.Format("bdUnit Preview ({0})", framework);
         }
 
         void Window1_Closed(object sender, System.EventArgs e)
