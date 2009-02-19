@@ -30,6 +30,8 @@ namespace Preview
     public partial class Window1
     {
         private string SelectedDirectory { get; set; }
+        private TextPointer ErrorPoint { get; set; }
+        private double ErrorVerticalOffset { get; set; }
 
         public Window1()
         {
@@ -56,8 +58,39 @@ namespace Preview
             range.Text = defaultText;
             InputEditor.Document.TextAlignment = TextAlignment.Justify;
             InputEditor.Document.LineHeight = 5;
+            ErrorOutput.MouseLeftButtonDown += ErrorOutput_MouseLeftButtonDown;
+            ErrorOutput.MouseEnter += ErrorOutput_MouseEnter;
+            ErrorOutput.MouseLeave += ErrorOutput_MouseLeave;
+            ErrorVerticalOffset = -1;
             Closed += Window1_Closed;
             HighlightInputSyntax();
+        }
+
+        void ErrorOutput_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (ErrorVerticalOffset != -1)
+            {
+                ErrorOutput.FontWeight = FontWeights.Normal;
+                ErrorOutput.FontStyle = FontStyles.Normal;
+            }
+        }
+
+        void ErrorOutput_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (ErrorVerticalOffset != -1)
+            {
+                ErrorOutput.FontWeight = FontWeights.Bold;
+                ErrorOutput.FontStyle = FontStyles.Italic;
+            }
+        }
+
+        void ErrorOutput_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (ErrorVerticalOffset != -1)
+            {
+                InputEditor.ScrollToVerticalOffset(ErrorVerticalOffset);
+                InputEditor.CaretPosition = ErrorPoint;
+            }
         }
 
         void SelectFolder_Click(object sender, RoutedEventArgs e)
@@ -220,6 +253,7 @@ namespace Preview
             if (!textRange.IsEmpty)
             {
                 var outputCode = string.Empty;
+                var error = string.Empty;
                 try
                 {
                     HighlightInputSyntax();
@@ -233,7 +267,10 @@ namespace Preview
                     var errorEndPoint = errorStartPoint.GetPositionAtOffset(ex.Location.Span.Length + 4);
                     var errorRange = new TextRange(errorStartPoint, errorEndPoint);
                     errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Red);
-                    outputCode = ex.Message;
+                    ErrorPoint = errorEndPoint;
+                    ErrorVerticalOffset = ex.Location.Span.Start.Line - 1;
+                    error = ex.Message;
+                    ErrorOutput.Cursor = Cursors.Hand;
                 }
                 finally
                 {
@@ -243,6 +280,7 @@ namespace Preview
                     {
                         sciEditor.ResetText();
                         sciEditor.InsertText(0, outputCode);
+                        ErrorOutput.Text = error;
                     }
                 }
             }
