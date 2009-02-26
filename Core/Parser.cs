@@ -29,6 +29,12 @@ namespace bdUnit.Core
             Input = input;
         }
 
+        public Parser(string input)
+        {
+            Grammar = File.ReadAllText(Settings.GrammarPath);
+            Input = input;
+        }
+
         public Parser(string input, IDictionary<string, string> grammarPath)
         {
             Input = input;
