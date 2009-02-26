@@ -15,10 +15,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using bdUnit.Core;
 using bdUnit.Core.Utility;
+using bdUnit.Preview;
 using Core.Enum;
 using ScintillaNet;
 using Brushes=System.Windows.Media.Brushes;
 using TextRange=System.Windows.Documents.TextRange;
+using Timer=System.Timers.Timer;
 
 #endregion
 
@@ -32,6 +34,7 @@ namespace Preview
         private string SelectedDirectory { get; set; }
         private TextPointer ErrorPoint { get; set; }
         private double ErrorVerticalOffset { get; set; }
+        private BackgroundThread _worker;
 
         public Window1()
         {
@@ -45,7 +48,10 @@ namespace Preview
         {
             CurrentFramework = UnitTestFrameworkEnum.NUnit;
             LoadEditor();
-            InputEditor.KeyDown += InputEditor_KeyDown;
+            InputEditor.TextChanged += InputEditor_TextChanged;
+            _worker = new BackgroundThread();
+            _worker.DoWork += worker_DoWork;
+            _parser = new Parser("");
             SelectFolder.Click += SelectFolder_Click;
             Paste.Click += Paste_Click;
             Dll.Click += Dll_Click;
@@ -63,7 +69,7 @@ namespace Preview
             ErrorOutput.MouseLeave += ErrorOutput_MouseLeave;
             ErrorVerticalOffset = -1;
             Closed += Window1_Closed;
-            HighlightInputSyntax();
+            //HighlightInputSyntax();
         }
 
         void ErrorOutput_MouseLeave(object sender, MouseEventArgs e)
@@ -81,7 +87,6 @@ namespace Preview
             {
                 ErrorOutput.FontWeight = FontWeights.Bold;
                 ErrorOutput.FontStyle = FontStyles.Italic;
-                ErrorOutput.Background = Brushes.LightSlateGray;
             }
         }
 
@@ -117,17 +122,20 @@ namespace Preview
 
         private void MbUnitPreview_Click(object sender, RoutedEventArgs e)
         {
-            UpdatePreview(UnitTestFrameworkEnum.MbUnit);
+            _textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            UpdatePreview(UnitTestFrameworkEnum.MbUnit, _textRange);
         }
 
         private void NUnitPreview_Click(object sender, RoutedEventArgs e)
         {
-            UpdatePreview(UnitTestFrameworkEnum.NUnit);
+            _textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            UpdatePreview(UnitTestFrameworkEnum.NUnit, _textRange);
         }
 
         private void XUnitPreview_Click(object sender, RoutedEventArgs e)
         {
-            UpdatePreview(UnitTestFrameworkEnum.XUnit);
+            _textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            UpdatePreview(UnitTestFrameworkEnum.XUnit, _textRange);
         }
 
         private void Paste_Click(object sender, RoutedEventArgs e)
@@ -155,21 +163,49 @@ namespace Preview
             Preview.Content = host;
         }
 
-        private void InputEditor_KeyDown(object sender, KeyEventArgs e)
+        private void InputEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-            textRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
+            _textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            _textRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
+            //var host = Preview.Content as WindowsFormsHost;
+            //var sciEditor = host.Child as Scintilla;
+            //if (e.Key == Key.F5 || e.Key == Key.OemPeriod || e.Key == Key.Return || e.Key == Key.Enter)
+            //{
+
+            if (!_worker.IsBusy && !IsUpdating)
+            {
+                _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
+                _worker.Generate();
+            }
+
+            //}
+            //if (sciEditor != null)
+            //{
+            //    sciEditor.ResetText();
+            //    sciEditor.InsertText(0, "Input has been modified, hit F5 to refresh");
+            //}
+        }
+
+        void _worker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            IsUpdating = true;
             var host = Preview.Content as WindowsFormsHost;
             var sciEditor = host.Child as Scintilla;
-            if (e.Key == Key.F5 || e.Key == Key.OemPeriod || e.Key == Key.Return || e.Key == Key.Enter)
-            {
-                UpdatePreview(CurrentFramework);
-            }
-            else if (sciEditor != null)
+            if (sciEditor != null)
             {
                 sciEditor.ResetText();
-                sciEditor.InsertText(0, "Input has been modified, hit F5 to refresh");
+                sciEditor.InsertText(0, _outputCode);
+                ErrorOutput.Text = _error;
             }
+            CurrentFramework = _framework;
+            Title = "bdUnit Preview - " + _framework;
+            HighlightInputSyntax();
+            IsUpdating = false;
+        }
+
+        void worker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            UpdatePreview(CurrentFramework, _textRange);
         }
 
         private void HighlightInputSyntax()
@@ -178,7 +214,7 @@ namespace Preview
                 return;
 
             TextRange documentRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-            documentRange.ClearAllProperties();
+            //documentRange.ClearAllProperties();
 
             TextPointer navigator = InputEditor.Document.ContentStart;
             while (navigator.CompareTo(InputEditor.Document.ContentEnd) < 0)
@@ -194,6 +230,13 @@ namespace Preview
         }
 
         List<bdUnitSyntaxProvider.Tag> m_tags = new List<bdUnitSyntaxProvider.Tag>();
+        private string _outputCode;
+        private string _error;
+        private UnitTestFrameworkEnum _framework;
+        private Timer timer;
+        private bool IsUpdating;
+        private TextRange _textRange;
+
         void Format()
         {
             for(var i = 0; i< m_tags.Count; i++)
@@ -201,7 +244,7 @@ namespace Preview
                 var range = new TextRange(m_tags[i].StartPosition, m_tags[i].EndPosition);
                 var syntaxColor = bdUnitSyntaxProvider.GetBrushColor(m_tags[i].Word);
                 range.ApplyPropertyValue(TextElement.ForegroundProperty, syntaxColor);
-                //range.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
+                range.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
             }
             m_tags.Clear();
         }
@@ -245,21 +288,22 @@ namespace Preview
             }
         }
 
-        private void UpdatePreview(UnitTestFrameworkEnum framework)
+        private void UpdatePreview(UnitTestFrameworkEnum framework, TextRange textRange)
         {
-            var paths = new Dictionary<string, string> {{"grammar", Settings.GrammarPath}};
-            var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-            textRange.ClearAllProperties();
-            if (!textRange.IsEmpty)
-            {
-                var outputCode = string.Empty;
-                var error = string.Empty;
+            _framework = framework;
+            //var paths = new Dictionary<string, string> {{"grammar", Settings.GrammarPath}};
+            //_textRange.ClearAllProperties();
+            //if (!_textRange.IsEmpty)
+            //{
+                _outputCode = string.Empty;
+                _error = string.Empty;
                 try
                 {
-                    HighlightInputSyntax();
-                    var parser = new Parser(textRange.Text, paths);
-                    outputCode = parser.Parse(framework);
-                    error = "Successfully parsed input";
+                    using (_parser)
+                    {
+                        _parser.Input = textRange.Text;
+                        _outputCode = _parser.Parse(_framework);
+                    }
                 }
                 catch (DynamicParserExtensions.ErrorException ex)
                 {
@@ -272,24 +316,17 @@ namespace Preview
                         ErrorPoint = errorEndPoint;
                     }
                     ErrorVerticalOffset = ex.Location.Span.Start.Line * 8;
-                    error = ex.Message;
+                    _error = ex.Message;
                     ErrorOutput.Cursor = Cursors.Hand;
                 }
                 finally
                 {
-                    var host = Preview.Content as WindowsFormsHost;
-                    var sciEditor = host.Child as Scintilla;
-                    if (sciEditor != null)
-                    {
-                        sciEditor.ResetText();
-                        sciEditor.InsertText(0, outputCode);
-                        ErrorOutput.Text = error;
-                    }
+                    
                 }
-            }
-            CurrentFramework = framework;
-            Title = string.Format("bdUnit Preview ({0})", framework);
+            //}
         }
+
+        private Parser _parser { get; set; }
 
         void Window1_Closed(object sender, System.EventArgs e)
         {

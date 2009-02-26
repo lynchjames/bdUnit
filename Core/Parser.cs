@@ -16,7 +16,7 @@ using Type=bdUnit.Core.AST.Type;
 
 namespace bdUnit.Core
 {
-    public class Parser
+    public class Parser : IDisposable
     {
         private Dictionary<Identifier, Type> explicitTypeMappings = new Dictionary<Identifier, Type>();
         private Dictionary<Identifier, Type> labelToTypeMappings;
@@ -57,7 +57,7 @@ namespace bdUnit.Core
         public static string TestFileName { get; set; }
         public static string GrammarPath { get; set; }
         public static string Grammar { get; set; }
-        public static string Input { get; set; }
+        public string Input { get; set; }
 
         public static DynamicParser LoadGrammar()
         {
@@ -164,6 +164,11 @@ namespace bdUnit.Core
 
         public static void Main()
         {
+        }
+
+        public void Dispose()
+        {
+            this.Input = null;
         }
     }
 }
