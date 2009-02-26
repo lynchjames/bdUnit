@@ -13,7 +13,6 @@ using System.Windows.Documents;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using bdUnit.Core;
 using bdUnit.Core.Utility;
 using Core.Enum;
@@ -33,8 +32,6 @@ namespace Preview
         private string SelectedDirectory { get; set; }
         private TextPointer ErrorPoint { get; set; }
         private double ErrorVerticalOffset { get; set; }
-        private bool BackgroundThreadIsRunning { get; set; }
-        private DateTime LastUpdated { get; set; }
 
         public Window1()
         {
@@ -44,11 +41,11 @@ namespace Preview
 
         private UnitTestFrameworkEnum CurrentFramework { get; set; }
 
-        [STAThread]
         private void Window1_Loaded(object sender, RoutedEventArgs e)
         {
             CurrentFramework = UnitTestFrameworkEnum.NUnit;
             LoadEditor();
+            InputEditor.KeyDown += InputEditor_KeyDown;
             SelectFolder.Click += SelectFolder_Click;
             Paste.Click += Paste_Click;
             Dll.Click += Dll_Click;
@@ -59,7 +56,6 @@ namespace Preview
             var defaultText = File.ReadAllText("../../../Core/Inputs/LogansRun.input");
             Debug.Write(defaultText);
             range.Text = defaultText;
-            InputEditor.TextChanged += InputEditor_TextChanged;
             InputEditor.Document.TextAlignment = TextAlignment.Justify;
             InputEditor.Document.LineHeight = 5;
             ErrorOutput.MouseLeftButtonDown += ErrorOutput_MouseLeftButtonDown;
@@ -85,6 +81,7 @@ namespace Preview
             {
                 ErrorOutput.FontWeight = FontWeights.Bold;
                 ErrorOutput.FontStyle = FontStyles.Italic;
+                ErrorOutput.Background = Brushes.LightSlateGray;
             }
         }
 
@@ -120,20 +117,17 @@ namespace Preview
 
         private void MbUnitPreview_Click(object sender, RoutedEventArgs e)
         {
-            CurrentFramework = UnitTestFrameworkEnum.MbUnit;
-            UpdatePreview();
+            UpdatePreview(UnitTestFrameworkEnum.MbUnit);
         }
 
         private void NUnitPreview_Click(object sender, RoutedEventArgs e)
         {
-            CurrentFramework = UnitTestFrameworkEnum.NUnit;
-            UpdatePreview();
+            UpdatePreview(UnitTestFrameworkEnum.NUnit);
         }
 
         private void XUnitPreview_Click(object sender, RoutedEventArgs e)
         {
-            CurrentFramework = UnitTestFrameworkEnum.XUnit;
-            UpdatePreview();
+            UpdatePreview(UnitTestFrameworkEnum.XUnit);
         }
 
         private void Paste_Click(object sender, RoutedEventArgs e)
@@ -161,39 +155,21 @@ namespace Preview
             Preview.Content = host;
         }
 
-        private void InputEditor_TextChanged(object sender, TextChangedEventArgs e)
+        private void InputEditor_KeyDown(object sender, KeyEventArgs e)
         {
-            if (!BackgroundThreadIsRunning)
+            var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            textRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
+            var host = Preview.Content as WindowsFormsHost;
+            var sciEditor = host.Child as Scintilla;
+            if (e.Key == Key.F5 || e.Key == Key.OemPeriod || e.Key == Key.Return || e.Key == Key.Enter)
             {
-                BackgroundThreadIsRunning = true;
-                var BackgroundThreadStart = new ThreadStart(UpdatePreview);
-                var BackgroundThread = new Thread(BackgroundThreadStart);
-                BackgroundThread.Name = "Update Preview";
-                BackgroundThread.IsBackground = true;
-                BackgroundThread.Start();
+                UpdatePreview(CurrentFramework);
             }
-            //var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-            //textRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
-            //var host = Preview.Content as WindowsFormsHost;
-            //var sciEditor = host.Child as Scintilla;
-            //if (e.Key == Key.F5 || e.Key == Key.OemPeriod || e.Key == Key.Return || e.Key == Key.Enter)
-            //{
-            //if (!BackgroundThreadIsRunning)
-            //{
-            //    var BackgroundThreadStart = new ThreadStart(UpdatePreview);
-            //    var BackgroundThread = new Thread(BackgroundThreadStart);
-            //    BackgroundThread.Name = "Update Preview";
-            //    BackgroundThread.IsBackground = true;
-            //    BackgroundThread.
-            //    BackgroundThread.Start();
-            //    BackgroundThreadIsRunning = true;
-            //}
-            //}
-            //if (sciEditor != null)
-            //{
-            //    sciEditor.ResetText();
-            //    sciEditor.InsertText(0, "Input has been modified, hit F5 to refresh");
-            //}
+            else if (sciEditor != null)
+            {
+                sciEditor.ResetText();
+                sciEditor.InsertText(0, "Input has been modified, hit F5 to refresh");
+            }
         }
 
         private void HighlightInputSyntax()
@@ -201,46 +177,20 @@ namespace Preview
             if (InputEditor.Document == null)
                 return;
 
-            if (!InputEditor.Dispatcher.CheckAccess())
-            {
-                InputEditor.Dispatcher.Invoke(DispatcherPriority.SystemIdle, new Action(
-            delegate()
-                {
-                    TextRange documentRange = new TextRange(InputEditor.Document.ContentStart,
-                                                            InputEditor.Document.ContentEnd);
-                    documentRange.ClearAllProperties();
+            TextRange documentRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            documentRange.ClearAllProperties();
 
-                    TextPointer navigator = InputEditor.Document.ContentStart;
-                    while (navigator.CompareTo(InputEditor.Document.ContentEnd) < 0)
-                    {
-                        TextPointerContext context = navigator.GetPointerContext(LogicalDirection.Backward);
-                        if (context == TextPointerContext.ElementStart && navigator.Parent is Run)
-                        {
-                            CheckWordsInRun((Run) navigator.Parent);
-                        }
-                        navigator = navigator.GetNextContextPosition(LogicalDirection.Forward);
-                    }
-                    Format();
-                }
-                                                                                                          ));
-            }
-            else
+            TextPointer navigator = InputEditor.Document.ContentStart;
+            while (navigator.CompareTo(InputEditor.Document.ContentEnd) < 0)
             {
-                TextRange documentRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-                documentRange.ClearAllProperties();
-
-                TextPointer navigator = InputEditor.Document.ContentStart;
-                while (navigator.CompareTo(InputEditor.Document.ContentEnd) < 0)
+                TextPointerContext context = navigator.GetPointerContext(LogicalDirection.Backward);
+                if (context == TextPointerContext.ElementStart && navigator.Parent is Run)
                 {
-                    TextPointerContext context = navigator.GetPointerContext(LogicalDirection.Backward);
-                    if (context == TextPointerContext.ElementStart && navigator.Parent is Run)
-                    {
-                        CheckWordsInRun((Run)navigator.Parent);
-                    }
-                    navigator = navigator.GetNextContextPosition(LogicalDirection.Forward);
+                    CheckWordsInRun((Run)navigator.Parent);
                 }
-                Format();
+                navigator = navigator.GetNextContextPosition(LogicalDirection.Forward);
             }
+            Format();
         }
 
         List<bdUnitSyntaxProvider.Tag> m_tags = new List<bdUnitSyntaxProvider.Tag>();
@@ -251,7 +201,7 @@ namespace Preview
                 var range = new TextRange(m_tags[i].StartPosition, m_tags[i].EndPosition);
                 var syntaxColor = bdUnitSyntaxProvider.GetBrushColor(m_tags[i].Word);
                 range.ApplyPropertyValue(TextElement.ForegroundProperty, syntaxColor);
-                range.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
+                //range.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
             }
             m_tags.Clear();
         }
@@ -295,79 +245,50 @@ namespace Preview
             }
         }
 
-        private void UpdatePreview()
+        private void UpdatePreview(UnitTestFrameworkEnum framework)
         {
-            if (!InputEditor.Dispatcher.CheckAccess())
+            var paths = new Dictionary<string, string> {{"grammar", Settings.GrammarPath}};
+            var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            textRange.ClearAllProperties();
+            if (!textRange.IsEmpty)
             {
-                InputEditor.Dispatcher.Invoke(DispatcherPriority.SystemIdle, new Action(
-            delegate()
-            {
-                var framework = CurrentFramework;
-                var paths = new Dictionary<string, string> { { "grammar", Settings.GrammarPath } };
-                var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-                if (!textRange.IsEmpty)
+                var outputCode = string.Empty;
+                var error = string.Empty;
+                try
                 {
-                    var outputCode = string.Empty;
-                    var error = string.Empty;
-                    try
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    HighlightInputSyntax();
+                    var parser = new Parser(textRange.Text, paths);
+                    outputCode = parser.Parse(framework);
+                    error = "Successfully parsed input";
+                }
+                catch (DynamicParserExtensions.ErrorException ex)
+                {
+                    if (ex.Location != null)
                     {
-                        HighlightInputSyntax();
-                        var parser = new Parser(textRange.Text, paths);
-                        outputCode = parser.Parse(framework);
-                    }
-                    catch (DynamicParserExtensions.ErrorException ex)
-                    {
-                        //TODO Modify input text if parsing exception is raised
-                        var errorStartPoint =
-                            textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1).
-                                GetPositionAtOffset(ex.Location.Span.Start.Column);
+                        var errorStartPoint = textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1).GetPositionAtOffset(ex.Location.Span.Start.Column);
                         var errorEndPoint = errorStartPoint.GetPositionAtOffset(ex.Location.Span.Length + 4);
                         var errorRange = new TextRange(errorStartPoint, errorEndPoint);
                         errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Red);
                         ErrorPoint = errorEndPoint;
-                        ErrorVerticalOffset = ex.Location.Span.Start.Line - 1;
-                        error = ex.Message;
-                        ErrorOutput.Cursor = Cursors.Hand;
                     }
-                    finally
+                    ErrorVerticalOffset = ex.Location.Span.Start.Line * 8;
+                    error = ex.Message;
+                    ErrorOutput.Cursor = Cursors.Hand;
+                }
+                finally
+                {
+                    var host = Preview.Content as WindowsFormsHost;
+                    var sciEditor = host.Child as Scintilla;
+                    if (sciEditor != null)
                     {
-                        var host = Preview.Content as WindowsFormsHost;
-                        var sciEditor = host.Child as Scintilla;
-                        if (sciEditor != null)
-                        {
-                            sciEditor.ResetText();
-                            sciEditor.InsertText(0, outputCode);
-                            ErrorOutput.Text = error;
-                        }
+                        sciEditor.ResetText();
+                        sciEditor.InsertText(0, outputCode);
+                        ErrorOutput.Text = error;
                     }
                 }
-                CurrentFramework = framework;
-                Title = "bdUnit Preview - " + framework;
-            }));
             }
-            //Thread.Sleep(10000);
-            BackgroundThreadIsRunning = false;
+            CurrentFramework = framework;
+            Title = string.Format("bdUnit Preview ({0})", framework);
         }
 
         void Window1_Closed(object sender, System.EventArgs e)
