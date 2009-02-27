@@ -121,10 +121,6 @@
     <Reference Include="WindowsFormsIntegration">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Wpf.TabControl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Library\TabControl\Wpf.TabControl.dll</HintPath>
-    </Reference>
     <Reference Include="xunit, Version=1.1.0.1323, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\xUnit\xunit.dll</HintPath>

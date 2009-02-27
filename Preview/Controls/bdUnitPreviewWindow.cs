@@ -309,7 +309,7 @@ namespace bdUnit.Preview.Controls
                         if (errorEndPoint != null)
                         {
                             var errorRange = new TextRange(errorStartPoint, errorEndPoint);
-                            errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Red);
+                            errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.DimGray);
                             ErrorPoint = errorEndPoint;
                             ErrorVerticalOffset = ex.Location.Span.Start.Line - 1; 
                         }

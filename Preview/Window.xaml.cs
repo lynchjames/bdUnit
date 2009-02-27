@@ -38,25 +38,7 @@ namespace Preview
         {
             InitializeComponent();
             Loaded += Window1_Loaded;
-            tabControl.TabItemAdded += tabControl_TabItemAdded;
-        }
-
-        void tabControl_TabItemAdded(object sender, Wpf.Controls.TabItemEventArgs e)
-        {
-            //TODO Fix this
-            BitmapImage image = new BitmapImage(new Uri("http://blog.stormideas.com/favicon.ico"));
-            Image img = new Image();
-            img.Source = image;
-            img.Width = 16;
-            img.Height = 16;
-            img.Margin = new Thickness(2, 0, 2, 0);
-
-            var items = ((TabControl) sender).Items;
-            for (int i = 0; i < items.Count; i++)
-            {
-                var item = (Wpf.Controls.TabItem) items[i];
-                item.Icon = img;
-            }
+            //tabControl.TabItemAdded += tabControl_TabItemAdded;
         }
 
         private void Window1_Loaded(object sender, RoutedEventArgs e)
@@ -68,12 +50,12 @@ namespace Preview
         {
             try
             {
-                for (int i = 0; i < tabControl.Items.Count; i++)
-                {
-                    var item = tabControl.Items[i];
-                    var host = ((bdUnitPreviewWindow)item).Preview.Content as WindowsFormsHost;
-                    host.Dispose();
-                }
+                //for (int i = 0; i < tabControl.Items.Count; i++)
+                //{
+                //    var item = tabControl.Items[i];
+                //    var host = ((bdUnitPreviewWindow)item).Preview.Content as WindowsFormsHost;
+                //    host.Dispose();
+                //}
             }
             catch (Exception)
             {
