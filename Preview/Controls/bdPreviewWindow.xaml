@@ -12,15 +12,15 @@
             <RowDefinition Height="*" MinHeight="400"></RowDefinition>
             <RowDefinition Height="*" MaxHeight="60"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Height="42" Name="EditorButtons" Orientation="Horizontal"  VerticalAlignment="Top" Grid.RowSpan="2" Background="White" Grid.ColumnSpan="2"></StackPanel>
+        <StackPanel Visibility="Collapsed" Height="42" Name="EditorButtons" Orientation="Horizontal"  VerticalAlignment="Top" Grid.RowSpan="2" Background="White" Grid.ColumnSpan="2"></StackPanel>
         <RichTextBox x:Name="InputEditor" AcceptsReturn="True" AcceptsTab="True" Grid.Row="1" Grid.Column="0" AllowDrop="True"  FontFamily="Consolas" FontSize="12" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" Background="Black"></RichTextBox>
-        <StackPanel Height="42" Name="PreviewButtons" Orientation="Horizontal" VerticalAlignment="Top" Grid.Column="1" Grid.RowSpan="2">
+        <StackPanel Visibility="Collapsed" Height="42" Name="PreviewButtons" Orientation="Horizontal" VerticalAlignment="Top" Grid.Column="1" Grid.RowSpan="2">
             <Button Height="23" Content="NUnit Preview" Name="NUnitPreview" Width="95" Margin="10px,0px,0px,0px" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <Button Height="23" Content="XUnit Preview" Name="XUnitPreview" Width="95" Margin="10px,0px,0px,0px" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <Button Height="23" Content="MbUnit Preview" Name="MbUnitPreview" Width="95" Margin="10px,0px,0px,0px" VerticalAlignment="Center" HorizontalAlignment="Left"/>
         </StackPanel>
         <Frame x:Name="Preview" Grid.Column="1" ScrollViewer.CanContentScroll="True" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Auto" x:FieldModifier="public"  BorderThickness="0"/>
-        <StackPanel Name="stackPanel1" Orientation="Horizontal" Height="42" Grid.RowSpan="2" VerticalAlignment="Top" Background="Black">
+        <StackPanel Name="stackPanel1"  Visibility="Collapsed" Orientation="Horizontal" Height="42" Grid.RowSpan="2" VerticalAlignment="Top" Background="Black">
             <Button Height="23" Name="SelectFolder" Content="Select Folder" Width="75" Margin="10,0,0,0" VerticalAlignment="Center" />
             <Button Height="23" Name="Paste" Content="Paste" Width="75" Margin="10,0,0,0" VerticalAlignment="Center" />
             <Button Height="23" Name="Dll" Content="Generate Dll" Width="75" Margin="10,0,0,0" VerticalAlignment="Center" />
