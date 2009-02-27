@@ -1,0 +1,14 @@
+C:\Development\bdUnit\Library\TabControl\Test\obj\Debug\ResolveAssemblyReference.cache
+C:\Development\bdUnit\Library\TabControl\Test\obj\Debug\Window1.baml
+C:\Development\bdUnit\Library\TabControl\Test\obj\Debug\Window1.g.cs
+C:\Development\bdUnit\Library\TabControl\Test\obj\Debug\App.g.cs
+C:\Development\bdUnit\Library\TabControl\Test\obj\Debug\Test_MarkupCompile.cache
+C:\Development\bdUnit\Library\TabControl\Test\obj\Debug\Test.g.resources
+C:\Development\bdUnit\Library\TabControl\Test\obj\Debug\Test.Properties.Resources.resources
+C:\Development\bdUnit\Library\TabControl\Test\obj\Debug\Test.csproj.GenerateResource.Cache
+C:\Development\bdUnit\Library\TabControl\Test\bin\Debug\Test.exe
+C:\Development\bdUnit\Library\TabControl\Test\bin\Debug\Test.pdb
+C:\Development\bdUnit\Library\TabControl\Test\bin\Debug\Wpf.TabControl.dll
+C:\Development\bdUnit\Library\TabControl\Test\bin\Debug\Wpf.TabControl.pdb
+C:\Development\bdUnit\Library\TabControl\Test\obj\Debug\Test.exe
+C:\Development\bdUnit\Library\TabControl\Test\obj\Debug\Test.pdb
