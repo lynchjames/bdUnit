@@ -7,10 +7,21 @@ namespace bdUnit.Core.Utility
 {
     public partial class DynamicParserExtensions
     {
+        private static ISourceLocation LastErrorLocation;
+
         internal class ExceptionErrorReporter : ErrorReporter
         {
             protected override void OnError(ISourceLocation sourceLocation, ErrorInformation errorInformation)
             {
+                if (sourceLocation == null)
+                {
+                    return;
+                }
+                if (LastErrorLocation != null && sourceLocation.Span == LastErrorLocation.Span)
+                {
+                    return;
+                }
+                LastErrorLocation = sourceLocation;
                 throw new ErrorException(sourceLocation, errorInformation);
             }
         }

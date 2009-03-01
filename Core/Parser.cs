@@ -79,11 +79,13 @@ namespace bdUnit.Core
 
             if (compiler.Compile(errorReporter) != 0 || errorReporter.HasErrors)
             {
+                compiler = null;
                 return null;
             }
 
             var dynamicParser = new DynamicParser();
             compiler.LoadDynamicParser(dynamicParser);
+            compiler = null;
             return dynamicParser;
         }
 
@@ -105,12 +107,9 @@ namespace bdUnit.Core
                 root = parser.ParseObject(InputPath, reporter);
             }
 
-            if (reporter.HasErrors)
-            {
-                reporter.Error("", new string[10]);
-            }
-
             var tests = deserializer.Deserialize(root) as IList<object>;
+            parser = null;
+            deserializer = null;
             var list = new List<Test>();
             if (tests != null)
             {
@@ -131,8 +130,7 @@ namespace bdUnit.Core
                         return mbUnit.GenerateTestFixture(list, TestFileName);
                 }
             }
-
-            return "The input is invalid - exception message to go here";
+            return string.Empty;
         }
 
         public void DoWork()
@@ -169,6 +167,10 @@ namespace bdUnit.Core
         public void Dispose()
         {
             this.Input = null;
+            this.parser = null;
+            this.namespaces = null;
+            this.explicitTypeMappings = null;
+            this.labelToTypeMappings = null;
         }
     }
 }

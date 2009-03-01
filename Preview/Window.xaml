@@ -4,7 +4,12 @@
     xmlns:Controls="clr-namespace:bdUnit.Preview.Controls"
     x:Class="Preview.Window1"
     Title="bdUnit Preview" Height="Auto" MinHeight="600"  Width="Auto" MinWidth="800" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" WindowStyle="ThreeDBorderWindow">
-	<Grid x:Name="LayoutRoot" VerticalAlignment="Stretch" Margin="0,0,0,0">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New" Executed="Command_Executed" CanExecute="Command_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="Command_Executed" CanExecute="Command_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="Command_Executed" CanExecute="Command_CanExecute"/>
+    </Window.CommandBindings>
+    <Grid x:Name="LayoutRoot" VerticalAlignment="Stretch" Margin="0,0,0,0">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
@@ -14,8 +19,8 @@
 		</Grid.RowDefinitions>
 		<Menu Height="22" x:Name="Menu" Width="Auto" Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
 			<MenuItem Header="File" Grid.RowSpan="2" x:Name="MenuFile" Width="50" HorizontalAlignment="Center">          
-				<MenuItem x:Name="_New" Header="New" IsCheckable="False" />
-				<MenuItem x:Name="_Open" Header="Open" IsCheckable="False" />
+				<MenuItem x:Name="_New" Header="New"  IsCheckable="False" Command="ApplicationCommands.New" IsEnabled="True"/>
+				<MenuItem x:Name="_Open" Header="Open" IsCheckable="False" Command="ApplicationCommands.Open" />
 				<MenuItem x:Name="_Save" Header="Save" IsCheckable="False"/>
 				<MenuItem x:Name="_Close" Header="Close" IsCheckable="False"/>
 				<MenuItem x:Name="_Exit" Header="Exit" IsCheckable="False"/>
@@ -35,7 +40,7 @@
 			</MenuItem> 
 		</Menu>
 		<TabControl x:Name="tabControl" TabStripPlacement="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="1" Margin="0,1.5,0,0">
-			<TabItem MaxWidth="120" MinWidth="100">
+            <TabItem MaxWidth="120" MinWidth="100">
                 <TabItem.Header>
 					<TextBlock Text="Untitled" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 				</TabItem.Header>

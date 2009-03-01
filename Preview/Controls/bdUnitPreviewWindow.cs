@@ -32,6 +32,17 @@ namespace bdUnit.Preview.Controls
         {
             InitializeComponent();
             Loaded += bdPreviewWindow_Loaded;
+            Load();
+        }
+
+        public bdUnitPreviewWindow(string filePath)
+        {
+            InitializeComponent();
+            Loaded += bdPreviewWindow_Loaded;
+            var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            var text = File.ReadAllText(filePath);
+            range.Text = text;
+            Load();
         }
 
         private string SelectedDirectory { get; set; }
@@ -41,30 +52,47 @@ namespace bdUnit.Preview.Controls
         private DateTime LastUpdated { get; set; }
         private UnitTestFrameworkEnum CurrentFramework { get; set; }
         private System.Timers.Timer _timer;
+        public int CurrentTabIndex { get; set; }
+        public string FilePath { get; set; }
+
+        private Scintilla ScintillaEditor
+        {
+            get
+            {
+                var sciEditor = new Scintilla { Name = "sciEditor", AcceptsReturn = true, AcceptsTab = true, Encoding = Encoding.UTF8 };
+                sciEditor.ConfigurationManager.Language = "cs";
+                sciEditor.LineWrap.Mode = WrapMode.None;
+                return sciEditor;
+            }
+        }
+
+        void Load()
+        {
+            LoadEditor();
+            _timer = new System.Timers.Timer();
+            CurrentFramework = UnitTestFrameworkEnum.NUnit;
+            //var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            //var defaultText = File.ReadAllText("../../../Core/Inputs/LogansRun.input");
+            //range.Text = defaultText;
+            InputEditor.Document.TextAlignment = TextAlignment.Justify;
+            InputEditor.Document.LineHeight = 5;
+            ErrorVerticalOffset = -1;
+            HighlightInputSyntax();
+        }
 
         [STAThread]
         private void bdPreviewWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            _timer = new System.Timers.Timer();
-            CurrentFramework = UnitTestFrameworkEnum.NUnit;
-            LoadEditor();
             SelectFolder.Click += SelectFolder_Click;
             Paste.Click += Paste_Click;
             Dll.Click += Dll_Click;
             XUnitPreview.Click += XUnitPreview_Click;
             NUnitPreview.Click += NUnitPreview_Click;
             MbUnitPreview.Click += MbUnitPreview_Click;
-            var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-            var defaultText = File.ReadAllText("../../../Core/Inputs/LogansRun.input");
-            range.Text = defaultText;
             InputEditor.TextChanged += InputEditor_TextChanged;
-            InputEditor.Document.TextAlignment = TextAlignment.Justify;
-            InputEditor.Document.LineHeight = 5;
             ErrorOutput.MouseLeftButtonDown += ErrorOutput_MouseLeftButtonDown;
             ErrorOutput.MouseEnter += ErrorOutput_MouseEnter;
             ErrorOutput.MouseLeave += ErrorOutput_MouseLeave;
-            ErrorVerticalOffset = -1;
-            HighlightInputSyntax();
         }
 
         void ErrorOutput_MouseLeave(object sender, MouseEventArgs e)
@@ -142,10 +170,6 @@ namespace bdUnit.Preview.Controls
         {
             InputEditor.Document.Foreground = new SolidColorBrush(Colors.White);
             InputEditor.Background = new SolidColorBrush(Colors.Black);
-            var sciEditor = new Scintilla {Name = "sciEditor", AcceptsReturn = true, AcceptsTab = true};
-            sciEditor.Encoding = Encoding.UTF8;
-            sciEditor.ConfigurationManager.Language = "cs";
-            sciEditor.LineWrap.Mode = WrapMode.None;
             
             //editor.Styles[editor.Lexing.StyleNameMap["OPERATOR"]].ForeColor = Color.Brown;
             //editor.Styles[editor.Lexing.StyleNameMap["GLOBALCLASS"]].ForeColor = Color.Yellow;
@@ -154,12 +178,13 @@ namespace bdUnit.Preview.Controls
             //editor.ForeColor = Color.Black;
             //editor.Caret.Color = Color.White;
 
-            var host = new WindowsFormsHost {Child = sciEditor};
+            var host = new WindowsFormsHost {Child = ScintillaEditor};
             Preview.Content = host;
         }
 
         private void InputEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
+            InputEditor.TextChanged -= InputEditor_TextChanged;
             _timer.Stop();
             _timer.Interval = 300;
             _timer.Elapsed += _timer_Elapsed;
@@ -168,6 +193,7 @@ namespace bdUnit.Preview.Controls
 
         void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
+            _timer.Stop();
             _timer.Elapsed -= _timer_Elapsed;
             if (!BackgroundThreadIsRunning && !IsUpdating)
             {
@@ -268,7 +294,7 @@ namespace bdUnit.Preview.Controls
             }
         }
 
-        private void UpdatePreview()
+        public void UpdatePreview()
         {
             if (!InputEditor.Dispatcher.CheckAccess())
             {
@@ -280,6 +306,7 @@ namespace bdUnit.Preview.Controls
             }
             BackgroundThreadIsRunning = false;
             LastUpdated = DateTime.Now;
+            InputEditor.TextChanged += InputEditor_TextChanged;
         }
 
         private void Update()
@@ -289,37 +316,42 @@ namespace bdUnit.Preview.Controls
             var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
             if (!textRange.IsEmpty)
             {
+                var parser = new Parser(textRange.Text, paths);
                 var outputCode = string.Empty;
                 var error = string.Empty;
                 try
                 {
                     HighlightInputSyntax();
-                    var parser = new Parser(textRange.Text, paths);
                     outputCode = parser.Parse(framework);
                 }
                 catch (DynamicParserExtensions.ErrorException ex)
                 {
                     //TODO Modify input text if parsing exception is raised
-                    var errorStartPoint =
-                        textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1).
-                            GetPositionAtOffset(ex.Location.Span.Start.Column);
-                    if (errorStartPoint != null)
+                    var errorStartLine =
+                        textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1);
+                    if (errorStartLine != null)
                     {
-                        var errorEndPoint = errorStartPoint.GetPositionAtOffset(ex.Location.Span.Length + 4);
-                        if (errorEndPoint != null)
+                        var errorStartPoint = errorStartLine.GetPositionAtOffset(ex.Location.Span.Start.Column);
+                        if (errorStartPoint != null)
                         {
-                            var errorRange = new TextRange(errorStartPoint, errorEndPoint);
-                            errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.DimGray);
-                            ErrorPoint = errorEndPoint;
-                            ErrorVerticalOffset = ex.Location.Span.Start.Line - 1; 
+                            var errorEndPoint = errorStartPoint.GetPositionAtOffset(ex.Location.Span.Length + 4);
+                            if (errorEndPoint != null)
+                            {
+                                var errorRange = new TextRange(errorStartPoint, errorEndPoint);
+                                errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.DimGray);
+                                ErrorPoint = errorEndPoint;
+                                ErrorVerticalOffset = ex.Location.Span.Start.Line - 1; 
+                            }
                         }
                     }
                     error = ex.Message;
                     ErrorOutput.Cursor = Cursors.Hand;
+                    ex = null;
                 }
                 finally
-                {   
-                    var host = Preview.Content as WindowsFormsHost;
+                {
+                    parser.Dispose();
+                    var host = (Preview.Content as WindowsFormsHost) ?? new WindowsFormsHost {Child = ScintillaEditor};
                     var sciEditor = host.Child as Scintilla;
                     if (sciEditor != null)
                     {
@@ -330,8 +362,6 @@ namespace bdUnit.Preview.Controls
                 }
             }
             CurrentFramework = framework;
-            //TODO Move this to window
-            //Title = "bdUnit Preview - " + framework;
         }
     }
 }
