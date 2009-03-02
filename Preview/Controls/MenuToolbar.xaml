@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="bdUnit.Preview.Controls.MenuToolbar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto">
+    <Grid>
+        <Menu Height="22" x:Name="Menu" Width="Auto" Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <MenuItem Header="File" Grid.RowSpan="2" x:Name="MenuFile" Width="50" HorizontalAlignment="Center">
+                <MenuItem x:Name="_New" Header="New"  IsCheckable="False" Command="ApplicationCommands.New" IsEnabled="True"/>
+                <MenuItem x:Name="_Open" Header="Open" IsCheckable="False" Command="ApplicationCommands.Open" />
+                <MenuItem x:Name="_Save" Header="Save" Command="ApplicationCommands.Save" IsCheckable="False"/>
+                <MenuItem x:Name="_Close" Header="Close" Command="ApplicationCommands.Close" IsCheckable="False"/>
+                <MenuItem x:Name="_Exit" Header="Exit" IsCheckable="False"/>
+            </MenuItem>
+            <MenuItem Header="Edit" x:Name="MenuEdit" Width="50" Height="Auto" HorizontalAlignment="Center">
+                <MenuItem x:Name="_Copy" Header="Copy" IsCheckable="False"/>
+                <MenuItem x:Name="_Paste" Header="Paste" IsCheckable="False"/>
+                <MenuItem x:Name="_SelectAll" Header="SelectAll" IsCheckable="False"/>
+            </MenuItem>
+            <MenuItem Header="Tools" x:Name="MenuTools" Width="50" Height="Auto" HorizontalAlignment="Center">
+                <MenuItem Header="Unit Test Framework">
+                    <MenuItem Header="NUnit" x:Name="NUnit" IsCheckable="True" Checked="Framework_Checked"/>
+                    <MenuItem Header="XUnit" x:Name="XUnit" IsCheckable="True" Checked="Framework_Checked"/>
+                    <MenuItem Header="MbUnit" x:Name="MbUnit" IsCheckable="True" Checked="Framework_Checked"/>
+                </MenuItem>
+                <MenuItem x:Name="_GenerateDll" Header="Generate Dll" IsCheckable="False"/>
+            </MenuItem>
+        </Menu>
+    </Grid>
+</UserControl>

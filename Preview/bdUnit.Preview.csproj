@@ -135,6 +135,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\MenuToolbar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Window.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -152,8 +156,13 @@
     <Compile Include="Background.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Code\EventBus.cs" />
+    <Compile Include="Code\TargetEventArgs.cs" />
     <Compile Include="Controls\bdUnitPreviewWindow.cs">
       <DependentUpon>bdPreviewWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MenuToolbar.xaml.cs">
+      <DependentUpon>MenuToolbar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

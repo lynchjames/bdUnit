@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using bdUnit.Core;
 using bdUnit.Core.Utility;
+using bdUnit.Preview.Code;
+using bdUnit.Preview.Controls;
 using Core.Enum;
 using ScintillaNet;
 using TextRange=System.Windows.Documents.TextRange;
@@ -26,22 +23,27 @@ namespace bdUnit.Preview.Controls
     /// <summary>
     /// Interaction logic for bdUnitPreviewWindow.xaml
     /// </summary>
-    public partial class bdUnitPreviewWindow : UserControl
+    public partial class bdUnitPreviewWindow
     {
         public bdUnitPreviewWindow()
         {
             InitializeComponent();
+            Id = Guid.NewGuid();
             Loaded += bdPreviewWindow_Loaded;
             Load();
         }
 
-        public bdUnitPreviewWindow(string filePath)
+        public bdUnitPreviewWindow(string filePath, UnitTestFrameworkEnum framework)
         {
             InitializeComponent();
+            Id = Guid.NewGuid();
             Loaded += bdPreviewWindow_Loaded;
             var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
             var text = File.ReadAllText(filePath);
             range.Text = text;
+            
+            CurrentFramework = framework;
+            IsSaved = true;
             Load();
         }
 
@@ -70,7 +72,6 @@ namespace bdUnit.Preview.Controls
         {
             LoadEditor();
             _timer = new System.Timers.Timer();
-            CurrentFramework = UnitTestFrameworkEnum.NUnit;
             //var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
             //var defaultText = File.ReadAllText("../../../Core/Inputs/LogansRun.input");
             //range.Text = defaultText;
@@ -86,13 +87,23 @@ namespace bdUnit.Preview.Controls
             SelectFolder.Click += SelectFolder_Click;
             Paste.Click += Paste_Click;
             Dll.Click += Dll_Click;
-            XUnitPreview.Click += XUnitPreview_Click;
-            NUnitPreview.Click += NUnitPreview_Click;
-            MbUnitPreview.Click += MbUnitPreview_Click;
+            //XUnitPreview.Click += XUnitPreview_Click;
+            //NUnitPreview.Click += NUnitPreview_Click;
+            //MbUnitPreview.Click += MbUnitPreview_Click;
             InputEditor.TextChanged += InputEditor_TextChanged;
             ErrorOutput.MouseLeftButtonDown += ErrorOutput_MouseLeftButtonDown;
             ErrorOutput.MouseEnter += ErrorOutput_MouseEnter;
             ErrorOutput.MouseLeave += ErrorOutput_MouseLeave;
+            EventBus.FrameworkChecked += EventBus_FrameworkChecked; 
+        }
+
+        private void EventBus_FrameworkChecked(object sender, EventArgs e)
+        {
+            var menu = (MenuToolbar) sender;
+            if (menu != null)
+            {
+                CurrentFramework = menu.CurrentFramework;
+            }
         }
 
         void ErrorOutput_MouseLeave(object sender, MouseEventArgs e)
@@ -143,24 +154,6 @@ namespace bdUnit.Preview.Controls
             }
         }
 
-        private void MbUnitPreview_Click(object sender, RoutedEventArgs e)
-        {
-            CurrentFramework = UnitTestFrameworkEnum.MbUnit;
-            UpdatePreview();
-        }
-
-        private void NUnitPreview_Click(object sender, RoutedEventArgs e)
-        {
-            CurrentFramework = UnitTestFrameworkEnum.NUnit;
-            UpdatePreview();
-        }
-
-        private void XUnitPreview_Click(object sender, RoutedEventArgs e)
-        {
-            CurrentFramework = UnitTestFrameworkEnum.XUnit;
-            UpdatePreview();
-        }
-
         private void Paste_Click(object sender, RoutedEventArgs e)
         {
             InputEditor.Paste();
@@ -184,9 +177,10 @@ namespace bdUnit.Preview.Controls
 
         private void InputEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
-            InputEditor.TextChanged -= InputEditor_TextChanged;
+            IsSaved = false;
+            EventBus.TextChanged(this, new TargetEventArgs {TargetId = Id});
             _timer.Stop();
-            _timer.Interval = 300;
+            _timer.Interval = 1000;
             _timer.Elapsed += _timer_Elapsed;
             _timer.Start();
         }
@@ -195,6 +189,7 @@ namespace bdUnit.Preview.Controls
         {
             _timer.Stop();
             _timer.Elapsed -= _timer_Elapsed;
+            InputEditor.TextChanged -= InputEditor_TextChanged;
             if (!BackgroundThreadIsRunning && !IsUpdating)
             {
                 BackgroundThreadIsRunning = true;
@@ -242,6 +237,9 @@ namespace bdUnit.Preview.Controls
 
         List<bdUnitSyntaxProvider.Tag> m_tags = new List<bdUnitSyntaxProvider.Tag>();
         private bool IsUpdating;
+        public bool IsSaved;
+        public Guid Id;
+        public string FileName;
 
         void Format()
         {
@@ -286,7 +284,7 @@ namespace bdUnit.Preview.Controls
             string lastWord = text.Substring(sIndex, text.Length - sIndex);
             if (bdUnitSyntaxProvider.IsKnownTag(lastWord))
             {
-                bdUnitSyntaxProvider.Tag t = new bdUnitSyntaxProvider.Tag();
+                var t = new bdUnitSyntaxProvider.Tag();
                 t.StartPosition = run.ContentStart.GetPositionAtOffset(sIndex, LogicalDirection.Forward);
                 t.EndPosition = run.ContentStart.GetPositionAtOffset(eIndex + lastWord.Length + 2, LogicalDirection.Backward);
                 t.Word = lastWord;
@@ -346,7 +344,6 @@ namespace bdUnit.Preview.Controls
                     }
                     error = ex.Message;
                     ErrorOutput.Cursor = Cursors.Hand;
-                    ex = null;
                 }
                 finally
                 {
