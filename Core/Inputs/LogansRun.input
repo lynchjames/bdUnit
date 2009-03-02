@@ -2,8 +2,8 @@ begin story "LogansRun":
     begin setup 
         @User to have a ~Spouse(@User) 
                 and a ~IsARunner(true) 
-                and an ~Age(10) 
-                and an ~IsDead(false) 
+                and an ~Age(10)
+                and an ~IsDead(false)
                 and several ~Children(@User)
             I want a @User to be able to #Kill another @User
             I want a @User to be able to #Marry another @User
@@ -26,3 +26,4 @@ begin story "LogansRun":
     When a @User(John) #Visit a @SleepShop(CentralSleepShop), 
         @User(John) should have ~IsDead as (true)
 end story
+

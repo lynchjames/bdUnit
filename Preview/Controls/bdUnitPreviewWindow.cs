@@ -47,6 +47,7 @@ namespace bdUnit.Preview.Controls
             CurrentFramework = framework;
             IsSaved = true;
             Load();
+            UpdatePreview();
         }
 
         #endregion

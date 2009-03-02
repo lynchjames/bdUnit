@@ -41,5 +41,15 @@ namespace bdUnit.Preview.Controls
             CurrentFramework = (UnitTestFrameworkEnum)Enum.Parse(typeof(UnitTestFrameworkEnum), menuItem.Name);
             EventBus.OnFrameworkChecked(this, new EventArgs());
         }
+
+        private void _Exit_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            EventBus.OnAppExit(this, new EventArgs());
+        }
     }
 }

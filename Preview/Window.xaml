@@ -20,18 +20,18 @@
 		</Grid.RowDefinitions>
         <Controls:MenuToolbar Height="22" x:Name="Menu" Width="Auto" Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Top"></Controls:MenuToolbar>
             <TabControl x:Name="tabControl" TabStripPlacement="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="1" Margin="0,1.997,0,0">
-                <TabControl.ContextMenu>
-                    <ContextMenu MenuItem.Click="ContextMenu_Click">
-                        <MenuItem Header="Close" Command="ApplicationCommands.Close" ></MenuItem>
-                        <MenuItem Header="Close All"></MenuItem>
-                        <MenuItem Header="Close All But This"></MenuItem>
-                    </ContextMenu>
-                </TabControl.ContextMenu>
-            <TabItem MaxWidth="120" MinWidth="100">
-                <TabItem.Header>
-					<TextBlock Text="Untitled" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
-				</TabItem.Header>
-                <Controls:bdUnitPreviewWindow />
+                <TabItem MaxWidth="120" MinWidth="100">
+                    <TabItem.Header>
+					    <TextBlock Text="[Untitled]" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+				    </TabItem.Header>
+                    <TabItem.ContextMenu>
+                        <ContextMenu x:Name="TabContextMenu" MenuItem.Click="ContextMenu_Click">
+                            <MenuItem Header="Close" Command="ApplicationCommands.Close" ></MenuItem>
+                            <MenuItem Header="Close All" Name="CloseAll"></MenuItem>
+                            <MenuItem Header="Close All But This" Name="CloseAllButThis"></MenuItem>
+                        </ContextMenu>
+                    </TabItem.ContextMenu>
+                    <Controls:bdUnitPreviewWindow />
 			</TabItem>
 		</TabControl>
 	</Grid>

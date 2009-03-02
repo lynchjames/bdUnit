@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using bdUnit.Preview.Controls;
 using Preview;
 
 namespace bdUnit.Preview.Code
@@ -11,6 +12,7 @@ namespace bdUnit.Preview.Code
         public static EventHandler FrameworkChecked;
         public static EventHandler TextChanged;
         public static EventHandler TextSaved;
+        public static EventHandler AppExit;
 
         public static void OnFrameworkChecked(object sender, EventArgs e)
         {
@@ -33,6 +35,14 @@ namespace bdUnit.Preview.Code
             if (TextSaved != null)
             {
                 TextSaved(sender, e);
+            }
+        }
+
+        public static void OnAppExit(object sender, EventArgs e)
+        {
+            if (AppExit != null)
+            {
+                AppExit(sender, e);
             }
         }
     }
