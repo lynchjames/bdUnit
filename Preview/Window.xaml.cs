@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using bdUnit.Preview.Code;
 using bdUnit.Preview.Controls;
@@ -26,15 +27,17 @@ namespace bdUnit.Preview
             //tabControl.TabItemAdded += tabControl_TabItemAdded;
         }
 
+        #region Events
+
         private void Window1_Loaded(object sender, RoutedEventArgs e)
         {
-            Closed += Window1_Closed;
+            Closing += Window1_Closing;
             EventBus.TextChanged += EventBus_TextChanged;
         }
 
         private void EventBus_TextChanged(object sender, EventArgs e)
         {
-            var id = ((TargetEventArgs) e).TargetId;
+            var id = ((TargetEventArgs)e).TargetId;
             var tabs = tabControl.Items;
             var tabCount = tabs.Count;
             for (int i = 0; i < tabCount; i++)
@@ -43,9 +46,26 @@ namespace bdUnit.Preview
                 if (tab != null && ((bdUnitPreviewWindow)tab.Content).Id == id && !((TextBlock)tab.Header).Text.Contains("*"))
                 {
                     var header = ((TextBlock)tab.Header);
-                    header.Text =  header.Text + " *";
+                    header.Text = header.Text + "*";
                     header.FontWeight = FontWeights.Bold;
                 }
+            }
+        }
+
+        void Window1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                for (int i = 0; i < tabControl.Items.Count; i++)
+                {
+                    var item = tabControl.Items[i] as TabItem;
+                    var bdUnitPreviewWindow1 = ((bdUnitPreviewWindow)item.Content);
+                    bdUnitPreviewWindow1.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -56,8 +76,8 @@ namespace bdUnit.Preview
                 //for (int i = 0; i < tabControl.Items.Count; i++)
                 //{
                 //    var item = tabControl.Items[i];
-                //    var host = ((bdUnitPreviewWindow)item).Preview.Content as WindowsFormsHost;
-                //    host.Dispose();
+                //    var bdUnitPreviewWindow1 = ((bdUnitPreviewWindow)item);
+                //    bdUnitPreviewWindow1.Dispose();
                 //}
             }
             catch (Exception)
@@ -68,28 +88,30 @@ namespace bdUnit.Preview
 
         private void Command_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var command = (RoutedUICommand) e.Command;
+            var command = (RoutedUICommand)e.Command;
             switch (command.Text)
             {
                 case "New":
-                    var tab = new TabItem {Header = "New Tab", Content = new bdUnitPreviewWindow()};
+                    var tab = new TabItem { Header = "New Tab", Content = new bdUnitPreviewWindow() };
                     tabControl.Items.Add(tab);
+                    tabControl.SelectedIndex = tabControl.Items.Count - 1;
                     break;
                 case "Open":
-                    var fileDialog = new OpenFileDialog();
-                    fileDialog.Multiselect = true;
+                    var fileDialog = new OpenFileDialog { Multiselect = true };
                     if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
                         var filePaths = fileDialog.FileNames;
                         var fileNames = fileDialog.SafeFileNames;
                         var fileCount = filePaths.Length;
-                        for (int i = 0; i < fileCount; i++)
+                        for (var i = 0; i < fileCount; i++)
                         {
-                            var bdUnitPreview = new bdUnitPreviewWindow(filePaths[i], Menu.CurrentFramework);
-                            bdUnitPreview.CurrentTabIndex = tabControl.Items.Count;
-                            bdUnitPreview.FilePath = filePaths[i];
-                            bdUnitPreview.FileName = fileNames[i];
-                            var openTab = new TabItem { Header = new TextBlock {Text = fileNames[i]}, Content = bdUnitPreview, IsSelected = true};
+                            var bdUnitPreview = new bdUnitPreviewWindow(filePaths[i], Menu.CurrentFramework)
+                            {
+                                CurrentTabIndex = tabControl.Items.Count,
+                                FilePath = filePaths[i],
+                                FileName = fileNames[i]
+                            };
+                            var openTab = new TabItem { Header = new TextBlock { Text = fileNames[i] }, Content = bdUnitPreview, IsSelected = true };
                             tabControl.Items.Add(openTab);
                             tabControl.SelectedIndex = tabControl.Items.Count - 1;
                         }
@@ -100,6 +122,7 @@ namespace bdUnit.Preview
                     tabControl.Items.Remove(currentTab);
                     break;
                 case "Save":
+                    //TODO Add save for new docs
                     var preview = ((TabItem)tabControl.SelectedItem).Content as bdUnitPreviewWindow;
                     if (preview != null && !preview.IsSaved)
                     {
@@ -107,21 +130,28 @@ namespace bdUnit.Preview
                         var text = range.Text;
                         File.WriteAllText(preview.FilePath, text);
                         preview.IsSaved = true;
-                        var header = ((TabItem) tabControl.SelectedItem).Header as TextBlock;
+                        var header = ((TabItem)tabControl.SelectedItem).Header as TextBlock;
                         if (header != null)
                         {
                             header.Text = preview.FileName;
-                            header.FontWeight = FontWeights.Normal; 
+                            header.FontWeight = FontWeights.Normal;
                         }
                     }
                     break;
             }
         }
 
+        #endregion Events
+
         private void Command_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             //TODO Add required check to prevent new tab menu option
             e.CanExecute = true;
+        }
+
+        private void ContextMenu_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

@@ -12,9 +12,9 @@
                 <MenuItem x:Name="_Exit" Header="Exit" IsCheckable="False"/>
             </MenuItem>
             <MenuItem Header="Edit" x:Name="MenuEdit" Width="50" Height="Auto" HorizontalAlignment="Center">
-                <MenuItem x:Name="_Copy" Header="Copy" IsCheckable="False"/>
-                <MenuItem x:Name="_Paste" Header="Paste" IsCheckable="False"/>
-                <MenuItem x:Name="_SelectAll" Header="SelectAll" IsCheckable="False"/>
+                <MenuItem x:Name="_Copy" Header="Copy" Command="ApplicationCommands.Copy" IsCheckable="False"/>
+                <MenuItem x:Name="_Paste" Header="Paste" Command="ApplicationCommands.Paste" IsCheckable="False"/>
+                <MenuItem x:Name="_SelectAll" Header="SelectAll" Command="ApplicationCommands.SelectAll" IsCheckable="False"/>
             </MenuItem>
             <MenuItem Header="Tools" x:Name="MenuTools" Width="50" Height="Auto" HorizontalAlignment="Center">
                 <MenuItem Header="Unit Test Framework">

@@ -15,11 +15,18 @@
 			<ColumnDefinition Width="*"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="0.038*"/>
-			<RowDefinition Height="0.962*"/>
+			<RowDefinition Height="0.035*"/>
+			<RowDefinition Height="0.965*"/>
 		</Grid.RowDefinitions>
         <Controls:MenuToolbar Height="22" x:Name="Menu" Width="Auto" Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Top"></Controls:MenuToolbar>
-            <TabControl x:Name="tabControl" TabStripPlacement="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="1" Margin="0,1.5,0,0">
+            <TabControl x:Name="tabControl" TabStripPlacement="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="1" Margin="0,1.997,0,0">
+                <TabControl.ContextMenu>
+                    <ContextMenu MenuItem.Click="ContextMenu_Click">
+                        <MenuItem Header="Close" Command="ApplicationCommands.Close" ></MenuItem>
+                        <MenuItem Header="Close All"></MenuItem>
+                        <MenuItem Header="Close All But This"></MenuItem>
+                    </ContextMenu>
+                </TabControl.ContextMenu>
             <TabItem MaxWidth="120" MinWidth="100">
                 <TabItem.Header>
 					<TextBlock Text="Untitled" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>

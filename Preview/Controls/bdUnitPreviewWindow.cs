@@ -23,8 +23,10 @@ namespace bdUnit.Preview.Controls
     /// <summary>
     /// Interaction logic for bdUnitPreviewWindow.xaml
     /// </summary>
-    public partial class bdUnitPreviewWindow
+    public partial class bdUnitPreviewWindow : IDisposable
     {
+        #region Constructor
+
         public bdUnitPreviewWindow()
         {
             InitializeComponent();
@@ -47,6 +49,10 @@ namespace bdUnit.Preview.Controls
             Load();
         }
 
+        #endregion
+
+        #region Properties
+
         private string SelectedDirectory { get; set; }
         private TextPointer ErrorPoint { get; set; }
         private double ErrorVerticalOffset { get; set; }
@@ -68,18 +74,15 @@ namespace bdUnit.Preview.Controls
             }
         }
 
-        void Load()
-        {
-            LoadEditor();
-            _timer = new System.Timers.Timer();
-            //var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-            //var defaultText = File.ReadAllText("../../../Core/Inputs/LogansRun.input");
-            //range.Text = defaultText;
-            InputEditor.Document.TextAlignment = TextAlignment.Justify;
-            InputEditor.Document.LineHeight = 5;
-            ErrorVerticalOffset = -1;
-            HighlightInputSyntax();
-        }
+        List<bdUnitSyntaxProvider.Tag> m_tags = new List<bdUnitSyntaxProvider.Tag>();
+        private bool IsUpdating;
+        public bool IsSaved;
+        public Guid Id;
+        public string FileName;
+
+        #endregion
+
+        #region Events
 
         [STAThread]
         private void bdPreviewWindow_Loaded(object sender, RoutedEventArgs e)
@@ -94,12 +97,12 @@ namespace bdUnit.Preview.Controls
             ErrorOutput.MouseLeftButtonDown += ErrorOutput_MouseLeftButtonDown;
             ErrorOutput.MouseEnter += ErrorOutput_MouseEnter;
             ErrorOutput.MouseLeave += ErrorOutput_MouseLeave;
-            EventBus.FrameworkChecked += EventBus_FrameworkChecked; 
+            EventBus.FrameworkChecked += EventBus_FrameworkChecked;
         }
 
         private void EventBus_FrameworkChecked(object sender, EventArgs e)
         {
-            var menu = (MenuToolbar) sender;
+            var menu = (MenuToolbar)sender;
             if (menu != null)
             {
                 CurrentFramework = menu.CurrentFramework;
@@ -150,7 +153,7 @@ namespace bdUnit.Preview.Controls
             }
             else
             {
-               MessageBox.Show("Please select a folder", "bdUnit - No Inputs Selected", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show("Please select a folder", "bdUnit - No Inputs Selected", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
 
@@ -159,26 +162,10 @@ namespace bdUnit.Preview.Controls
             InputEditor.Paste();
         }
 
-        private void LoadEditor()
-        {
-            InputEditor.Document.Foreground = new SolidColorBrush(Colors.White);
-            InputEditor.Background = new SolidColorBrush(Colors.Black);
-            
-            //editor.Styles[editor.Lexing.StyleNameMap["OPERATOR"]].ForeColor = Color.Brown;
-            //editor.Styles[editor.Lexing.StyleNameMap["GLOBALCLASS"]].ForeColor = Color.Yellow;
-            //editor.Styles[editor.Lexing.StyleNameMap["IDENTIFIER"]].ForeColor = Color.Yellow;
-            //editor.Styles.Default.BackColor = Color.Black;
-            //editor.ForeColor = Color.Black;
-            //editor.Caret.Color = Color.White;
-
-            var host = new WindowsFormsHost {Child = ScintillaEditor};
-            Preview.Content = host;
-        }
-
         private void InputEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
             IsSaved = false;
-            EventBus.TextChanged(this, new TargetEventArgs {TargetId = Id});
+            EventBus.TextChanged(this, new TargetEventArgs { TargetId = Id });
             _timer.Stop();
             _timer.Interval = 1000;
             _timer.Elapsed += _timer_Elapsed;
@@ -199,6 +186,39 @@ namespace bdUnit.Preview.Controls
                 BackgroundThread.IsBackground = true;
                 BackgroundThread.Start();
             }
+        }
+
+        #endregion
+
+        #region Methods
+
+        void Load()
+        {
+            LoadEditor();
+            _timer = new System.Timers.Timer();
+            //var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            //var defaultText = File.ReadAllText("../../../Core/Inputs/LogansRun.input");
+            //range.Text = defaultText;
+            InputEditor.Document.TextAlignment = TextAlignment.Justify;
+            InputEditor.Document.LineHeight = 5;
+            ErrorVerticalOffset = -1;
+            HighlightInputSyntax();
+        }
+
+        private void LoadEditor()
+        {
+            InputEditor.Document.Foreground = new SolidColorBrush(Colors.White);
+            InputEditor.Background = new SolidColorBrush(Colors.Black);
+            
+            //editor.Styles[editor.Lexing.StyleNameMap["OPERATOR"]].ForeColor = Color.Brown;
+            //editor.Styles[editor.Lexing.StyleNameMap["GLOBALCLASS"]].ForeColor = Color.Yellow;
+            //editor.Styles[editor.Lexing.StyleNameMap["IDENTIFIER"]].ForeColor = Color.Yellow;
+            //editor.Styles.Default.BackColor = Color.Black;
+            //editor.ForeColor = Color.Black;
+            //editor.Caret.Color = Color.White;
+
+            var host = new WindowsFormsHost {Child = ScintillaEditor};
+            Preview.Content = host;
         }
 
         private void HighlightInputSyntax()
@@ -235,15 +255,9 @@ namespace bdUnit.Preview.Controls
             Format();
         }
 
-        List<bdUnitSyntaxProvider.Tag> m_tags = new List<bdUnitSyntaxProvider.Tag>();
-        private bool IsUpdating;
-        public bool IsSaved;
-        public Guid Id;
-        public string FileName;
-
         void Format()
         {
-            for(var i = 0; i< m_tags.Count; i++)
+            for (var i = 0; i < m_tags.Count; i++)
             {
                 var range = new TextRange(m_tags[i].StartPosition, m_tags[i].EndPosition);
                 var syntaxColor = bdUnitSyntaxProvider.GetBrushColor(m_tags[i].Word);
@@ -324,7 +338,6 @@ namespace bdUnit.Preview.Controls
                 }
                 catch (DynamicParserExtensions.ErrorException ex)
                 {
-                    //TODO Modify input text if parsing exception is raised
                     var errorStartLine =
                         textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1);
                     if (errorStartLine != null)
@@ -338,7 +351,7 @@ namespace bdUnit.Preview.Controls
                                 var errorRange = new TextRange(errorStartPoint, errorEndPoint);
                                 errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.DimGray);
                                 ErrorPoint = errorEndPoint;
-                                ErrorVerticalOffset = ex.Location.Span.Start.Line - 1; 
+                                ErrorVerticalOffset = ex.Location.Span.Start.Line - 1;
                             }
                         }
                     }
@@ -348,7 +361,7 @@ namespace bdUnit.Preview.Controls
                 finally
                 {
                     parser.Dispose();
-                    var host = (Preview.Content as WindowsFormsHost) ?? new WindowsFormsHost {Child = ScintillaEditor};
+                    var host = (Preview.Content as WindowsFormsHost) ?? new WindowsFormsHost { Child = ScintillaEditor };
                     var sciEditor = host.Child as Scintilla;
                     if (sciEditor != null)
                     {
@@ -360,5 +373,23 @@ namespace bdUnit.Preview.Controls
             }
             CurrentFramework = framework;
         }
+
+        #endregion
+
+        #region Implementation of IDisposable
+
+        public void Dispose()
+        {
+            try
+            {
+                this.Preview = null;
+            }
+            catch (Exception)
+            {
+                
+            }
+        }
+
+        #endregion
     }
 }
