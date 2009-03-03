@@ -2,16 +2,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
+using bdUnit.Core;
 using bdUnit.Preview.Code;
 using bdUnit.Preview.Controls;
+using Core.Enum;
 using ContextMenu=System.Windows.Controls.ContextMenu;
 using MenuItem=System.Windows.Controls.MenuItem;
+using MessageBox=System.Windows.MessageBox;
 using TextRange=System.Windows.Documents.TextRange;
 
 #endregion
@@ -30,11 +34,26 @@ namespace bdUnit.Preview
             //tabControl.TabItemAdded += tabControl_TabItemAdded;
         }
 
+        #region Properties
+
+        private UnitTestFrameworkEnum CurrentFramework
+        {
+            get
+            {
+                var options = new List<MenuItem>() { Menu.NUnit, Menu.XUnit, Menu.MbUnit };
+                var selectedOption = options.Find(o => o.IsChecked);
+                return (UnitTestFrameworkEnum)Enum.Parse(typeof(UnitTestFrameworkEnum), selectedOption.Name);
+            }
+        }
+
+        #endregion
+
         #region Events
 
         private void Window1_Loaded(object sender, RoutedEventArgs e)
         {
             Closing += Window1_Closing;
+            Menu.GenerateDll.Click += GenerateDll_Click;
             EventBus.TextChanged += EventBus_TextChanged;
             EventBus.AppExit += EventBus_AppExit;
         }
@@ -84,7 +103,19 @@ namespace bdUnit.Preview
             switch (command.Text)
             {
                 case "New":
-                    var tab = new TabItem { Header = new TextBlock(){Text = "[Untitled]", TextTrimming = TextTrimming.CharacterEllipsis, TextWrapping = TextWrapping.NoWrap}, Content = new bdUnitPreviewWindow()};
+                    var tab = new TabItem
+                                  {
+                                      Header =
+                                          new TextBlock()
+                                              {
+                                                  Text = "[Untitled]",
+                                                  TextTrimming = TextTrimming.CharacterEllipsis,
+                                                  TextWrapping = TextWrapping.NoWrap
+                                              },
+                                      Content = new bdUnitPreviewWindow(),
+                                      MaxWidth= 120,
+                                      MinWidth= 100
+                                  };
                     tab.ContextMenu = GenerateContextMenu(tab);
                     tabControl.Items.Add(tab);
                     tabControl.SelectedIndex = tabControl.Items.Count - 1;
@@ -109,7 +140,20 @@ namespace bdUnit.Preview
                                 FilePath = filePaths[i],
                                 FileName = fileNames[i]
                             };
-                            var openTab = new TabItem { Header = new TextBlock { Text = fileNames[i], TextTrimming = TextTrimming.CharacterEllipsis, TextWrapping = TextWrapping.NoWrap }, Content = bdUnitPreview, IsSelected = true };
+                            var openTab = new TabItem
+                                              {
+                                                  Header =
+                                                      new TextBlock
+                                                          {
+                                                              Text = fileNames[i],
+                                                              TextTrimming = TextTrimming.CharacterEllipsis,
+                                                              TextWrapping = TextWrapping.NoWrap
+                                                          },
+                                                  Content = bdUnitPreview,
+                                                  IsSelected = true,
+                                                  MaxWidth = 120,
+                                                  MinWidth = 100
+                                              };
                             openTab.ContextMenu = GenerateContextMenu(openTab);
                             tabControl.Items.Add(openTab);
                             tabControl.SelectedIndex = tabControl.Items.Count - 1;
@@ -159,6 +203,50 @@ namespace bdUnit.Preview
                     }
                     break;
             }
+        }
+
+        private void GenerateDll_Click(object sender, RoutedEventArgs e)
+        {
+            var dllBuilder = new DllBuilder();
+            var filePaths = new string[] {};
+            if (Menu.DllFromOpenDocs.IsChecked)
+            {
+                filePaths = GetOpenFilePaths();
+            }
+            if (Menu.DllFromSelectedDocs.IsChecked)
+            {
+                var openFileDialog = new OpenFileDialog
+                                             {
+                                                 Multiselect = true,
+                                                 Filter = "Input text | *.input",
+                                                 RestoreDirectory = true
+                                             };
+                if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    filePaths = openFileDialog.FileNames;
+                }
+            }
+            var parentFolder = Directory.GetParent(filePaths[0]);
+            if (parentFolder != null)
+            {
+                Directory.SetCurrentDirectory(parentFolder.ToString());
+                MessageBox.Show(dllBuilder.CompileDll(filePaths, CurrentFramework));
+                Process.Start("explorer.exe", parentFolder.ToString());
+            }
+        }
+
+        private string[] GetOpenFilePaths()
+        {
+            var tabs = tabControl.Items;
+            var count = tabs.Count;
+            var paths = new string[count];
+            for (var i = 0; i < count; i++)
+            {
+                var tab = (TabItem) tabs[i];
+                var bdUnitPreview = tab.Content as bdUnitPreviewWindow;
+                if (bdUnitPreview != null) paths[i] = bdUnitPreview.FilePath;
+            }
+            return paths;
         }
 
         private ContextMenu GenerateContextMenu(TabItem tab)

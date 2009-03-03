@@ -88,9 +88,9 @@ namespace bdUnit.Preview.Controls
         [STAThread]
         private void bdPreviewWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            SelectFolder.Click += SelectFolder_Click;
-            Paste.Click += Paste_Click;
-            Dll.Click += Dll_Click;
+            //SelectFolder.Click += SelectFolder_Click;
+            //Paste.Click += Paste_Click;
+            //Dll.Click += Dll_Click;
             //XUnitPreview.Click += XUnitPreview_Click;
             //NUnitPreview.Click += NUnitPreview_Click;
             //MbUnitPreview.Click += MbUnitPreview_Click;
@@ -137,31 +137,26 @@ namespace bdUnit.Preview.Controls
             }
         }
 
-        void SelectFolder_Click(object sender, RoutedEventArgs e)
-        {
-            var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            folderDialog.ShowDialog();
-            SelectedDirectory = folderDialog.SelectedPath;
-            // Add code to load up inputs in tabs within the preview windows
-        }
+        //void SelectFolder_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
+        //    folderDialog.ShowDialog();
+        //    SelectedDirectory = folderDialog.SelectedPath;
+        //    // Add code to load up inputs in tabs within the preview windows
+        //}
 
-        void Dll_Click(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(SelectedDirectory))
-            {
-                var dllBuilder = new DllBuilder();
-                MessageBox.Show(dllBuilder.CompileDll(SelectedDirectory, CurrentFramework));
-            }
-            else
-            {
-                MessageBox.Show("Please select a folder", "bdUnit - No Inputs Selected", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-            }
-        }
-
-        private void Paste_Click(object sender, RoutedEventArgs e)
-        {
-            InputEditor.Paste();
-        }
+        //void Dll_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (!string.IsNullOrEmpty(SelectedDirectory))
+        //    {
+        //        var dllBuilder = new DllBuilder();
+        //        MessageBox.Show(dllBuilder.CompileDll(SelectedDirectory, CurrentFramework));
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Please select a folder", "bdUnit - No Inputs Selected", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        //    }
+        //}
 
         private void InputEditor_TextChanged(object sender, TextChangedEventArgs e)
         {

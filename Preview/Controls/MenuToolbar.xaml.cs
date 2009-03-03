@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using bdUnit.Core;
 using bdUnit.Preview.Code;
 using Core.Enum;
 
@@ -42,14 +43,24 @@ namespace bdUnit.Preview.Controls
             EventBus.OnFrameworkChecked(this, new EventArgs());
         }
 
-        private void _Exit_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             EventBus.OnAppExit(this, new EventArgs());
+        }
+
+        private void DllTarget_Checked(object sender, RoutedEventArgs e)
+        {
+            if (DllFromSelectedDocs == null || DllFromOpenDocs == null) return;
+
+            var menuItem = (MenuItem)sender;
+            if (menuItem.Name == "DllFromOpenDocs")
+            {
+                DllFromSelectedDocs.IsChecked = false;
+            }
+            if (menuItem.Name == "DllFromSelectedDocs")
+            {
+                DllFromOpenDocs.IsChecked = false;
+            }
         }
     }
 }

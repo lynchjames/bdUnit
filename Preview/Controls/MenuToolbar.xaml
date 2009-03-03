@@ -9,6 +9,7 @@
                 <MenuItem x:Name="_Open" Header="Open" IsCheckable="False" Command="ApplicationCommands.Open" />
                 <MenuItem x:Name="_Save" Header="Save" Command="ApplicationCommands.Save" IsCheckable="False"/>
                 <MenuItem x:Name="_Close" Header="Close" Command="ApplicationCommands.Close" IsCheckable="False"/>
+                <Separator/>
                 <MenuItem x:Name="_Exit" Header="Exit" Click="Exit_Click" IsCheckable="False"/>
             </MenuItem>
             <MenuItem Header="Edit" x:Name="MenuEdit" Width="50" Height="Auto" HorizontalAlignment="Center">
@@ -22,7 +23,12 @@
                     <MenuItem Header="XUnit" x:Name="XUnit" IsCheckable="True" Checked="Framework_Checked"/>
                     <MenuItem Header="MbUnit" x:Name="MbUnit" IsCheckable="True" Checked="Framework_Checked"/>
                 </MenuItem>
-                <MenuItem x:Name="_GenerateDll" Header="Generate Dll" IsCheckable="False"/>
+                <MenuItem Header="Dll Generation Targets">
+                    <MenuItem Header="Open Documents" x:Name="DllFromOpenDocs" IsCheckable="True" IsChecked="True" Checked="DllTarget_Checked"/>
+                    <MenuItem Header="Selected Documents" x:Name="DllFromSelectedDocs" IsCheckable="True" Checked="DllTarget_Checked"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem x:Name="GenerateDll" Header="Generate Dll"  IsCheckable="False"/>
             </MenuItem>
         </Menu>
     </Grid>

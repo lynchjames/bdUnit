@@ -17,7 +17,7 @@ namespace bdUnit.Core
                         "xunit", "MbUnit.Framework", "StructureMap", "StructureMap.AutoMocking"
                     };
       
-        public string CompileDll(string folderPath, UnitTestFrameworkEnum currentFramework)
+        public string CompileDll(string[] filePaths, UnitTestFrameworkEnum currentFramework)
         {
             CodeDomProvider compiler = new CSharpCodeProvider(new Dictionary<string, string>
                                                                     {
@@ -38,32 +38,37 @@ namespace bdUnit.Core
                 parameters.ReferencedAssemblies.Add(AppDomain.CurrentDomain.BaseDirectory
                                                             + string.Format("\\{0}.dll", reference));
             }
-            var source = GetSource(folderPath, currentFramework);
-            var results = compiler.CompileAssemblyFromSource(parameters, source);
-            
-            if (results.Errors.HasErrors)
+            try
             {
-                var errorText = new StringBuilder();
-                var count = results.Errors.Count;
-                for (var i = 0; i < count; i++)
+                var source = GetSource(filePaths, currentFramework);
+                var results = compiler.CompileAssemblyFromSource(parameters, source);
+
+                if (results.Errors.HasErrors)
                 {
-                    errorText.AppendLine("Compilation Error: " + results.Errors[i].ErrorText);
+                    var errorText = new StringBuilder();
+                    var count = results.Errors.Count;
+                    for (var i = 0; i < count; i++)
+                    {
+                        errorText.AppendLine("Compilation Error: " + results.Errors[i].ErrorText);
+                    }
+                    return errorText.ToString();
                 }
-                return errorText.ToString();
+                return "Succesfully Generated Dll";
             }
-            return "Succesfully Generated Dll";
+            catch (Exception)
+            {
+                return "One or more documents could not be parsed. Please check and try again.";
+            }
         }
 
-        private static string[] GetSource(string folderPath, UnitTestFrameworkEnum framework)
+        private static string[] GetSource(string[] filePaths, UnitTestFrameworkEnum framework)
         {
-            Directory.SetCurrentDirectory(folderPath);
-            var files = Directory.GetFiles(folderPath, "*.input");
-            var source = new string[files.Length];
-            for (var i = 0; i < files.Length; i++)
+            var source = new string[filePaths.Length];
+            for (var i = 0; i < filePaths.Length; i++)
             {
                 var paths = new Dictionary<string, string>
                                 {
-                                    {"input", string.Format("{0}", files[i])},
+                                    {"input", string.Format("{0}", filePaths[i])},
                                     {"grammar", Settings.GrammarPath}
                                 };
                 var parser = new Parser(paths);
