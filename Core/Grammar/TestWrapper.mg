@@ -73,7 +73,11 @@ module Test
         | TConstraint p:TestLanguage.Property x:TestLanguage.Operators v:TestLanguage.Value
         => Constraint{Property{Name{p},v,x}}
         | o:TestLanguage.Object TConstraint p:TestLanguage.Property x:TestLanguage.Operators v:TestLanguage.Value 
-        => Constraint{Property{Name{p},v,o,x}};
+        => Constraint{Property{Name{p},v,o,x}}
+        | o:TestLanguage.Object TConstraint x:TestLanguage.Operators o2:TestLanguage.Object
+        => Constraint{Objects[o, o2], x}
+        | p:TestLanguage.Property TConstraint x:TestLanguage.Operators v:TestLanguage.Value
+        => Constraint{Property{Name{p}, x, v}};
         //| TConstraint TAll o:Object "'s" p:Property
         //=> [Property{p}]);
         
@@ -121,7 +125,9 @@ module Test
             | TWhen m:Method (Connectives.TAll|TEach|" ") o:Object TResult c:Asserts.Constraints
             => When{TargetMethod{Name{m}, Objects[o]}, c}
             | TWhen o:Object m:Method (Connectives.TAnother | " a ") o2:Object"," c:Asserts.Constraints
-            => When{TargetMethod{Name{m}, Objects[o,o2], c}};
+            => When{TargetMethod{Name{m}, Objects[o,o2], c}}
+            | TWhen o:Object p:Property x:Operators v:Value"," " the" c:Asserts.Constraints
+            => When{TargetProperty{Name{p},Objects[o], x, c}};
             
         syntax CreateMethodStatement
             = TCreate m:Method Connectives.TAll o:Object "."? 
@@ -157,7 +163,7 @@ module Test
         token TMethod = " to be able to " | " the ability to ";
         @{CaseSensitive[false]}
         token TProperty = "to have " ("a"|"an") " ";
-        token TEqual = " of " | "equal to " | " as ";
+        token TEqual = " of " | "equal to " | " as " | " is ";
         token TGreater = " greater than ";
         token TGreaterOrEqual = " greater than or" TEqual;
         token TLesser = " less than ";
@@ -174,7 +180,7 @@ module Test
         @{Classification["Type"]} token ObjectId = '@' (Base.Letter|'-'|'_')+;
         @{Classification["Method"]} token MethodId = '#' (Base.Letter|'-'|'_')+;
         @{Classification["Property"]} token PropertyId = '~' (Base.Letter|'-'|'_')+;
-        @{Classification["Value"]} token ValueId = (Base.Letter|'_'|Base.Digit|'.')+;
+        @{Classification["Value"]} token ValueId = (Base.Letter|'_'|Base.Digit|'.')+ | Common.SingleQuotedText;
               
         syntax StringLiteral
           = val:Language.Grammar.TextLiteral => val;    

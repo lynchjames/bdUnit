@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace bdUnit.Core.AST
 {
-    public class TargetMethod
+    public class TargetMethod : ITarget
     {
         public TargetMethod()
         {

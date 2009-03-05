@@ -61,9 +61,6 @@ namespace bdUnit.Core
             Access = access;
             var statementList = test.StatementList;
             stringBuilder = GenerateMethods(statementList, stringBuilder);
-
-            //StreamWriter stream = File.CreateText(string.Format("{0}\\{1}.cs", path, test.Title));
-            //stream.Write("");
             return stringBuilder.ToString();
         }
 
@@ -75,30 +72,38 @@ namespace bdUnit.Core
                 for (var i = 0; i < statementCount; i++)
                 {
                     var statement = statements[i];
-                    var method = statement.TargetMethod;
-                    //list[i].TargetMethod.Loop.Constraints.ElementAt(0).Property
-                    var when = new When();
-                    if (statement.GetType() == when.GetType())
+                    var whenStatement = statement as When;
+                    if (whenStatement == null) continue;
+                    ITarget target;
+                    if (whenStatement.TargetProperty != null)
                     {
-                        var count = method.Objects.Count;
-                        var variables = new StringBuilder();
-                        for (var j = 0; j < count - 1; j++)
-                        {
-                            var objects = method.Objects;
-                            var obj = objects[j];
-                            var otherObj = objects[j == 0 ? 1 : 0];
-                            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n", obj.Instance.Value, obj.Name));
-                            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n", otherObj.Instance.Value, otherObj.Name));
-                            var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, method.Name, otherObj.Instance.Value);
+                        target = whenStatement.TargetProperty;
+                    }
+                    else
+                    {
+                        target = whenStatement.TargetMethod;
+                    }
+                    var count = target.Objects.Count;
+                    var variables = new StringBuilder();
+                    for (var j = 0; j < count - 1; j++)
+                    {
+                        var objects = target.Objects;
+                        var obj = objects[j];
+                        var otherObj = objects[j == 0 ? 1 : 0];
+                        variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n", obj.Instance.Value, obj.Name));
+                        variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n", otherObj.Instance.Value, otherObj.Name));
+                        var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name, otherObj.Instance.Value);
 
-                            //TODO: Add logic to determine type constuctor @User(Name = Jim, Age = 25) should correspond to var Jim = new User() {Name = "Jim", Age = 25};
-                            var title = string.Format("When_{0}_{1}_{2}", obj.Name, method.Name, otherObj.Name);
-                            stringBuilder.AppendLine(TestText.Replace("##testname##", title));
-                            stringBuilder.AppendLine("\t\t{");
-                            stringBuilder.Append(variables).Append(methodUsage);
-                            if (method.Loop != null)
+                        //TODO: Add logic to determine type constuctor @User(Name = Jim, Age = 25) should correspond to var Jim = new User() {Name = "Jim", Age = 25};
+                        var title = string.Format("When_{0}_{1}_{2}", obj.Name, target.Name, otherObj.Name);
+                        stringBuilder.AppendLine(TestText.Replace("##testname##", title));
+                        stringBuilder.AppendLine("\t\t{");
+                        stringBuilder.Append(variables).Append(methodUsage);
+                        if (target as TargetMethod != null)
+                        {
+                            var loop = ((TargetMethod)target).Loop;
+                            if (loop != null)
                             {
-                                var loop = method.Loop;
                                 stringBuilder.Append(GenerateAsserts(obj, loop.Constraints));
                                 var reciprocalRelationships =
                                     loop.Constraints.Where(
@@ -108,19 +113,19 @@ namespace bdUnit.Core
                                 {
                                     reciprocalRelationships.ForEach(
                                         r =>
-                                        stringBuilder.Append(CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal, new List<Property> { r.Property }, AssertText, method.Objects)));
-                                }
+                                        stringBuilder.Append(CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal, new List<Property> { r.Property }, AssertText, target.Objects)));
+                                } 
                             }
-                            else if (method.Constraints.Count > 0)
-                            {
-                                for (var k = 0; k < method.Constraints.Count; k++)
-                                {
-                                    var constraint = method.Constraints[k];
-                                    stringBuilder.Append(GenerateAsserts(constraint.Property.Object, new List<Constraint> { constraint }));
-                                }
-                            }
-                            stringBuilder.AppendLine("\t\t}");
                         }
+                        if (target.Constraints.Count > 0)
+                        {
+                            for (var k = 0; k < target.Constraints.Count; k++)
+                            {
+                                var constraint = target.Constraints[k];
+                                stringBuilder.Append(GenerateAsserts(constraint.Property.Object, new List<Constraint> { constraint }));
+                            }
+                        }
+                        stringBuilder.AppendLine("\t\t}");
                     }
                 }
             }

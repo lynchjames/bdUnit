@@ -1,13 +1,13 @@
 begin story "TMDirectoryExample":
     begin setup 
-        @DomainBase to have an ~Id and a ~DateCreated.
-        I want a @DomainBase to be able to #Equals another @DomainBase.
+        @DomainBase to have an ~Id and a ~DateCreated
+        I want a @DomainBase to be able to #Equals another @DomainBase
         @UserFriendlyDomainBase to have a ~Title
-            and a ~UserFriendlyTitle.
+            and a ~UserFriendlyTitle
     end setup
 
-    When a @DomainBase(a) #Equals another @DomainBase(b), @DomainBase(a) should be equal to @DomainBase(b).
+    When a @DomainBase(a) #Equals another @DomainBase(b), @DomainBase(a) should be equal to @DomainBase(b)
     
-    When @UserFiendlyDomainBaseTitle ~Title is (A WebPage.), the ~UserFriendlyTitle should be (A-WebPage).
+    When @UserFiendlyDomainBaseTitle ~Title is ("A WebPage."), the ~UserFriendlyTitle should be equal to ("A-WebPage")
     end story
 
