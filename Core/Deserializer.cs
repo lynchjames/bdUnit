@@ -43,6 +43,11 @@ namespace bdUnit.Core
             {
                 if (child is string)
                 {
+                    //Keep quotes for string values
+                    if (name == "Value" && RegexUtility.IsString((string)child))
+                    {
+                        return child as string;
+                    }
                     return UnQuote((string) child);
                 }
             }

@@ -127,7 +127,7 @@ module Test
             | TWhen o:Object m:Method (Connectives.TAnother | " a ") o2:Object"," c:Asserts.Constraints
             => When{TargetMethod{Name{m}, Objects[o,o2], c}}
             | TWhen o:Object p:Property x:Operators v:Value"," " the" c:Asserts.Constraints
-            => When{TargetProperty{Name{p},Objects[o], x, c}};
+            => When{TargetProperty{Name{p},Objects[o], x, v, c}};
             
         syntax CreateMethodStatement
             = TCreate m:Method Connectives.TAll o:Object "."? 

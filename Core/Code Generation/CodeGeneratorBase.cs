@@ -74,58 +74,86 @@ namespace bdUnit.Core
                     var statement = statements[i];
                     var whenStatement = statement as When;
                     if (whenStatement == null) continue;
-                    ITarget target;
+                    var variables = new StringBuilder();
                     if (whenStatement.TargetProperty != null)
                     {
-                        target = whenStatement.TargetProperty;
+                        var targetProperty = whenStatement.TargetProperty;
+                        stringBuilder = GenerateMethodForTargetProperty(targetProperty, variables, stringBuilder);
                     }
                     else
                     {
-                        target = whenStatement.TargetMethod;
+                        var targetMethod = whenStatement.TargetMethod;
+                        stringBuilder = GenerateMethodForTargetMethod(targetMethod, variables, stringBuilder);
                     }
-                    var count = target.Objects.Count;
-                    var variables = new StringBuilder();
-                    for (var j = 0; j < count - 1; j++)
-                    {
-                        var objects = target.Objects;
-                        var obj = objects[j];
-                        var otherObj = objects[j == 0 ? 1 : 0];
-                        variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n", obj.Instance.Value, obj.Name));
-                        variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n", otherObj.Instance.Value, otherObj.Name));
-                        var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name, otherObj.Instance.Value);
+                    //var count = target.Objects.Count;
 
-                        //TODO: Add logic to determine type constuctor @User(Name = Jim, Age = 25) should correspond to var Jim = new User() {Name = "Jim", Age = 25};
-                        var title = string.Format("When_{0}_{1}_{2}", obj.Name, target.Name, otherObj.Name);
-                        stringBuilder.AppendLine(TestText.Replace("##testname##", title));
-                        stringBuilder.AppendLine("\t\t{");
-                        stringBuilder.Append(variables).Append(methodUsage);
-                        if (target as TargetMethod != null)
-                        {
-                            var loop = ((TargetMethod)target).Loop;
-                            if (loop != null)
-                            {
-                                stringBuilder.Append(GenerateAsserts(obj, loop.Constraints));
-                                var reciprocalRelationships =
-                                    loop.Constraints.Where(
-                                        con =>
-                                        con.Property.GetRelationQualifiedEnum() == RelationQualifiedEnum.Reciprocal).ToList();
-                                if (reciprocalRelationships.Count > 0)
-                                {
-                                    reciprocalRelationships.ForEach(
-                                        r =>
-                                        stringBuilder.Append(CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal, new List<Property> { r.Property }, AssertText, target.Objects)));
-                                } 
-                            }
-                        }
-                        if (target.Constraints.Count > 0)
-                        {
-                            for (var k = 0; k < target.Constraints.Count; k++)
-                            {
-                                var constraint = target.Constraints[k];
-                                stringBuilder.Append(GenerateAsserts(constraint.Property.Object, new List<Constraint> { constraint }));
-                            }
-                        }
-                        stringBuilder.AppendLine("\t\t}");
+                    stringBuilder.AppendLine("\t\t}");
+                }
+            }
+            return stringBuilder;
+        }
+
+        private StringBuilder GenerateMethodForTargetProperty(TargetProperty property, StringBuilder variables, StringBuilder stringBuilder)
+        {
+            var obj = property.Objects[0];
+            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n",
+                                           obj.Instance.Value, obj.Name));
+            var title = string.Format("When_{0}_{1}_Is_Set", obj.Name, property.Name);
+            stringBuilder.AppendLine(TestText.Replace("##testname##", title));
+            stringBuilder.AppendLine("\t\t{");
+            stringBuilder.AppendLine(string.Format("{0}.{1} {2} {3}", obj.Instance.Value, property.Name, property.Operators[0].Value, property.Value));
+            return stringBuilder;
+        }
+
+        private StringBuilder GenerateMethodForTargetMethod(TargetMethod target, StringBuilder variables, StringBuilder stringBuilder)
+        {
+            var objects = target.Objects;
+            var obj = objects[0];
+            var otherObj = objects[1];
+            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n",
+                                           obj.Instance.Value, obj.Name));
+            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n",
+                                           otherObj.Instance.Value, otherObj.Name));
+            var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name,
+                                            otherObj.Instance.Value);
+
+            //TODO: Add logic to determine type constuctor @User(Name = Jim, Age = 25) should correspond to var Jim = new User() {Name = "Jim", Age = 25};
+            var title = string.Format("When_{0}_{1}_{2}", obj.Name, target.Name, otherObj.Name);
+            stringBuilder.AppendLine(TestText.Replace("##testname##", title));
+            stringBuilder.AppendLine("\t\t{");
+            stringBuilder.Append(variables).Append(methodUsage);
+            
+            var loop = target.Loop;
+            if (loop != null)
+            {
+                stringBuilder.Append(GenerateAsserts(obj, loop.Constraints));
+                var reciprocalRelationships =
+                    loop.Constraints.Where(
+                        con =>
+                        con.Property.GetRelationQualifiedEnum() == RelationQualifiedEnum.Reciprocal).ToList();
+                if (reciprocalRelationships.Count > 0)
+                {
+                    reciprocalRelationships.ForEach(
+                        r =>
+                        stringBuilder.Append(CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal,
+                                                                      new List<Property> {r.Property},
+                                                                      AssertText, target.Objects)));
+                }
+            }
+            if (target.Constraints.Count > 0)
+            {
+                for (var k = 0; k < target.Constraints.Count; k++)
+                {
+                    var constraint = target.Constraints[k];
+                    if (constraint.Property != null)
+                    {
+                        stringBuilder.Append(GenerateAsserts(constraint.Property.Object,
+                                                             new List<Constraint> {constraint}));
+                    }
+                    else if (constraint.Objects.Count > 0)
+                    {
+                        stringBuilder.Append(GenerateAsserts(constraint.Objects[0],
+                                                             new List<Constraint> {constraint}));
                     }
                 }
             }
@@ -254,6 +282,17 @@ namespace bdUnit.Core
                         text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}.{1} {2} {3}", _object.Instance.Value, property.Name, property.Operators[0].Value, property.Value)));
                     }
                 }
+            }
+            return text.ToString();
+        }
+
+        public string GenerateAsserts(TargetProperty property, IList<Constraint> constraints)
+        {
+            var text = new StringBuilder();
+            var count = constraints.Count;
+            for (var i = 0; i < count; i++)
+            {
+
             }
             return text.ToString();
         }
