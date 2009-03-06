@@ -128,6 +128,7 @@
       </SubType>
     </Compile>
     <Compile Include="Utility\RegexUtility.cs" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Grammar\TestWrapper.mg" />
     <None Include="Inputs\LogansRun.input" />
     <AppDesigner Include="Properties\" />

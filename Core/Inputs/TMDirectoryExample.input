@@ -1,10 +1,10 @@
 begin story "TMDirectoryExample":
-    begin setup 
+    /*begin setup 
         @DomainBase to have an ~Id and a ~DateCreated
         I want a @DomainBase to be able to #Equals another @DomainBase
         @UserFriendlyDomainBase to have a ~Title
             and a ~UserFriendlyTitle
-    end setup
+    end setup*/
 
     /*When a @DomainBase(a) #Equals another @DomainBase(b), @DomainBase(a) should be equal to @DomainBase(b)*/
     

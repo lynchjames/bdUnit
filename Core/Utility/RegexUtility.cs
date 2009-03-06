@@ -1,5 +1,6 @@
 ﻿#region Using Statements
 
+using System;
 using System.Text.RegularExpressions;
 
 #endregion
@@ -21,6 +22,12 @@ namespace bdUnit.Core.Utility
         public static bool IsDecimal(string target)
         {
             return Regex.IsMatch(target, "^\\d+(\\.\\d+)$");
+        }
+
+        public static bool IsBool(string target)
+        {
+            bool isBool;
+            return Boolean.TryParse(target, out isBool);
         }
     }
 }

@@ -90,7 +90,11 @@ module Test
         | list:Main item:Test => [valuesof(list),item];
         
         syntax Test = TTest title:Title ':' TSetupStart sp:SetupList TSetupEnd s:StatementList TEnd
-        => Test{ Title{title}, sp, s };             
+        => Test{ Title{title}, sp, s}
+        | TTest title:Title ':' TSetupStart sp:SetupList TSetupEnd TEnd
+        => Test{ Title{title}, sp}
+        | TTest title:Title ':' s:StatementList TEnd
+        => Test{ Title{title}, s};
         
         syntax Title 
         = text:Common.SingleQuotedText => text;

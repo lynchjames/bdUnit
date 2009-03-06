@@ -49,6 +49,10 @@ namespace bdUnit.Core
                     }
                     testFixture = TestFixtureText.Replace("##interfaces##", interfaceText.ToString());
                 }
+                else
+                {
+                    testFixture = TestFixtureText.Replace("##interfaces##", "");
+                }
             }
             testFixture = testFixture.Replace("##fixturename##", tests[0].Title);
             testFixture = testFixture.Replace("##tests##", stringBuilder.ToString());
@@ -64,6 +68,7 @@ namespace bdUnit.Core
             return stringBuilder.ToString();
         }
 
+        //TODO Need to be able to test the returned object from a method?
         public StringBuilder GenerateMethods(IList<IStatement> statements, StringBuilder stringBuilder)
         {
             var statementCount = statements.Count;
@@ -78,11 +83,12 @@ namespace bdUnit.Core
                     if (whenStatement.TargetProperty != null)
                     {
                         var targetProperty = whenStatement.TargetProperty;
-                        stringBuilder = GenerateMethodForTargetProperty(targetProperty, variables, stringBuilder);
+                        stringBuilder = GenerateMethodForTargetProperty(targetProperty, stringBuilder);
                     }
                     else
                     {
                         var targetMethod = whenStatement.TargetMethod;
+                        //TODO Test specific property values on object after method used
                         stringBuilder = GenerateMethodForTargetMethod(targetMethod, variables, stringBuilder);
                     }
                     //var count = target.Objects.Count;
@@ -93,15 +99,16 @@ namespace bdUnit.Core
             return stringBuilder;
         }
 
-        private StringBuilder GenerateMethodForTargetProperty(TargetProperty property, StringBuilder variables, StringBuilder stringBuilder)
+        private StringBuilder GenerateMethodForTargetProperty(TargetProperty property, StringBuilder stringBuilder)
         {
             var obj = property.Objects[0];
-            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n",
-                                           obj.Instance.Value, obj.Name));
             var title = string.Format("When_{0}_{1}_Is_Set", obj.Name, property.Name);
             stringBuilder.AppendLine(TestText.Replace("##testname##", title));
             stringBuilder.AppendLine("\t\t{");
-            stringBuilder.AppendLine(string.Format("{0}.{1} {2} {3}", obj.Instance.Value, property.Name, property.Operators[0].Value, property.Value));
+            stringBuilder.AppendLine(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");",
+                                           obj.Instance.Value, obj.Name));
+            stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3}", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
+            stringBuilder.Append(GenerateAsserts(property));
             return stringBuilder;
         }
 
@@ -271,7 +278,7 @@ namespace bdUnit.Core
                 var property = constraint.Property;
                 if (string.IsNullOrEmpty(constraint.Property.Relation))
                 {
-                    if (property.Value == "true" | property.Value == "false")
+                    if (RegexUtility.IsBool(property.Value))
                     {
                         var value = Boolean.Parse(property.Value);
                         var boolQualifier = value ? string.Empty : "!";
@@ -286,13 +293,25 @@ namespace bdUnit.Core
             return text.ToString();
         }
 
-        public string GenerateAsserts(TargetProperty property, IList<Constraint> constraints)
+        public string GenerateAsserts(TargetProperty property)
         {
             var text = new StringBuilder();
-            var count = constraints.Count;
+            var count = property.Constraints.Count;
             for (var i = 0; i < count; i++)
             {
-
+                var constraint = property.Constraints[i];
+                var constrainedProperty = constraint.Property;
+                var instance = property.Objects[0].Instance.Value;
+                if (RegexUtility.IsBool(constrainedProperty.Value))
+                {
+                    var value = Boolean.Parse(constrainedProperty.Value);
+                    var boolQualifier = value ? string.Empty : "!";
+                    text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}{1}.{2}", boolQualifier, instance, constrainedProperty.Name)));
+                }
+                else
+                {
+                    text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}.{1} {2} {3}", instance, constrainedProperty.Name, property.Operators[0].Value, constrainedProperty.Value)));
+                }
             }
             return text.ToString();
         }
