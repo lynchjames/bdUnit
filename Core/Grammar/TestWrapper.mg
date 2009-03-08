@@ -77,11 +77,13 @@ module Test
         | o:TestLanguage.Object TConstraint x:TestLanguage.Operators o2:TestLanguage.Object
         => Constraint{Objects[o, o2], x}
         | p:TestLanguage.Property TConstraint x:TestLanguage.Operators v:TestLanguage.Value
-        => Constraint{Property{Name{p}, x, v}};
+        => Constraint{Property{Name{p}, x, v}}
+        | o:TestLanguage.Object p:TestLanguage.Property TConstraint x:TestLanguage.Operators v:TestLanguage.Value
+        => Constraint{Property{Name{p}, o, x, v}};
         //| TConstraint TAll o:Object "'s" p:Property
         //=> [Property{p}]);
         
-        token TConstraint = "should be" | "should" | "should have" | "should have";
+        token TConstraint = ' '? ("should be" | "should" | "should have" | "should have");
     }
     
     language TestLanguage
@@ -130,7 +132,7 @@ module Test
             => When{TargetMethod{Name{m}, Objects[o]}, c}
             | TWhen o:Object m:Method (Connectives.TAnother | " a ") o2:Object"," c:Asserts.Constraints
             => When{TargetMethod{Name{m}, Objects[o,o2], c}}
-            | TWhen o:Object p:Property x:Operators v:Value"," " the" c:Asserts.Constraints
+            | TWhen o:Object p:Property x:Operators v:Value"," " the"? c:Asserts.Constraints
             => When{TargetProperty{Name{p},Objects[o], x, v, c}};
             
         syntax CreateMethodStatement
@@ -149,12 +151,15 @@ module Test
         syntax Property = name:PropertyId => name;
         syntax Value = " " '(' v:ValueId ')'=> Value{v}
         | '(' v:ValueId ')'=> Value{v}
-        | '(' o:Object ')' => o;
+        | '(' o:Object ')' => o
+        | '(' p:Property ')' => Value{p};
         syntax Loop = o:Object c:Asserts.Constraints 
         => Loop{Objects[o],c};
-        syntax Operators = x:TestLanguage.Equal | x:TestLanguage.Greater | x:TestLanguage.GreaterOrEqual | x:TestLanguage.Lesser | x:TestLanguage.LesserOrEqual
+        syntax Operators = x:Equal | x:Contains | x:NotContains | x:Greater | x:GreaterOrEqual | x:Lesser | x:LesserOrEqual
          => x;
         syntax Equal = TEqual => Operator{Value{"=="}};
+        syntax Contains = TContains => Operator{Value{"contains"}};
+        syntax NotContains = TNotContains => Operator{Value{"notcontains"}};
         syntax Greater = TGreater => Operator{Value{">"}};
         syntax GreaterOrEqual = TGreaterOrEqual => Operator{Value{">="}};
         syntax Lesser = TLesser => Operator{Value{"<"}};
@@ -168,9 +173,11 @@ module Test
         @{CaseSensitive[false]}
         token TProperty = "to have " ("a"|"an") " ";
         token TEqual = " of " | "equal to " | " as " | " is ";
-        token TGreater = " greater than ";
+        token TContains = " contain" "s"?;
+        token TNotContains = " not contain";
+        token TGreater = " greater than " | " later than ";
         token TGreaterOrEqual = " greater than or" TEqual;
-        token TLesser = " less than ";
+        token TLesser = " less than " | " earlier than ";
         token TLesserOrEqual = " less than or" TEqual;
         token TWhen = ("W"|"w")("hen " | "hen I " | "hen I" | "hen a ");
         

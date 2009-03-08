@@ -205,6 +205,10 @@ namespace bdUnit.Core
                     }
                     propertyText = propertyText.Replace("##typename##", "string");
                 }
+                else if (RegexUtility.IsDateTime(property.DefaultValue.Value))
+                {
+                    propertyText = propertyText.Replace("##typename##", "DateTime");
+                }
                 else if (RegexUtility.IsString(property.DefaultValue.Value))
                 {
                     if (property.DefaultValue.Value == "true" || property.DefaultValue.Value == "false")
@@ -284,6 +288,18 @@ namespace bdUnit.Core
                         var boolQualifier = value ? string.Empty : "!";
                         text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}{1}.{2}", boolQualifier, _object.Instance.Value, property.Name)));
                     }
+                    else if (RegexUtility.IsDateTime(property.Value))
+                    {
+                        var dtInstance = "dateTime" + InstanceIdentifier;
+                        text.AppendLine(string.Format("\t\t\tvar {0} = DateTime.Parse(\"{1}\");", dtInstance, property.Value));
+                        text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}.{1} {2} {3}", _object.Instance.Value, property.Name, property.Operators[0].Value, dtInstance)));
+                        InstanceIdentifier++;
+                    }
+                    else if (property.Operators[0].Value.Contains("contains"))
+                    {
+                        var boolQualifier = property.Operators[0].Value == "contains" ? "" : "!";
+                        text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}{1}.{2}.Contains({3})", boolQualifier, _object.Instance.Value, property.Name, property.Value)));
+                    }
                     else
                     {
                         text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}.{1} {2} {3}", _object.Instance.Value, property.Name, property.Operators[0].Value, property.Value)));
@@ -307,6 +323,18 @@ namespace bdUnit.Core
                     var value = Boolean.Parse(constrainedProperty.Value);
                     var boolQualifier = value ? string.Empty : "!";
                     text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}{1}.{2}", boolQualifier, instance, constrainedProperty.Name)));
+                }
+                else if (constrainedProperty.Operators[0].Value.Contains("contains"))
+                {
+                    var boolQualifier = property.Operators[0].Value == "contains" ? "" : "!";
+                    text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}{1}.{2}.Contains({3})", boolQualifier, instance, constrainedProperty.Name, constrainedProperty.Value)));
+                }
+                else if (RegexUtility.IsDateTime(constrainedProperty.Value))
+                {
+                    var dtInstance = "dateTime" + InstanceIdentifier;
+                    text.AppendLine(string.Format("\t\t\tvar {0} = DateTime.Parse(\"{1}\");", dtInstance, constrainedProperty.Value));
+                    text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}.{1} {2} {3}", instance, constrainedProperty.Name, constrainedProperty.Operators[0].Value, dtInstance)));
+                    InstanceIdentifier++;
                 }
                 else
                 {

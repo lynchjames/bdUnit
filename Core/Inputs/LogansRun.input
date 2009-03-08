@@ -3,7 +3,7 @@ begin story "LogansRun":
         @User to have a ~Spouse(@User) 
                 and a ~IsARunner(true) 
                 and an ~Age(10)
-                and an ~IsDead(false)
+                and an ~IsDead("01/03/2008")
                 and several ~Children(@User)
             I want a @User to be able to #Kill another @User
             I want a @User to be able to #Marry another @User
@@ -20,10 +20,10 @@ begin story "LogansRun":
         each @User should have ~Spouse as the other @User 
             and should have ~IsARunner as (false) 
             and should have ~Age less than (21)
-    When a @User(a) #Kill another @User(b), 
+    When a @User(a) ~Name is ("kjh"), 
         @User(b) should have ~IsDead as (true) 
-            and @User(a) should have ~IsDead as (false)
+            and @User(a) ~IsDead should be earlier than ("22/04/1983")
     When a @User(John) #Visit a @SleepShop(CentralSleepShop), 
-        @User(John) should have ~IsDead as (true)
+        @User(John) should have ~IsDead as (true) 
 end story
 

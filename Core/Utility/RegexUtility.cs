@@ -24,6 +24,11 @@ namespace bdUnit.Core.Utility
             return Regex.IsMatch(target, "^\\d+(\\.\\d+)$");
         }
 
+        public static bool IsDateTime(string target)
+        {
+            return Regex.IsMatch(target, "(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d");
+        }
+
         public static bool IsBool(string target)
         {
             bool isBool;

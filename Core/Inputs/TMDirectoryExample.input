@@ -8,6 +8,11 @@ begin story "TMDirectoryExample":
 
     /*When a @DomainBase(a) #Equals another @DomainBase(b), @DomainBase(a) should be equal to @DomainBase(b)*/
     
-    When @UserFiendlyDomainBaseTitle(a) ~Title is ("A WebPage."), the ~UserFriendlyTitle should be equal to ("A-WebPage")
+    When @UserFiendlyDomainBaseTitle(a) ~Title is ("A WebPage."),
+    @UserFriendlyDomainBaseTitle(b) ~UserFriendlyTitle should contain ("blah")
+    
+    When a @User(a) #Kill another @User(b), 
+        @User(b) should have ~IsDead as (true) 
+            and @User(a) ~IsDead should contain (false)
     end story
 
