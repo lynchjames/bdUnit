@@ -107,7 +107,7 @@ namespace bdUnit.Core
             stringBuilder.AppendLine("\t\t{");
             stringBuilder.AppendLine(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");",
                                            obj.Instance.Value, obj.Name));
-            stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3}", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
+            stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
             stringBuilder.Append(GenerateAsserts(property));
             return stringBuilder;
         }
@@ -142,9 +142,13 @@ namespace bdUnit.Core
                 {
                     reciprocalRelationships.ForEach(
                         r =>
-                        stringBuilder.Append(CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal,
-                                                                      new List<Property> {r.Property},
-                                                                      AssertText, target.Objects)));
+                            {
+                                var reciprocalAssert = CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal,
+                                                                                new List<Property> {r.Property},
+                                                                                AssertText, target.Objects);
+                                WriteToTrace(stringBuilder, reciprocalAssert);
+                                stringBuilder.Append(reciprocalAssert);
+                            });
                 }
             }
             if (target.Constraints.Count > 0)
@@ -286,23 +290,45 @@ namespace bdUnit.Core
                     {
                         var value = Boolean.Parse(property.Value);
                         var boolQualifier = value ? string.Empty : "!";
-                        text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}{1}.{2}", boolQualifier, _object.Instance.Value, property.Name)));
+                        var boolStatement = AssertText.Replace("##clause##",
+                                                               string.Format("{0}{1}.{2}", boolQualifier,
+                                                                             _object.Instance.Value, property.Name));
+                        WriteToTrace(text, boolStatement);
+                        text.AppendLine(boolStatement);
                     }
                     else if (RegexUtility.IsDateTime(property.Value))
                     {
                         var dtInstance = "dateTime" + InstanceIdentifier;
-                        text.AppendLine(string.Format("\t\t\tvar {0} = DateTime.Parse(\"{1}\");", dtInstance, property.Value));
-                        text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}.{1} {2} {3}", _object.Instance.Value, property.Name, property.Operators[0].Value, dtInstance)));
+                        var dateTimeStatement = string.Format("\t\t\tvar {0} = DateTime.Parse(\"{1}\");", dtInstance,
+                                                              property.Value);
+                        WriteToTrace(text, dateTimeStatement);
+                        text.AppendLine(dateTimeStatement);
+                        var dateTimeAssert = AssertText.Replace("##clause##",
+                                                                string.Format("{0}.{1} {2} {3}", _object.Instance.Value,
+                                                                              property.Name, property.Operators[0].Value,
+                                                                              dtInstance));
+                        WriteToTrace(text, dateTimeAssert);
+                        text.AppendLine(dateTimeAssert);
                         InstanceIdentifier++;
                     }
                     else if (property.Operators[0].Value.Contains("contains"))
                     {
                         var boolQualifier = property.Operators[0].Value == "contains" ? "" : "!";
-                        text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}{1}.{2}.Contains({3})", boolQualifier, _object.Instance.Value, property.Name, property.Value)));
+                        var containsAssert = AssertText.Replace("##clause##",
+                                                                string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
+                                                                              _object.Instance.Value, property.Name,
+                                                                              property.Value));
+                        WriteToTrace(text, containsAssert);
+                        text.AppendLine(containsAssert);
                     }
                     else
                     {
-                        text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}.{1} {2} {3}", _object.Instance.Value, property.Name, property.Operators[0].Value, property.Value)));
+                        var valueAssert = AssertText.Replace("##clause##",
+                                                             string.Format("{0}.{1} {2} {3}", _object.Instance.Value,
+                                                                           property.Name, property.Operators[0].Value,
+                                                                           property.Value));
+                        WriteToTrace(text, valueAssert);
+                        text.AppendLine(valueAssert);
                     }
                 }
             }
@@ -322,23 +348,47 @@ namespace bdUnit.Core
                 {
                     var value = Boolean.Parse(constrainedProperty.Value);
                     var boolQualifier = value ? string.Empty : "!";
-                    text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}{1}.{2}", boolQualifier, instance, constrainedProperty.Name)));
+                    var boolAssert = AssertText.Replace("##clause##",
+                                                        string.Format("{0}{1}.{2}", boolQualifier, instance,
+                                                                      constrainedProperty.Name));
+                    WriteToTrace(text, boolAssert);
+                    text.AppendLine();
                 }
                 else if (constrainedProperty.Operators[0].Value.Contains("contains"))
                 {
                     var boolQualifier = property.Operators[0].Value == "contains" ? "" : "!";
-                    text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}{1}.{2}.Contains({3})", boolQualifier, instance, constrainedProperty.Name, constrainedProperty.Value)));
+                    var containsAssert = AssertText.Replace("##clause##",
+                                                            string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
+                                                                          instance, constrainedProperty.Name,
+                                                                          constrainedProperty.Value));
+                    WriteToTrace(text, containsAssert);
+                    text.AppendLine(containsAssert);
                 }
                 else if (RegexUtility.IsDateTime(constrainedProperty.Value))
                 {
                     var dtInstance = "dateTime" + InstanceIdentifier;
-                    text.AppendLine(string.Format("\t\t\tvar {0} = DateTime.Parse(\"{1}\");", dtInstance, constrainedProperty.Value));
-                    text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}.{1} {2} {3}", instance, constrainedProperty.Name, constrainedProperty.Operators[0].Value, dtInstance)));
+                    var dateTimeStatment = string.Format("\t\t\tvar {0} = DateTime.Parse(\"{1}\");", dtInstance,
+                                                         constrainedProperty.Value);
+                    WriteToTrace(text, dateTimeStatment);
+                    text.AppendLine(dateTimeStatment);
+                    var dateTimeAssert = AssertText.Replace("##clause##",
+                                                            string.Format("{0}.{1} {2} {3}", instance,
+                                                                          constrainedProperty.Name,
+                                                                          constrainedProperty.Operators[0].Value,
+                                                                          dtInstance));
+                    WriteToTrace(text, dateTimeAssert);
+                    text.AppendLine(dateTimeAssert);
                     InstanceIdentifier++;
                 }
                 else
                 {
-                    text.AppendLine(AssertText.Replace("##clause##", string.Format("{0}.{1} {2} {3}", instance, constrainedProperty.Name, property.Operators[0].Value, constrainedProperty.Value)));
+                    var valueAssert = AssertText.Replace("##clause##",
+                                                         string.Format("{0}.{1} {2} {3}", instance,
+                                                                       constrainedProperty.Name,
+                                                                       property.Operators[0].Value,
+                                                                       constrainedProperty.Value));
+                    WriteToTrace(text, valueAssert);
+                    text.AppendLine(valueAssert);
                 }
             }
             return text.ToString();
@@ -349,6 +399,13 @@ namespace bdUnit.Core
             //text = text.Insert(0, string.Format("\t\t\tprivate {0} _{1} = {2};\n", type, propertyName, value));
             //text = text.Replace("{ get; set; }", string.Format("{{ get {{ return _{0}; }} set {{ _{0} = value; }}", propertyName));
             return text;
+        }
+
+        private static void WriteToTrace(StringBuilder text, string statement)
+        {
+            statement = statement.Replace("\t", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace("\"", @"\" + "\"");
+            text.AppendLine(string.Format("\t\t\tDebug.WriteLine(\"{0}\");", statement));
+            return;
         }
 
         #region TextTemplates

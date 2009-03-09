@@ -226,7 +226,8 @@ namespace bdUnit.Preview
                     filePaths = openFileDialog.FileNames;
                 }
             }
-            var parentFolder = Directory.GetParent(filePaths[0]);
+            var filePath = filePaths[0] ?? filePaths[1];
+            var parentFolder = Directory.GetParent(filePath);
             if (parentFolder != null)
             {
                 Directory.SetCurrentDirectory(parentFolder.ToString());

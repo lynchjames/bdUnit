@@ -26,14 +26,15 @@ namespace MyNewDomain
         }
 
         public IUser Spouse { get; set; }
+        public string Name { get; set; }
         public bool IsARunner { get; set; }
         public int Age { get; set; }
-        public bool IsDead { get; set; }
+        DateTime IUser.IsDead { get; set; }
         public IList<IUser> Children { get; set; }
         
         public void Kill(IUser user)
         {
-            user.IsDead = true;
+            
         }
 
         public void Marry(IUser user)
@@ -44,7 +45,7 @@ namespace MyNewDomain
 
         public void Visit(ISleepShop sleepshop)
         {
-            this.IsDead = true;
+
         }
 
         public void Total()
@@ -84,101 +85,101 @@ namespace MyNewDomain
         public decimal Longitude { get; set; }
     }
 
-    [Pluggable("bdUnit")]
-    public class Location : ILocationonio
-    {
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
-    }
+    //[Pluggable("bdUnit")]
+    //public class Location : ILocationonio
+    //{
+    //    public decimal Latitude { get; set; }
+    //    public decimal Longitude { get; set; }
+    //}
 
-    [Pluggable("bdUnit")]
-    public class Blah : ILocations
-    {
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
-    }
+    //[Pluggable("bdUnit")]
+    //public class Blah : ILocations
+    //{
+    //    public decimal Latitude { get; set; }
+    //    public decimal Longitude { get; set; }
+    //}
 
-    [Pluggable("bdUnit")]
-    public class Woman : IWoman
-    {
-        public void Kill(IWoman woman)
-        {
+    //[Pluggable("bdUnit")]
+    //public class Woman : IWoman
+    //{
+    //    public void Kill(IWoman woman)
+    //    {
             
-        }
+    //    }
 
-        public void Marry(IWoman woman)
-        {
+    //    public void Marry(IWoman woman)
+    //    {
             
-        }
+    //    }
 
-        public void Visit(ISleepingShop sleepingshop)
-        {
+    //    public void Visit(ISleepingShop sleepingshop)
+    //    {
             
-        }
+    //    }
 
-        public void Find()
-        {
+    //    public void Find()
+    //    {
             
-        }
+    //    }
 
-        public IWoman Spouse { get; set; }
-        public bool IsARunner { get; set; }
-        public int Age { get; set; }
-        public bool IsDead { get; set; }
-        public IList<IUser> Children { get; set; }
-    }
+    //    public IWoman Spouse { get; set; }
+    //    public bool IsARunner { get; set; }
+    //    public int Age { get; set; }
+    //    public bool IsDead { get; set; }
+    //    public IList<IUser> Children { get; set; }
+    //}
 
-    [Pluggable("bdUnit")]
-    public class Man : IMan
-    {
-        public void Kill(IMan man)
-        {
+    //[Pluggable("bdUnit")]
+    //public class Man : IMan
+    //{
+    //    public void Kill(IMan man)
+    //    {
             
-        }
+    //    }
 
-        public void Marry(IMan man)
-        {
+    //    public void Marry(IMan man)
+    //    {
             
-        }
+    //    }
 
-        public void Visit(ISleepyShop sleepyshop)
-        {
+    //    public void Visit(ISleepyShop sleepyshop)
+    //    {
             
-        }
+    //    }
 
-        public void Find()
-        {
+    //    public void Find()
+    //    {
             
-        }
+    //    }
 
-        public IMan Spouse { get; set; }
-        public bool IsARunner { get; set; }
-        public int Age { get; set; }
-        public bool IsDead { get; set; }
-        public IList<IUser> Children { get; set; }
-    }
+    //    public IMan Spouse { get; set; }
+    //    public bool IsARunner { get; set; }
+    //    public int Age { get; set; }
+    //    public bool IsDead { get; set; }
+    //    public IList<IUser> Children { get; set; }
+    //}
 
-    [Pluggable("bdUnit")]
-    public class Sleep : ISleepingShop
-    {
-        public void Find()
-        {
+    //[Pluggable("bdUnit")]
+    //public class Sleep : ISleepingShop
+    //{
+    //    public void Find()
+    //    {
             
-        }
+    //    }
 
-        public ILocations Locations { get; set; }
-        public bool IsOpen { get; set; }
-    }
+    //    public ILocations Locations { get; set; }
+    //    public bool IsOpen { get; set; }
+    //}
 
-    [Pluggable("bdUnit")]
-    public class Sleeeep : ISleepyShop
-    {
-        public void Find()
-        {
+    //[Pluggable("bdUnit")]
+    //public class Sleeeep : ISleepyShop
+    //{
+    //    public void Find()
+    //    {
             
-        }
+    //    }
 
-        public ILocation Location { get; set; }
-        public bool IsOpen { get; set; }
-    }
+    //    public ILocation Location { get; set; }
+    //    public bool IsOpen { get; set; }
+    //}
 }

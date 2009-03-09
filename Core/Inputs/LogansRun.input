@@ -1,6 +1,7 @@
 begin story "LogansRun":
     begin setup 
-        @User to have a ~Spouse(@User) 
+        @User to have a ~Spouse(@User)
+and a ~Name
                 and a ~IsARunner(true) 
                 and an ~Age(10)
                 and an ~IsDead("01/03/2008")
@@ -24,6 +25,6 @@ begin story "LogansRun":
         @User(b) should have ~IsDead as (true) 
             and @User(a) ~IsDead should be earlier than ("22/04/1983")
     When a @User(John) #Visit a @SleepShop(CentralSleepShop), 
-        @User(John) should have ~IsDead as (true) 
+        @User(John) should have ~IsDead later than ("01/01/1980") 
 end story
 

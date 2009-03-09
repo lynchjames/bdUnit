@@ -11,7 +11,7 @@ namespace bdUnit.Core
     {
         #region TextTemplates
 
-        public readonly string TestFixtureText = ("#region Using Statements\nusing System.Collections.Generic;\nusing bdUnit.Interfaces;\nusing NUnit.Framework;\nusing Rhino.Mocks;\nusing StructureMap;\nusing System;\n#endregion\n\nnamespace bdUnit.Interfaces \n{##interfaces##\n}\n\nnamespace bdUnit.Tests \n{\n\t[TestFixture]\n\tpublic class ##fixturename##\n\t{\n##structuremap##\n##tests##\t}\n}").Replace("##structuremap##", StructureMap);
+        public readonly string TestFixtureText = ("#region Using Statements\nusing System.Collections.Generic;\nusing System.Diagnostics;\nusing bdUnit.Interfaces;\nusing NUnit.Framework;\nusing Rhino.Mocks;\nusing StructureMap;\nusing System;\n#endregion\n\nnamespace bdUnit.Interfaces \n{##interfaces##\n}\n\nnamespace bdUnit.Tests \n{\n\t[TestFixture]\n\tpublic class ##fixturename##\n\t{\n##structuremap##\n##tests##\t}\n}").Replace("##structuremap##", StructureMap);
 
         public readonly string TestText = "\n\t\t[Test]\n\t\tpublic void ##testname##()";
 

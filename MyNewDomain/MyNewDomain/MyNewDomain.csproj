@@ -31,9 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="bdUnit_MbUnit, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="bdUnit_NUnit, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\BuildDrop\bdUnit\bdUnit_MbUnit.dll</HintPath>
+      <HintPath>bdUnit\bdUnit_NUnit.dll</HintPath>
     </Reference>
     <Reference Include="MbUnit.Framework, Version=2.4.2.355, Culture=neutral, PublicKeyToken=5e72ecd30bc408d5">
       <SpecificVersion>False</SpecificVersion>

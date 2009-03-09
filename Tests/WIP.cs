@@ -1,5 +1,6 @@
-﻿//#region Using Statements
+//#region Using Statements
 //using System.Collections.Generic;
+//using System.Diagnostics;
 //using bdUnit.Interfaces;
 //using NUnit.Framework;
 //using StructureMap;
@@ -10,29 +11,30 @@
 //{
 
 //    [PluginFamily("bdUnit")]
-//    public interface IUser
+//    public partial interface IUser
 //    {
 //        IUser Spouse { get; set; }
+//        string Name { get; set; }
 //        bool IsARunner { get; set; }
 //        int Age { get; set; }
-//        bool IsDead { get; set; }
+//        DateTime IsDead { get; set; }
 //        IList<IUser> Children { get; set; }
 //        void Kill(IUser user);
 //        void Marry(IUser user);
 //        void Visit(ISleepShop sleepshop);
-//        void Total();
+//        void Find();
 //    }
 
 //    [PluginFamily("bdUnit")]
-//    public interface ISleepShop
+//    public partial interface ISleepShop
 //    {
 //        ILocation Location { get; set; }
 //        bool IsOpen { get; set; }
-//        void Locate();
+//        void Find();
 //    }
 
 //    [PluginFamily("bdUnit")]
-//    public interface ILocation
+//    public partial interface ILocation
 //    {
 //        decimal Latitude { get; set; }
 //        decimal Longitude { get; set; }
@@ -42,7 +44,7 @@
 //namespace bdUnit.Tests
 //{
 //    [TestFixture]
-//    public class LogansRun_Marriage
+//    public class LogansRun
 //    {
 //        [TestFixtureSetUp]
 //        public void Setup()
@@ -62,20 +64,26 @@
 //            IUser Peter = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
 //            IUser Eve = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
 //            Peter.Marry(Eve);
+//            Debug.WriteLine("Assert.IsTrue(!Peter.IsARunner);");
 //            Assert.IsTrue(!Peter.IsARunner);
-//            Assert.IsTrue(Peter.Age < 30);
+//            Debug.WriteLine("Assert.IsTrue(Peter.Age < 21);");
+//            Assert.IsTrue(Peter.Age < 21);
+//            Debug.WriteLine("Assert.IsTrue(Peter.Spouse == Eve);Assert.IsTrue(Eve.Spouse == Peter);");
 //            Assert.IsTrue(Peter.Spouse == Eve);
 //            Assert.IsTrue(Eve.Spouse == Peter);
 //        }
 
 //        [Test]
-//        public void When_User_Kill_User()
+//        public void When_User_Name_Is_Set()
 //        {
 //            IUser a = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
-//            IUser b = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
-//            a.Kill(b);
-//            Assert.IsTrue(b.IsDead);
-//            Assert.IsTrue(!a.IsDead);
+//            a.Name = "kjh";
+//            Debug.WriteLine("Assert.IsTrue(a.IsDead);");
+
+//            Debug.WriteLine("var dateTime1 = DateTime.Parse(\"22/04/1983\");");
+//            var dateTime1 = DateTime.Parse("22/04/1983");
+//            Debug.WriteLine("Assert.IsTrue(a.IsDead < dateTime1);");
+//            Assert.IsTrue(a.IsDead < dateTime1);
 //        }
 
 //        [Test]
@@ -84,6 +92,7 @@
 //            IUser John = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
 //            ISleepShop CentralSleepShop = ObjectFactory.GetNamedInstance<ISleepShop>("bdUnit");
 //            John.Visit(CentralSleepShop);
+//            Debug.WriteLine("Assert.IsTrue(John.IsDead);");
 //            Assert.IsTrue(John.IsDead);
 //        }
 //    }
