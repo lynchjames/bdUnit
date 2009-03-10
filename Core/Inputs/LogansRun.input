@@ -1,7 +1,7 @@
 begin story "LogansRun":
     begin setup 
         @User to have a ~Spouse(@User)
-and a ~Name
+                and a ~Name
                 and a ~IsARunner(true) 
                 and an ~Age(10)
                 and an ~IsDead("01/03/2008")
