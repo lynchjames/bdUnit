@@ -70,22 +70,27 @@ namespace bdUnit.Core.Utility
         private static readonly SolidColorBrush MethodColor = new SolidColorBrush(Colors.LightSkyBlue);
         private static readonly SolidColorBrush SetupColor = new SolidColorBrush(Colors.Red);
         private static readonly SolidColorBrush DefaultKeywordColor = new SolidColorBrush(Colors.Orange);
+        private static readonly SolidColorBrush CommentColor = new SolidColorBrush(Colors.ForestGreen);
 
         public static SolidColorBrush GetBrushColor(string tag)
         {
+            if (tag.Contains("//"))
+            {
+                return CommentColor;
+            }
             if (tag.Contains("@"))
             {
                 return TypeColor;
             }
-            else if (tag.Contains("#"))
+            if (tag.Contains("#"))
             {
                 return MethodColor;
             }
-            else if (tag.Contains("~"))
+            if (tag.Contains("~"))
             {
                 return PropertyColor;
             }
-            else if (tag.Contains("begin") || tag.Contains("end") || tag.Contains("setup") || tag.Contains("story"))
+            if (tag.Contains("begin") || tag.Contains("end") || tag.Contains("setup") || tag.Contains("story"))
             {
                 return SetupColor;
             }

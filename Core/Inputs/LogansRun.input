@@ -8,11 +8,11 @@ begin story "LogansRun":
                 and several ~Children(@User)
             I want a @User to be able to #Kill another @User
             I want a @User to be able to #Marry another @User
-            I want a @User to be able to #Visit a @SleepShop
+            //I want a @User to be able to #Visit a @SleepShop with ~CreatedDate("01/01/1982") and ~Referrer("Bad Man")
             I want to be able to #Find all @User
         @SleepShop to have a ~Location(@Location)
                 and an ~IsOpen(true)
-            I want to be able to #Find @SleepShop ~Location.
+            I want to be able to #Find @SleepShop ~Location
         @Location to have a ~Latitude(0.0)
                 and a ~Longitude(0.0)
     end setup

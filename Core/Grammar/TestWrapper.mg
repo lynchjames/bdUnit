@@ -136,13 +136,13 @@ module Test
             => When{TargetProperty{Name{p},Objects[o], x, v, c}};
             
         syntax CreateMethodStatement
-            = TCreate m:Method Connectives.TAll o:Object "."? 
+            = TCreate m:Method Connectives.TAll o:Object
             => CreateMethod{TargetMethod{Name{m},Objects[o]}}
-            | TCreate o:Object TMethod m:Method Connectives.TAnother o2:Object "."?
+            | TCreate o:Object TMethod m:Method Connectives.TAnother o2:Object
             => CreateMethod{TargetMethod{Name{m},Objects[o,o2]}}
-            | TCreate o:Object TMethod m:Method Connectives.TA o2:Object "."? 
+            | TCreate o:Object TMethod m:Method Connectives.TA o2:Object 
             => CreateMethod{TargetMethod{Name{m},Objects[o,o2]}}
-            | TCreate m:Method o:Object p:Property"."?
+            | TCreate m:Method o:Object p:Property
             => CreateMethod{TargetMethod{Name{m},Objects[o],Properties[Property{Name{p}}]}};
                    
         syntax Object = name:ObjectId => Object{Name{name}}

@@ -173,6 +173,7 @@ namespace bdUnit.Preview.Controls
             _timer.Stop();
             _timer.Elapsed -= _timer_Elapsed;
             InputEditor.TextChanged -= InputEditor_TextChanged;
+            
             if (!BackgroundThreadIsRunning && !IsUpdating)
             {
                 BackgroundThreadIsRunning = true;
@@ -237,6 +238,9 @@ namespace bdUnit.Preview.Controls
         {
             TextRange documentRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
             documentRange.ClearAllProperties();
+            //HACK to avoid problem with additional runs being inserted
+            var inputText = documentRange.Text;
+            documentRange.Text = inputText;
 
             TextPointer navigator = InputEditor.Document.ContentStart;
             while (navigator.CompareTo(InputEditor.Document.ContentEnd) < 0)
@@ -275,6 +279,14 @@ namespace bdUnit.Preview.Controls
                 {
                     if (i > 0 && !(Char.IsWhiteSpace(text[i - 1]) | bdUnitSyntaxProvider.GetSpecials.Contains(text[i - 1])))
                     {
+                        if (text.Contains("//"))
+                        {
+                            var t = new bdUnitSyntaxProvider.Tag();
+                            t.StartPosition = run.ContentStart;
+                            t.EndPosition = run.ContentEnd;
+                            t.Word = text;
+                            m_tags.Add(t);
+                        }
                         eIndex = i - 1;
                         string word = text.Substring(sIndex, eIndex - sIndex + 1);
 
@@ -306,10 +318,12 @@ namespace bdUnit.Preview.Controls
         {
             if (!InputEditor.Dispatcher.CheckAccess())
             {
+                InputEditor.Dispatcher.Invoke(DispatcherPriority.SystemIdle, new Action(HighlightInputSyntax));
                 InputEditor.Dispatcher.Invoke(DispatcherPriority.SystemIdle, new Action(Update));
             }
             else
             {
+                HighlightInputSyntax();
                 Update();
             }
             BackgroundThreadIsRunning = false;
@@ -329,7 +343,6 @@ namespace bdUnit.Preview.Controls
                 var error = string.Empty;
                 try
                 {
-                    HighlightInputSyntax();
                     outputCode = parser.Parse(framework);
                 }
                 catch (DynamicParserExtensions.ErrorException ex)
