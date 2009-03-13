@@ -91,7 +91,6 @@ namespace bdUnit.Core
                         //TODO Test specific property values on object after method used
                         stringBuilder = GenerateMethodForTargetMethod(targetMethod, variables, stringBuilder);
                     }
-                    //var count = target.Objects.Count;
 
                     stringBuilder.AppendLine("\t\t}");
                 }
