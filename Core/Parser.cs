@@ -166,11 +166,11 @@ namespace bdUnit.Core
 
         public void Dispose()
         {
-            this.Input = null;
-            this.parser = null;
-            this.namespaces = null;
-            this.explicitTypeMappings = null;
-            this.labelToTypeMappings = null;
+            Input = null;
+            parser = null;
+            namespaces = null;
+            explicitTypeMappings = null;
+            labelToTypeMappings = null;
         }
     }
 }

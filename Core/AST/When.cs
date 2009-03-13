@@ -4,8 +4,6 @@
 
 #endregion
 
-using System.Collections.Generic;
-
 namespace bdUnit.Core.AST
 {
     public class When : IStatement

@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿#region Using Statements
+
+using System.Collections.Generic;
 using Core.Enum;
+
+#endregion
 
 namespace bdUnit.Core.AST
 {

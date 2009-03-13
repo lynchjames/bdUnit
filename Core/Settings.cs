@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace bdUnit.Core
+﻿namespace bdUnit.Core
 {
     public class Settings
     {
-        private static string _grammarPath = "/Development/bdUnit/Core/Grammar/TestWrapper.mg";
+        private static string _grammarPath = "/Development/bdUnit/bdUnit/Core/Grammar/TestWrapper.mg";
         
         public static string GrammarPath
         {

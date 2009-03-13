@@ -1,11 +1,13 @@
-﻿using System;
+﻿#region Using Statements
+
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
-using bdUnit.Core;
 using Core.Enum;
 using Microsoft.CSharp;
+
+#endregion
 
 namespace bdUnit.Core
 {

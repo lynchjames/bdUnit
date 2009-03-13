@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿#region Using Statements
+
+using System.Collections.Generic;
 using System.Windows.Documents;
 using System.Windows.Media;
+
+#endregion
 
 namespace bdUnit.Core.Utility
 {

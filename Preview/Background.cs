@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region Using Statements
+
 using System.ComponentModel;
+
+#endregion
 
 namespace bdUnit.Preview
 {

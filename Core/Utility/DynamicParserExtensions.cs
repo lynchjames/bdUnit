@@ -1,11 +1,15 @@
-﻿using System;
+﻿#region Using Statements
+
+using System;
 using System.Collections;
 using System.Dataflow;
 using System.Runtime.Serialization;
 
+#endregion
+
 namespace bdUnit.Core.Utility
 {
-    public partial class DynamicParserExtensions
+    public class DynamicParserExtensions
     {
         internal class ExceptionErrorReporter : ErrorReporter
         {
@@ -24,8 +28,8 @@ namespace bdUnit.Core.Utility
 
             public ErrorException(ISourceLocation location, ErrorInformation information)
             {
-                this.Error = information;
-                this.Location = location;
+                Error = information;
+                Location = location;
             }
 
             public override Exception GetBaseException()

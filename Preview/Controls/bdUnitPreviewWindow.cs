@@ -1,8 +1,11 @@
-﻿using System;
+﻿#region Using Statements
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -13,10 +16,12 @@ using System.Windows.Threading;
 using bdUnit.Core;
 using bdUnit.Core.Utility;
 using bdUnit.Preview.Code;
-using bdUnit.Preview.Controls;
 using Core.Enum;
 using ScintillaNet;
 using TextRange=System.Windows.Documents.TextRange;
+using Timer=System.Timers.Timer;
+
+#endregion
 
 namespace bdUnit.Preview.Controls
 {
@@ -60,7 +65,7 @@ namespace bdUnit.Preview.Controls
         private bool BackgroundThreadIsRunning { get; set; }
         private DateTime LastUpdated { get; set; }
         private UnitTestFrameworkEnum CurrentFramework { get; set; }
-        private System.Timers.Timer _timer;
+        private Timer _timer;
         public int CurrentTabIndex { get; set; }
         public string FilePath { get; set; }
 
@@ -88,12 +93,6 @@ namespace bdUnit.Preview.Controls
         [STAThread]
         private void bdPreviewWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //SelectFolder.Click += SelectFolder_Click;
-            //Paste.Click += Paste_Click;
-            //Dll.Click += Dll_Click;
-            //XUnitPreview.Click += XUnitPreview_Click;
-            //NUnitPreview.Click += NUnitPreview_Click;
-            //MbUnitPreview.Click += MbUnitPreview_Click;
             InputEditor.TextChanged += InputEditor_TextChanged;
             ErrorOutput.MouseLeftButtonDown += ErrorOutput_MouseLeftButtonDown;
             ErrorOutput.MouseEnter += ErrorOutput_MouseEnter;
@@ -137,27 +136,6 @@ namespace bdUnit.Preview.Controls
             }
         }
 
-        //void SelectFolder_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
-        //    folderDialog.ShowDialog();
-        //    SelectedDirectory = folderDialog.SelectedPath;
-        //    // Add code to load up inputs in tabs within the preview windows
-        //}
-
-        //void Dll_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (!string.IsNullOrEmpty(SelectedDirectory))
-        //    {
-        //        var dllBuilder = new DllBuilder();
-        //        MessageBox.Show(dllBuilder.CompileDll(SelectedDirectory, CurrentFramework));
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("Please select a folder", "bdUnit - No Inputs Selected", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        //    }
-        //}
-
         private void InputEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
             IsSaved = false;
@@ -168,7 +146,7 @@ namespace bdUnit.Preview.Controls
             _timer.Start();
         }
 
-        void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _timer.Stop();
             _timer.Elapsed -= _timer_Elapsed;
@@ -192,10 +170,7 @@ namespace bdUnit.Preview.Controls
         void Load()
         {
             LoadEditor();
-            _timer = new System.Timers.Timer();
-            //var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-            //var defaultText = File.ReadAllText("../../../Core/Inputs/LogansRun.input");
-            //range.Text = defaultText;
+            _timer = new Timer();
             InputEditor.Document.TextAlignment = TextAlignment.Justify;
             InputEditor.Document.LineHeight = 5;
             ErrorVerticalOffset = -1;
@@ -206,14 +181,6 @@ namespace bdUnit.Preview.Controls
         {
             InputEditor.Document.Foreground = new SolidColorBrush(Colors.White);
             InputEditor.Background = new SolidColorBrush(Colors.Black);
-            
-            //editor.Styles[editor.Lexing.StyleNameMap["OPERATOR"]].ForeColor = Color.Brown;
-            //editor.Styles[editor.Lexing.StyleNameMap["GLOBALCLASS"]].ForeColor = Color.Yellow;
-            //editor.Styles[editor.Lexing.StyleNameMap["IDENTIFIER"]].ForeColor = Color.Yellow;
-            //editor.Styles.Default.BackColor = Color.Black;
-            //editor.ForeColor = Color.Black;
-            //editor.Caret.Color = Color.White;
-
             var host = new WindowsFormsHost {Child = ScintillaEditor};
             Preview.Content = host;
         }
@@ -236,16 +203,11 @@ namespace bdUnit.Preview.Controls
 
         private void Highlight()
         {
-            TextRange documentRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
-            documentRange.ClearAllProperties();
-            //HACK to avoid problem with additional runs being inserted
-            var inputText = documentRange.Text;
-            documentRange.Text = inputText;
-
-            TextPointer navigator = InputEditor.Document.ContentStart;
+            InputEditor.Background = Brushes.Black;
+            var navigator = InputEditor.Document.ContentStart;
             while (navigator.CompareTo(InputEditor.Document.ContentEnd) < 0)
             {
-                TextPointerContext context = navigator.GetPointerContext(LogicalDirection.Backward);
+                var context = navigator.GetPointerContext(LogicalDirection.Backward);
                 if (context == TextPointerContext.ElementStart && navigator.Parent is Run)
                 {
                     CheckWordsInRun((Run)navigator.Parent);
@@ -269,11 +231,11 @@ namespace bdUnit.Preview.Controls
 
         void CheckWordsInRun(Run run)
         {
-            string text = run.Text;
+            var text = run.Text;
 
-            int sIndex = 0;
-            int eIndex = 0;
-            for (int i = 0; i < text.Length; i++)
+            var sIndex = 0;
+            var eIndex = 0;
+            for (var i = 0; i < text.Length; i++)
             {
                 if (Char.IsWhiteSpace(text[i]) | bdUnitSyntaxProvider.GetSpecials.Contains(text[i]))
                 {
@@ -288,11 +250,11 @@ namespace bdUnit.Preview.Controls
                             m_tags.Add(t);
                         }
                         eIndex = i - 1;
-                        string word = text.Substring(sIndex, eIndex - sIndex + 1);
+                        var word = text.Substring(sIndex, eIndex - sIndex + 1);
 
                         if (bdUnitSyntaxProvider.IsKnownTag(word))
                         {
-                            bdUnitSyntaxProvider.Tag t = new bdUnitSyntaxProvider.Tag();
+                            var t = new bdUnitSyntaxProvider.Tag();
                             t.StartPosition = run.ContentStart.GetPositionAtOffset(sIndex, LogicalDirection.Forward);
                             t.EndPosition = run.ContentStart.GetPositionAtOffset(eIndex + 1, LogicalDirection.Backward);
                             t.Word = word;
@@ -303,7 +265,7 @@ namespace bdUnit.Preview.Controls
                 }
             }
 
-            string lastWord = text.Substring(sIndex, text.Length - sIndex);
+            var lastWord = text.Substring(sIndex, text.Length - sIndex);
             if (bdUnitSyntaxProvider.IsKnownTag(lastWord))
             {
                 var t = new bdUnitSyntaxProvider.Tag();
@@ -391,7 +353,7 @@ namespace bdUnit.Preview.Controls
         {
             try
             {
-                this.Preview = null;
+                Preview = null;
             }
             catch (Exception)
             {

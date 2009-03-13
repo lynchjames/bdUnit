@@ -1,11 +1,14 @@
-﻿using System;
+﻿#region Using Statements
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using bdUnit.Core;
 using bdUnit.Preview.Code;
 using Core.Enum;
+
+#endregion
 
 namespace bdUnit.Preview.Controls
 {
@@ -20,7 +23,7 @@ namespace bdUnit.Preview.Controls
         {
             get
             {
-                return new List<MenuItem>() { NUnit, XUnit, MbUnit };
+                return new List<MenuItem> { NUnit, XUnit, MbUnit };
             }
         }
 
