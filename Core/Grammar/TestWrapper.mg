@@ -126,14 +126,22 @@ module Test
         | list:PropertyList Connectives.TAnd? Connectives.TMany item:Property v:Value (".")? => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}, Relation{"ManyToOne"}}];
             
         syntax WhenStatement 
-            = TWhen o:Object m:Method Connectives.TAnother o2:Object"," TEach l:Loop"."?
-            => When{TargetMethod{Name{m}, Objects[o,o2], l}}
-            | TWhen m:Method (Connectives.TAll|TEach|" ") o:Object TResult c:Asserts.Constraints
-            => When{TargetMethod{Name{m}, Objects[o]}, c}
-            | TWhen o:Object m:Method (Connectives.TAnother | " a ") o2:Object"," c:Asserts.Constraints
-            => When{TargetMethod{Name{m}, Objects[o,o2], c}}
-            | TWhen o:Object p:Property x:Operators v:Value"," " the"? c:Asserts.Constraints
-            => When{TargetProperty{Name{p},Objects[o], x, v, c}};
+            = TWhen tl:TargetList TEach l:Loop"."?
+            => When{tl, l}
+            | TWhen tl:TargetList c:Asserts.Constraints
+            => When{tl, c};
+
+        syntax TargetList
+        = item:Target (Connectives.TAnd | "," | ", the")? => TargetList[item]
+        | list:TargetList Connectives.TAnd item:Target (Connectives.TAnd | "," | ", the")? => TargetList[valuesof(list), item];
+
+        syntax Target
+        = m:Method (Connectives.TAll|TEach|" ") o:Object TResult
+        => TargetMethod{Name{m}, Objects[o]}
+        | o:Object m:Method (Connectives.TAnother | " a ") o2:Object
+        => TargetMethod{Name{m}, Objects[o,o2]}
+        | o:Object p:Property x:Operators v:Value
+        => TargetProperty{Name{p},Objects[o], x, v};
             
         syntax CreateMethodStatement
             = TCreate m:Method Connectives.TAll o:Object
