@@ -2,6 +2,5 @@
 {
     public interface IStatement
     {
-        TargetMethod TargetMethod { get; set; }
     }
 }

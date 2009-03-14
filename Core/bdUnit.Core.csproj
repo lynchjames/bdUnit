@@ -92,6 +92,7 @@
     <Compile Include="AST\IProperty.cs" />
     <Compile Include="AST\ITarget.cs" />
     <Compile Include="AST\Operator.cs" />
+    <Compile Include="AST\Target.cs" />
     <Compile Include="AST\TargetProperty.cs" />
     <Compile Include="AST\Type.cs" />
     <Compile Include="AST\Object.cs" />

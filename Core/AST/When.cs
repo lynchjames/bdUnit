@@ -4,6 +4,8 @@
 
 #endregion
 
+using System.Collections.Generic;
+
 namespace bdUnit.Core.AST
 {
     public class When : IStatement
@@ -11,17 +13,12 @@ namespace bdUnit.Core.AST
         public When()
         {
             Loop = new Loop();
-            //TargetMethod = new TargetMethod();
-            //TargetProperty = new TargetProperty();
+            TargetList = new List<Target>();
+            Constraints = new List<Constraint>();
         }
 
         public Loop Loop { get; set; }
-        public TargetProperty TargetProperty { get; set; }
-
-        #region IStatement Members
-
-        public TargetMethod TargetMethod { get; set; }
-
-        #endregion
+        public IList<Target> TargetList { get; set; }
+        public IList<Constraint> Constraints { get; set; }
     }
 }

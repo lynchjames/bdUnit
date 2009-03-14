@@ -20,6 +20,7 @@ using Core.Enum;
 using ScintillaNet;
 using TextRange=System.Windows.Documents.TextRange;
 using Timer=System.Timers.Timer;
+using System.Linq;
 
 #endregion
 
@@ -203,7 +204,7 @@ namespace bdUnit.Preview.Controls
 
         private void Highlight()
         {
-            InputEditor.Background = Brushes.Black;
+            InputEditor.Document.Blocks.ToList().ForEach(x => x.Background = Brushes.Black);
             var navigator = InputEditor.Document.ContentStart;
             while (navigator.CompareTo(InputEditor.Document.ContentEnd) < 0)
             {

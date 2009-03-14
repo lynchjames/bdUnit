@@ -137,11 +137,11 @@ module Test
 
         syntax Target
         = m:Method (Connectives.TAll|TEach|" ") o:Object TResult
-        => TargetMethod{Name{m}, Objects[o]}
+        => Target{TargetMethod{Name{m}, Objects[o]}}
         | o:Object m:Method (Connectives.TAnother | " a ") o2:Object
-        => TargetMethod{Name{m}, Objects[o,o2]}
+        => Target{TargetMethod{Name{m}, Objects[o,o2]}}
         | o:Object p:Property x:Operators v:Value
-        => TargetProperty{Name{p},Objects[o], x, v};
+        => Target{TargetProperty{Name{p},Objects[o], x, v}};
             
         syntax CreateMethodStatement
             = TCreate m:Method Connectives.TAll o:Object

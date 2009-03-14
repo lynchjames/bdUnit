@@ -15,7 +15,6 @@ namespace bdUnit.Core.AST
             Objects = new List<Object>();
             Operators = new List<Operator>();
             DefaultValue = new DefaultValue();
-            Constraints = new List<Constraint>();
         }
 
         public string Name { get; set; }
@@ -24,7 +23,6 @@ namespace bdUnit.Core.AST
         public IList<Object> Objects { get; set; }
         public IList<Operator> Operators { get; set; }
         public string Relation { get; set; }
-        public IList<Constraint> Constraints { get; set; }
 
         public RelationQualifiedEnum GetRelationQualifiedEnum()
         {

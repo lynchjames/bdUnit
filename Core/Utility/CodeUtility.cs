@@ -54,5 +54,10 @@ namespace bdUnit.Core.Utility
                     }
             return output.ToString();
         }
+
+        public List<T> GetDistinct<T>(List<T> list)
+        {
+            return list.Distinct().ToList();
+        }
     }
 }

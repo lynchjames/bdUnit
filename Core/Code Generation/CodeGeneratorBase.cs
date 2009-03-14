@@ -79,22 +79,131 @@ namespace bdUnit.Core
                     var statement = statements[i];
                     var whenStatement = statement as When;
                     if (whenStatement == null) continue;
-                    var variables = new StringBuilder();
-                    if (whenStatement.TargetProperty != null)
+                    if (whenStatement.TargetList.Count > 1)
                     {
-                        var targetProperty = whenStatement.TargetProperty;
-                        stringBuilder = GenerateMethodForTargetProperty(targetProperty, stringBuilder);
+                        stringBuilder = GenerateMethodsForTargets(whenStatement.TargetList as List<Target>, stringBuilder);
                     }
                     else
                     {
-                        var targetMethod = whenStatement.TargetMethod;
-                        //TODO Test specific property values on object after method used
-                        stringBuilder = GenerateMethodForTargetMethod(targetMethod, variables, stringBuilder);
+                        var target = whenStatement.TargetList[0];
+                        if (target.TargetProperty != null)
+                        {
+                            var targetProperty = target.TargetProperty;
+                            stringBuilder = GenerateMethodForTargetProperty(targetProperty, stringBuilder);
+                        }
+                        else
+                        {
+                            var variables = new StringBuilder();
+                            var targetMethod = target.TargetMethod;
+                            //TODO Test specific property values on object after method used
+                            stringBuilder = GenerateMethodForTargetMethod(targetMethod, variables, whenStatement, stringBuilder);
+                        }
                     }
-
+                    if (whenStatement.Constraints.Count > 0)
+                    {
+                        for (var k = 0; k < whenStatement.Constraints.Count; k++)
+                        {
+                            var constraint = whenStatement.Constraints[k];
+                            if (constraint.Objects.Count > 0)
+                            {
+                                stringBuilder.Append(GenerateAsserts(constraint.Objects[0],
+                                                                     new List<Constraint> { constraint }));
+                            }
+                            else if (constraint.Property != null)
+                            {
+                                stringBuilder.Append(GenerateAsserts(constraint.Property.Object,
+                                                                     new List<Constraint> { constraint }));
+                            }
+                        }
+                    }
+                    //TODO Loops are broken
+                    //if (whenStatement.Loop != null)
+                    //{
+                    //    var loop = whenStatement.Loop;
+                    //    stringBuilder.Append(GenerateAsserts(loop.TargetMethod.Objects[0], loop.Constraints));
+                    //    var reciprocalRelationships =
+                    //        loop.Constraints.Where(
+                    //            con =>
+                    //            con.Property.GetRelationQualifiedEnum() == RelationQualifiedEnum.Reciprocal).ToList();
+                    //    if (reciprocalRelationships.Count > 0)
+                    //    {
+                    //        reciprocalRelationships.ForEach(
+                    //            r =>
+                    //            {
+                    //                var reciprocalAssert = CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal,
+                    //                                                                new List<Property> { r.Property },
+                    //                                                                AssertText, loop.TargetMethod.Objects);
+                    //                WriteToTrace(stringBuilder, reciprocalAssert);
+                    //                stringBuilder.Append(reciprocalAssert);
+                    //            });
+                    //    }
+                    //}
                     stringBuilder.AppendLine("\t\t}");
                 }
             }
+            return stringBuilder;
+        }
+
+        private StringBuilder GenerateMethodsForTargets(List<Target> list, StringBuilder stringBuilder)
+        {
+            var titleSet = false;
+            var previouslyCreated = new List<string>();
+            list.ForEach(x =>
+                             {
+                                 if (x.TargetProperty != null)
+                                 {
+                                     var property = x.TargetProperty;
+                                     var obj = property.Objects[0];
+                                     if (!titleSet)
+                                     {
+                                        var title = string.Format("When_{0}_Is_Set_...", property.Name);
+                                        stringBuilder.AppendLine(TestText.Replace("##testname##", title));
+                                        stringBuilder.AppendLine("\t\t{");
+                                        titleSet = true;
+                                     }
+                                     if (!previouslyCreated.Contains(obj.Instance.Value))
+                                     {
+                                         stringBuilder.AppendLine(
+                                             string.Format(
+                                                 "\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");",
+                                                 obj.Instance.Value, obj.Name));
+                                         previouslyCreated.Add(obj.Instance.Value);
+                                     }
+                                     stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
+                                 }
+                                 else
+                                 {
+                                     var target = x.TargetMethod;
+                                     var objects = target.Objects;
+                                     var obj = objects[0];
+                                     var otherObj = objects[1];
+                                     var variables = new StringBuilder();
+                                     if (!previouslyCreated.Contains(obj.Instance.Value))
+                                     {
+                                         variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n",
+                                                                    obj.Instance.Value, obj.Name));
+                                         previouslyCreated.Add(obj.Instance.Value);
+                                     }
+                                     if (!previouslyCreated.Contains(otherObj.Instance.Value))
+                                     {
+                                         variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n",
+                                                                    otherObj.Instance.Value, otherObj.Name));
+                                         previouslyCreated.Add(otherObj.Instance.Value);
+                                     }
+                                     var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name,
+                                                                     otherObj.Instance.Value);
+
+                                     if (!titleSet)
+                                     {
+                                         var title = string.Format("When_{0}_{1}_{2}", obj.Name, target.Name,
+                                                                   otherObj.Name);
+                                         stringBuilder.AppendLine(TestText.Replace("##testname##", title));
+                                         stringBuilder.AppendLine("\t\t{");
+                                         titleSet = true;
+                                     }
+                                     stringBuilder.Append(variables).Append(methodUsage);
+                                 }
+                             });
             return stringBuilder;
         }
 
@@ -107,11 +216,11 @@ namespace bdUnit.Core
             stringBuilder.AppendLine(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");",
                                            obj.Instance.Value, obj.Name));
             stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
-            stringBuilder.Append(GenerateAsserts(property));
+            //stringBuilder.Append(GenerateAsserts(property));
             return stringBuilder;
         }
 
-        private StringBuilder GenerateMethodForTargetMethod(TargetMethod target, StringBuilder variables, StringBuilder stringBuilder)
+        private StringBuilder GenerateMethodForTargetMethod(TargetMethod target, StringBuilder variables, When whenStatement, StringBuilder stringBuilder)
         {
             var objects = target.Objects;
             var obj = objects[0];
@@ -128,45 +237,6 @@ namespace bdUnit.Core
             stringBuilder.AppendLine(TestText.Replace("##testname##", title));
             stringBuilder.AppendLine("\t\t{");
             stringBuilder.Append(variables).Append(methodUsage);
-            
-            var loop = target.Loop;
-            if (loop != null)
-            {
-                stringBuilder.Append(GenerateAsserts(obj, loop.Constraints));
-                var reciprocalRelationships =
-                    loop.Constraints.Where(
-                        con =>
-                        con.Property.GetRelationQualifiedEnum() == RelationQualifiedEnum.Reciprocal).ToList();
-                if (reciprocalRelationships.Count > 0)
-                {
-                    reciprocalRelationships.ForEach(
-                        r =>
-                            {
-                                var reciprocalAssert = CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal,
-                                                                                new List<Property> {r.Property},
-                                                                                AssertText, target.Objects);
-                                WriteToTrace(stringBuilder, reciprocalAssert);
-                                stringBuilder.Append(reciprocalAssert);
-                            });
-                }
-            }
-            if (target.Constraints.Count > 0)
-            {
-                for (var k = 0; k < target.Constraints.Count; k++)
-                {
-                    var constraint = target.Constraints[k];
-                    if (constraint.Property != null)
-                    {
-                        stringBuilder.Append(GenerateAsserts(constraint.Property.Object,
-                                                             new List<Constraint> {constraint}));
-                    }
-                    else if (constraint.Objects.Count > 0)
-                    {
-                        stringBuilder.Append(GenerateAsserts(constraint.Objects[0],
-                                                             new List<Constraint> {constraint}));
-                    }
-                }
-            }
             return stringBuilder;
         }
 
@@ -334,64 +404,64 @@ namespace bdUnit.Core
             return text.ToString();
         }
 
-        public string GenerateAsserts(TargetProperty property)
-        {
-            var text = new StringBuilder();
-            var count = property.Constraints.Count;
-            for (var i = 0; i < count; i++)
-            {
-                var constraint = property.Constraints[i];
-                var constrainedProperty = constraint.Property;
-                var instance = property.Objects[0].Instance.Value;
-                if (RegexUtility.IsBool(constrainedProperty.Value))
-                {
-                    var value = Boolean.Parse(constrainedProperty.Value);
-                    var boolQualifier = value ? string.Empty : "!";
-                    var boolAssert = AssertText.Replace("##clause##",
-                                                        string.Format("{0}{1}.{2}", boolQualifier, instance,
-                                                                      constrainedProperty.Name));
-                    WriteToTrace(text, boolAssert);
-                    text.AppendLine();
-                }
-                else if (constrainedProperty.Operators[0].Value.Contains("contains"))
-                {
-                    var boolQualifier = property.Operators[0].Value == "contains" ? "" : "!";
-                    var containsAssert = AssertText.Replace("##clause##",
-                                                            string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
-                                                                          instance, constrainedProperty.Name,
-                                                                          constrainedProperty.Value));
-                    WriteToTrace(text, containsAssert);
-                    text.AppendLine(containsAssert);
-                }
-                else if (RegexUtility.IsDateTime(constrainedProperty.Value))
-                {
-                    var dtInstance = "dateTime" + InstanceIdentifier;
-                    var dateTimeStatment = string.Format("\t\t\tvar {0} = DateTime.Parse(\"{1}\");", dtInstance,
-                                                         constrainedProperty.Value);
-                    WriteToTrace(text, dateTimeStatment);
-                    text.AppendLine(dateTimeStatment);
-                    var dateTimeAssert = AssertText.Replace("##clause##",
-                                                            string.Format("{0}.{1} {2} {3}", instance,
-                                                                          constrainedProperty.Name,
-                                                                          constrainedProperty.Operators[0].Value,
-                                                                          dtInstance));
-                    WriteToTrace(text, dateTimeAssert);
-                    text.AppendLine(dateTimeAssert);
-                    InstanceIdentifier++;
-                }
-                else
-                {
-                    var valueAssert = AssertText.Replace("##clause##",
-                                                         string.Format("{0}.{1} {2} {3}", instance,
-                                                                       constrainedProperty.Name,
-                                                                       property.Operators[0].Value,
-                                                                       constrainedProperty.Value));
-                    WriteToTrace(text, valueAssert);
-                    text.AppendLine(valueAssert);
-                }
-            }
-            return text.ToString();
-        }
+        //public string GenerateAsserts(TargetProperty property)
+        //{
+        //    var text = new StringBuilder();
+        //    var count = property.Constraints.Count;
+        //    for (var i = 0; i < count; i++)
+        //    {
+        //        var constraint = property.Constraints[i];
+        //        var constrainedProperty = constraint.Property;
+        //        var instance = property.Objects[0].Instance.Value;
+        //        if (RegexUtility.IsBool(constrainedProperty.Value))
+        //        {
+        //            var value = Boolean.Parse(constrainedProperty.Value);
+        //            var boolQualifier = value ? string.Empty : "!";
+        //            var boolAssert = AssertText.Replace("##clause##",
+        //                                                string.Format("{0}{1}.{2}", boolQualifier, instance,
+        //                                                              constrainedProperty.Name));
+        //            WriteToTrace(text, boolAssert);
+        //            text.AppendLine();
+        //        }
+        //        else if (constrainedProperty.Operators[0].Value.Contains("contains"))
+        //        {
+        //            var boolQualifier = property.Operators[0].Value == "contains" ? "" : "!";
+        //            var containsAssert = AssertText.Replace("##clause##",
+        //                                                    string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
+        //                                                                  instance, constrainedProperty.Name,
+        //                                                                  constrainedProperty.Value));
+        //            WriteToTrace(text, containsAssert);
+        //            text.AppendLine(containsAssert);
+        //        }
+        //        else if (RegexUtility.IsDateTime(constrainedProperty.Value))
+        //        {
+        //            var dtInstance = "dateTime" + InstanceIdentifier;
+        //            var dateTimeStatment = string.Format("\t\t\tvar {0} = DateTime.Parse(\"{1}\");", dtInstance,
+        //                                                 constrainedProperty.Value);
+        //            WriteToTrace(text, dateTimeStatment);
+        //            text.AppendLine(dateTimeStatment);
+        //            var dateTimeAssert = AssertText.Replace("##clause##",
+        //                                                    string.Format("{0}.{1} {2} {3}", instance,
+        //                                                                  constrainedProperty.Name,
+        //                                                                  constrainedProperty.Operators[0].Value,
+        //                                                                  dtInstance));
+        //            WriteToTrace(text, dateTimeAssert);
+        //            text.AppendLine(dateTimeAssert);
+        //            InstanceIdentifier++;
+        //        }
+        //        else
+        //        {
+        //            var valueAssert = AssertText.Replace("##clause##",
+        //                                                 string.Format("{0}.{1} {2} {3}", instance,
+        //                                                               constrainedProperty.Name,
+        //                                                               property.Operators[0].Value,
+        //                                                               constrainedProperty.Value));
+        //            WriteToTrace(text, valueAssert);
+        //            text.AppendLine(valueAssert);
+        //        }
+        //    }
+        //    return text.ToString();
+        //}
 
         public string OverrideDefault(string text, string value, string propertyName, string type)
         {
