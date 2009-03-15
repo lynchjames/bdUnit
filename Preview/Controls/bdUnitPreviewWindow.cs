@@ -41,9 +41,20 @@ namespace bdUnit.Preview.Controls
             Load();
         }
 
-        public bdUnitPreviewWindow(string filePath, UnitTestFrameworkEnum framework)
+        public bdUnitPreviewWindow(Parser parser)
         {
             InitializeComponent();
+            _parser = parser;
+            Id = Guid.NewGuid();
+            Loaded += bdPreviewWindow_Loaded;
+            Load();
+        }
+
+        public bdUnitPreviewWindow(string filePath, UnitTestFrameworkEnum framework, Parser parser)
+        {
+            InitializeComponent();
+            _parser = parser;
+            _parser = parser;
             Id = Guid.NewGuid();
             Loaded += bdPreviewWindow_Loaded;
             var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
@@ -86,6 +97,7 @@ namespace bdUnit.Preview.Controls
         public bool IsSaved;
         public Guid Id;
         public string FileName;
+        public Parser _parser;
 
         #endregion
 
@@ -142,7 +154,7 @@ namespace bdUnit.Preview.Controls
             IsSaved = false;
             EventBus.TextChanged(this, new TargetEventArgs { TargetId = Id });
             _timer.Stop();
-            _timer.Interval = 1000;
+            _timer.Interval = 500;
             _timer.Elapsed += _timer_Elapsed;
             _timer.Start();
         }
@@ -204,7 +216,7 @@ namespace bdUnit.Preview.Controls
 
         private void Highlight()
         {
-            InputEditor.Document.Blocks.ToList().ForEach(x => x.Background = Brushes.Black);
+            InputEditor.Background = Brushes.Black;
             var navigator = InputEditor.Document.ContentStart;
             while (navigator.CompareTo(InputEditor.Document.ContentEnd) < 0)
             {
@@ -299,9 +311,11 @@ namespace bdUnit.Preview.Controls
             var framework = CurrentFramework;
             var paths = new Dictionary<string, string> { { "grammar", Settings.GrammarPath } };
             var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            textRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
             if (!textRange.IsEmpty)
             {
-                var parser = new Parser(textRange.Text, paths);
+                var parser = _parser ?? new Parser();
+                parser.Input = textRange.Text;
                 var outputCode = string.Empty;
                 var error = string.Empty;
                 try
@@ -314,10 +328,10 @@ namespace bdUnit.Preview.Controls
                         textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1);
                     if (errorStartLine != null)
                     {
-                        var errorStartPoint = errorStartLine.GetPositionAtOffset(ex.Location.Span.Start.Column);
+                        var errorStartPoint = errorStartLine.GetPositionAtOffset(ex.Location.Span.Start.Column + 4);
                         if (errorStartPoint != null)
                         {
-                            var errorEndPoint = errorStartPoint.GetPositionAtOffset(ex.Location.Span.Length + 4);
+                            var errorEndPoint = errorStartPoint.GetPositionAtOffset(ex.Location.Span.Length);
                             if (errorEndPoint != null)
                             {
                                 var errorRange = new TextRange(errorStartPoint, errorEndPoint);
@@ -332,7 +346,6 @@ namespace bdUnit.Preview.Controls
                 }
                 finally
                 {
-                    parser.Dispose();
                     var host = (Preview.Content as WindowsFormsHost) ?? new WindowsFormsHost { Child = ScintillaEditor };
                     var sciEditor = host.Child as Scintilla;
                     if (sciEditor != null)

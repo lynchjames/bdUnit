@@ -96,7 +96,13 @@
     <Compile Include="AST\TargetProperty.cs" />
     <Compile Include="AST\Type.cs" />
     <Compile Include="AST\Object.cs" />
-    <Compile Include="Code Generation\CodeGeneratorBase.cs" />
+    <Compile Include="Code Generation\CodeGenerator.cs" />
+    <Compile Include="Code Generation\Generators\AssertGenerator.cs" />
+    <Compile Include="Code Generation\Generators\GeneratorBase.cs" />
+    <Compile Include="Code Generation\Generators\InterfaceGenerator.cs" />
+    <Compile Include="Code Generation\Generators\MethodGenerator.cs" />
+    <Compile Include="Code Generation\Generators\MethodSignatureGenerator.cs" />
+    <Compile Include="Code Generation\Generators\PropertyGenerator.cs" />
     <Compile Include="Code Generation\ICodeGenerator.cs" />
     <Compile Include="Code Generation\MbUnitCodeGenerator.cs" />
     <Compile Include="Code Generation\XUnitCodeGenerator.cs" />
@@ -109,6 +115,7 @@
     <Compile Include="Enum\AccessEnum.cs" />
     <Compile Include="Enum\UnitTestFrameworkEnum.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Utility\ASTUtility.cs" />
     <Compile Include="Utility\bdUnitSyntaxProvider.cs" />
     <Compile Include="Utility\CodeUtility.cs" />
     <Compile Include="Utility\DynamicParserExtensions.cs" />

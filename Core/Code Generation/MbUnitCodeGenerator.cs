@@ -40,9 +40,11 @@ namespace bdUnit.Core
 
         public string GenerateTestFixture(List<Test> tests, string fileName)
         {
-            var generator = new CodeGeneratorBase(TestFixtureText, TestText, MethodText, PropertyText, TypeText,
+            var generator = new CodeGenerator(TestFixtureText, TestText, MethodText, PropertyText, TypeText,
                                                   AssertText);
-            return generator.GenerateTestFixture(tests, fileName);
+            var code = generator.GenerateTestFixture(tests, fileName);
+            generator = null;
+            return code;
         }
     }
 }

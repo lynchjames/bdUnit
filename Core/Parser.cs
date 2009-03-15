@@ -22,47 +22,42 @@ namespace bdUnit.Core
         private Dictionary<Identifier, Type> labelToTypeMappings;
         private List<Pair<XNamespace, string>> namespaces = new List<Pair<XNamespace, string>>();
         private DynamicParser parser;
+        private bool IsGrammarLoaded;
 
-        public Parser(string input, string grammar)
+        public Parser()
         {
-            Grammar = grammar;
-            Input = input;
+            
         }
 
         public Parser(string input)
         {
-            Grammar = File.ReadAllText(Settings.GrammarPath);
             Input = input;
         }
 
         public Parser(string input, IDictionary<string, string> grammarPath)
         {
             Input = input;
-            var grammar = File.ReadAllText(grammarPath["grammar"]);
-            Grammar = grammar;
         }
 
         public Parser(IDictionary<string, string> filePaths)
         {
             var stringInput = File.ReadAllText(filePaths["input"]);
             Input = stringInput;
-            var grammar = File.ReadAllText(filePaths["grammar"]);
-            Grammar = grammar;
             var pathParts = filePaths["input"].Split(new[] {'/'});
             TestFileName = pathParts[pathParts.Length - 1].Replace(".input", string.Empty);
             TestFileName = TestFileName.Insert(TestFileName.Length, ".cs");
         }
 
-        public static string InputPath { get; set; }
+        public string InputPath { get; set; }
         public static string TestFileName { get; set; }
-        public static string GrammarPath { get; set; }
+        public string GrammarPath { get; set; }
         public static string Grammar { get; set; }
         public string Input { get; set; }
 
-        public static DynamicParser LoadGrammar()
+        public void LoadGrammar()
         {
             var errorReporter = ErrorReporter.Standard;
-
+            Grammar = File.ReadAllText(Settings.GrammarPath);
             var compiler = new MGrammarCompiler
                                {
                                    SourceItems = new[]
@@ -80,19 +75,22 @@ namespace bdUnit.Core
             if (compiler.Compile(errorReporter) != 0 || errorReporter.HasErrors)
             {
                 compiler = null;
-                return null;
+                return;
             }
 
             var dynamicParser = new DynamicParser();
             compiler.LoadDynamicParser(dynamicParser);
             compiler = null;
-            return dynamicParser;
+            parser = dynamicParser;
         }
 
         public string Parse(UnitTestFrameworkEnum framework)
         {
-            
-            var parser = LoadGrammar();
+            if (!IsGrammarLoaded)
+            {
+                LoadGrammar();
+                IsGrammarLoaded = true;
+            }
             var deserializer = new Deserializer();
 
             object root;
@@ -108,8 +106,6 @@ namespace bdUnit.Core
             }
 
             var tests = deserializer.Deserialize(root) as IList<object>;
-            parser = null;
-            deserializer = null;
             var list = new List<Test>();
             if (tests != null)
             {
@@ -135,7 +131,7 @@ namespace bdUnit.Core
 
         public void DoWork()
         {
-            var parser = LoadGrammar();
+            LoadGrammar();
             var deserializer = new Deserializer();
 
             object root;
@@ -160,14 +156,9 @@ namespace bdUnit.Core
             //codegen.GenerateTest(test, "../../../Core/Inputs/LogansRunTest.cs", AccessEnum.@public);
         }
 
-        public static void Main()
-        {
-        }
-
         public void Dispose()
         {
             Input = null;
-            parser = null;
             namespaces = null;
             explicitTypeMappings = null;
             labelToTypeMappings = null;

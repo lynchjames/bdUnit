@@ -27,6 +27,8 @@ namespace bdUnit.Preview
     /// </summary>
     public partial class Window1
     {
+        private Parser _parser;
+
         public Window1()
         {
             InitializeComponent();
@@ -52,6 +54,7 @@ namespace bdUnit.Preview
 
         private void Window1_Loaded(object sender, RoutedEventArgs e)
         {
+            _parser = new Parser();
             Closing += Window1_Closing;
             Menu.GenerateDll.Click += GenerateDll_Click;
             EventBus.TextChanged += EventBus_TextChanged;
@@ -112,7 +115,7 @@ namespace bdUnit.Preview
                                                   TextTrimming = TextTrimming.CharacterEllipsis,
                                                   TextWrapping = TextWrapping.NoWrap
                                               },
-                                      Content = new bdUnitPreviewWindow(),
+                                      Content = new bdUnitPreviewWindow(_parser),
                                       MaxWidth= 120,
                                       MinWidth= 100
                                   };
@@ -134,7 +137,7 @@ namespace bdUnit.Preview
                         var fileCount = filePaths.Length;
                         for (var i = 0; i < fileCount; i++)
                         {
-                            var bdUnitPreview = new bdUnitPreviewWindow(filePaths[i], Menu.CurrentFramework)
+                            var bdUnitPreview = new bdUnitPreviewWindow(filePaths[i], Menu.CurrentFramework, _parser)
                             {
                                 CurrentTabIndex = tabControl.Items.Count,
                                 FilePath = filePaths[i],
@@ -206,7 +209,7 @@ namespace bdUnit.Preview
 
         private void GenerateDll_Click(object sender, RoutedEventArgs e)
         {
-            var dllBuilder = new DllBuilder();
+            var dllBuilder = new DllBuilder(_parser);
             var filePaths = new string[] {};
             if (Menu.DllFromOpenDocs.IsChecked)
             {

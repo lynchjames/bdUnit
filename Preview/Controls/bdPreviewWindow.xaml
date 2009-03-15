@@ -13,7 +13,10 @@
             <RowDefinition Height="*" MaxHeight="60"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Visibility="Collapsed" Height="42" Name="EditorButtons" Orientation="Horizontal"  VerticalAlignment="Top" Grid.RowSpan="2" Background="White" Grid.ColumnSpan="2"></StackPanel>
-        <RichTextBox x:Name="InputEditor" AcceptsReturn="True" AcceptsTab="True" Block.TextAlignment="Left" FlowDirection="LeftToRight" Grid.Row="0" Grid.Column="0" AllowDrop="True"  FontFamily="Consolas" FontSize="12" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" Background="Black" Grid.RowSpan="2"></RichTextBox>
+        <RichTextBox x:Name="InputEditor" AcceptsReturn="True" AcceptsTab="True" Block.TextAlignment="Left" FlowDirection="LeftToRight" Grid.Row="0" Grid.Column="0" AllowDrop="True"  FontFamily="Consolas" FontSize="12" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" BorderThickness="0" Background="Black" Grid.RowSpan="2">
+        	<FlowDocument>
+        		<Paragraph/>
+        	</FlowDocument></RichTextBox>
         <StackPanel Visibility="Collapsed" Height="42" Name="PreviewButtons" Orientation="Horizontal" VerticalAlignment="Top" Grid.Column="1" Grid.RowSpan="2">
             <Button Height="23" Content="NUnit Preview" Name="NUnitPreview" Width="95" Margin="10px,0px,0px,0px" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <Button Height="23" Content="XUnit Preview" Name="XUnitPreview" Width="95" Margin="10px,0px,0px,0px" VerticalAlignment="Center" HorizontalAlignment="Left"/>

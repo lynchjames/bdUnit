@@ -1,0 +1,95 @@
+using System.Collections.Generic;
+using System.Text;
+using bdUnit.Core.AST;
+using bdUnit.Core.Enum;
+using bdUnit.Core.Utility;
+using Core.Enum;
+
+namespace bdUnit.Core.Generators
+{
+    public interface IPropertyGenerator
+    {
+        string Generate(IList<Property> properties);
+    }
+
+    public class PropertyGenerator : GeneratorBase, IPropertyGenerator
+    {
+        public PropertyGenerator(AccessEnum access, string propertyText)
+        {
+            Access = access;
+            PropertyText = propertyText;
+
+        }
+        public string Generate(IList<Property> properties)
+        {
+            var stringBuilder = new StringBuilder();
+            var count = properties.Count;
+            for (var i = 0; i < count; i++)
+            {
+                var property = properties[i];
+                var propertyText = "";
+                propertyText = PropertyText.Replace("##accesslevel##", Access.ToString());
+                propertyText = propertyText.Replace("##propertyname##", property.Name);
+                if (!string.IsNullOrEmpty(property.Relation) && property.GetRelationQualifiedEnum() != RelationQualifiedEnum.None && property.DefaultValue != null && property.DefaultValue.Object != null)
+                {
+                    propertyText = CodeUtility.Parameterize(property.GetRelationQualifiedEnum(), new List<Property> { property },
+                                             propertyText, null);
+
+                }
+                else if (string.IsNullOrEmpty(property.DefaultValue.Value))
+                {
+                    if (property.DefaultValue.Object.Name != null)
+                    {
+                        propertyText = CodeUtility.Parameterize(RelationQualifiedEnum.OneToOne, new List<Property> {property}, propertyText, null);
+                    }
+                    propertyText = propertyText.Replace("##typename##", "string");
+                }
+                else if (RegexUtility.IsDateTime(property.DefaultValue.Value))
+                {
+                    propertyText = propertyText.Replace("##typename##", "DateTime");
+                }
+                else if (RegexUtility.IsString(property.DefaultValue.Value))
+                {
+                    if (property.DefaultValue.Value == "true" || property.DefaultValue.Value == "false")
+                    {
+                        propertyText = propertyText.Replace("##typename##", "bool");
+                        if (property.DefaultValue.Value == "true")
+                        {
+                            propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name, "bool");
+                        }
+                    }
+                    else
+                    {
+                        propertyText = propertyText.Replace("##typename##", "string");
+                        propertyText = OverrideDefault(propertyText, "\"" + property.DefaultValue.Value + "\"", property.Name, "string");
+                    }
+                }
+                else if (RegexUtility.IsDecimal(property.DefaultValue.Value))
+                {
+                    propertyText = propertyText.Replace("##typename##", "decimal");
+                    if (property.DefaultValue.Value != "0.0")
+                    {
+                        propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name, "decimal");
+                    }
+                }
+                else if (RegexUtility.IsInteger(property.DefaultValue.Value))
+                {
+                    propertyText = propertyText.Replace("##typename##", "int");
+                    if (property.DefaultValue.Value != "0")
+                    {
+                        propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name, "int");
+                    }
+                }
+                stringBuilder.Append(propertyText);
+            }
+            return stringBuilder.ToString();
+        }
+
+        public string OverrideDefault(string text, string value, string propertyName, string type)
+        {
+            //text = text.Insert(0, string.Format("\t\t\tprivate {0} _{1} = {2};\n", type, propertyName, value));
+            //text = text.Replace("{ get; set; }", string.Format("{{ get {{ return _{0}; }} set {{ _{0} = value; }}", propertyName));
+            return text;
+        }
+    }
+}

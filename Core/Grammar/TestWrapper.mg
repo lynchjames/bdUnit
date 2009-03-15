@@ -105,9 +105,7 @@ module Test
         | list:StatementList item:Statement => StatementList[valuesof(list), item];
         
         syntax Statement = 
-        //a:CreateStatement => a
         | a:CreateMethodStatement => a
-        //| a:IfStatement => a
         | a:WhenStatement => a;
         
         syntax SetupList = item:Setup => TypeList[item]
@@ -117,9 +115,9 @@ module Test
             = o:Object prop:PropertyList sl:StatementList?
             => Type{o, prop, sl};
             
-        syntax PropertyList = (' ')* TProperty item:Property => ProperyList[Property{Name{item}}]
+        syntax PropertyList = (' ')* TProperty item:Property => PropertyList[Property{Name{item}}]
         | list:PropertyList Connectives.TAnd? item:Property (".")? => PropertyList[valuesof(list), Property{Name{item}}]
-        | (' ')* TProperty item:Property v:Value => ProperyList[Property{Name{item}, DefaultValue{v}}]
+        | (' ')* TProperty item:Property v:Value => PropertyList[Property{Name{item}, DefaultValue{v}}]
         | list:PropertyList Connectives.TAnd? item:Property v:Value (".")? => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}}]
          | list:PropertyList Connectives.TAnd Connectives.TMany item:Property (".")? => PropertyList[valuesof(list), Property{Name{item}}]
         | (' ')* TProperty Connectives.TAnd? Connectives.TMany item:Property v:Value ('.')? => ProperyList[Property{Name{item}, DefaultValue{v}}]

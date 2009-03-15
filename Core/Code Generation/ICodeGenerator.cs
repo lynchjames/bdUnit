@@ -21,11 +21,6 @@ namespace bdUnit.Core
 
         string GenerateTestFixture(List<Test> tests, string fileName);
         string GenerateTest(Test test, string path, AccessEnum access);
-        StringBuilder GenerateMethods(IList<IStatement> statements, StringBuilder stringBuilder);
-        string GenerateInterfaces(Type type);
-        string GenerateProperties(IList<Property> properties);
-        string GenerateMethodSignature(CreateMethod method);
-        string GenerateAsserts(Object _object, IList<Constraint> constraints);
 
         #endregion
     }

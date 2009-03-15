@@ -13,12 +13,19 @@ namespace bdUnit.Core
 {
     public class DllBuilder
     {
+        public DllBuilder(Parser parser)
+        {
+            _parser = parser;
+        }
+
         private readonly string[] References = 
             new[]   {
                         "Rhino.Mocks", "nunit.core", "nunit.core.interfaces", "nunit.framework",
                         "xunit", "MbUnit.Framework", "StructureMap", "StructureMap.AutoMocking"
                     };
-      
+
+        private Parser _parser;
+
         public string CompileDll(string[] filePaths, UnitTestFrameworkEnum currentFramework)
         {
             CodeDomProvider compiler = new CSharpCodeProvider(new Dictionary<string, string>
@@ -63,18 +70,14 @@ namespace bdUnit.Core
             }
         }
 
-        private static string[] GetSource(string[] filePaths, UnitTestFrameworkEnum framework)
+        private string[] GetSource(string[] filePaths, UnitTestFrameworkEnum framework)
         {
             var source = new string[filePaths.Length];
             for (var i = 0; i < filePaths.Length; i++)
             {
-                var paths = new Dictionary<string, string>
-                                {
-                                    {"input", string.Format("{0}", filePaths[i])},
-                                    {"grammar", Settings.GrammarPath}
-                                };
-                var parser = new Parser(paths);
-                source[i] = parser.Parse(framework);
+                _parser.InputPath = string.Format("{0}", filePaths[i]);
+                _parser.GrammarPath = Settings.GrammarPath;     
+                source[i] = _parser.Parse(framework);
             }
             return source;
         }
