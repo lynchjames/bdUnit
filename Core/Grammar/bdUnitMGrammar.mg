@@ -38,50 +38,36 @@ module Common
     }
 }
 
-module Setup
-{
-    import Language;
-    import Microsoft.Languages;
-    import Common;    
-    export SetupLang;
-    
-    language SetupLang
-    {
-        
-    }
-}
-
 module Test
 {
     import Language;
     import Microsoft.Languages;
-    import Setup;
-    import Common;    
-    export TestLanguage;
+    import Common;
+    import TestLanguage as TL;
     
     language Asserts
     {
         syntax Constraints 
-        = c:Constraint (".")?
-        | cons:Constraints Connectives.TAnd c:Constraint (".")? => Constraints[valuesof(cons),c];
+        = c:Constraint
+        | cons:Constraints Connectives.TAnd c:Constraint => Constraints[valuesof(cons),c];
         
         syntax Constraint 
-        = TConstraint p:TestLanguage.Property Connectives.TOther o:TestLanguage.Object
+        = TConstraint p:TL.Property Connectives.TOther o:TestLanguage.Object
         => Constraint{Objects[o],Property[p]}
-        | TConstraint p:TestLanguage.Property x:TestLanguage.Operators Connectives.TOther o:TestLanguage.Object
+        | TConstraint p:TL.Property x:TL.Operators Connectives.TOther o:TestLanguage.Object
         => Constraint{Property{Name{p},o,x,Relation{"Reciprocal"}}}
-        | TConstraint p:TestLanguage.Property x:TestLanguage.Operators v:TestLanguage.Value
+        | TConstraint p:TL.Property x:TestLanguage.Operators v:TestLanguage.Value
         => Constraint{Property{Name{p},v,x}}
-        | o:TestLanguage.Object TConstraint p:TestLanguage.Property x:TestLanguage.Operators v:TestLanguage.Value 
+        | o:TL.Object TConstraint p:TL.Property x:TL.Operators v:TL.Value 
         => Constraint{Property{Name{p},v,o,x}}
-        | o:TestLanguage.Object TConstraint x:TestLanguage.Operators o2:TestLanguage.Object
+        | o:TL.Object TConstraint x:TL.Operators o2:TL.Object
         => Constraint{Objects[o, o2], x}
-        | p:TestLanguage.Property TConstraint x:TestLanguage.Operators v:TestLanguage.Value
+        | p:TL.Property TConstraint x:TL.Operators v:TL.Value
         => Constraint{Property{Name{p}, x, v}}
-        | o:TestLanguage.Object p:TestLanguage.Property TConstraint x:TestLanguage.Operators v:TestLanguage.Value
-        => Constraint{Property{Name{p}, o, x, v}};
-        //| TConstraint TAll o:Object "'s" p:Property
-        //=> [Property{p}]);
+        | o:TL.Object p:TL.Property TConstraint x:TL.Operators v:TL.Value
+        => Constraint{Property{Name{p}, o, x, v}}
+        | o:TL.Object TConstraint c:TL.Count p:TL.Property
+        => Constraint{Property{Name{p}, o, c}};
         
         token TConstraint = ' '? ("should be" | "should" | "should have" | "should have");
     }
@@ -105,48 +91,55 @@ module Test
         | list:StatementList item:Statement => StatementList[valuesof(list), item];
         
         syntax Statement = 
-        | a:CreateMethodStatement => a
-        | a:WhenStatement => a;
+        | a:CreateMethodStatement "."? => a
+        | a:WhenStatement "."? => a;
         
-        syntax SetupList = item:Setup => TypeList[item]
-        | list:SetupList item:Setup => TypeList[valuesof(list),item];
+        syntax SetupList = item:Setup "."? => TypeList[item]
+        | list:SetupList item:Setup "."? => TypeList[valuesof(list),item];
         
         syntax Setup
             = o:Object prop:PropertyList sl:StatementList?
             => Type{o, prop, sl};
             
-        syntax PropertyList = (' ')* TProperty item:Property => PropertyList[Property{Name{item}}]
-        | list:PropertyList Connectives.TAnd? item:Property (".")? => PropertyList[valuesof(list), Property{Name{item}}]
-        | (' ')* TProperty item:Property v:Value => PropertyList[Property{Name{item}, DefaultValue{v}}]
-        | list:PropertyList Connectives.TAnd? item:Property v:Value (".")? => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}}]
-         | list:PropertyList Connectives.TAnd Connectives.TMany item:Property (".")? => PropertyList[valuesof(list), Property{Name{item}}]
-        | (' ')* TProperty Connectives.TAnd? Connectives.TMany item:Property v:Value ('.')? => ProperyList[Property{Name{item}, DefaultValue{v}}]
-        | list:PropertyList Connectives.TAnd? Connectives.TMany item:Property v:Value (".")? => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}, Relation{"ManyToOne"}}];
+        syntax PropertyList 
+            = (' ')* TProperty item:Property => PropertyList[Property{Name{item}}]
+            | list:PropertyList Connectives.TAnd? item:Property 
+            => PropertyList[valuesof(list), Property{Name{item}}]
+            | (' ')* TProperty item:Property v:Value 
+            => PropertyList[Property{Name{item}, DefaultValue{v}}]
+            | list:PropertyList Connectives.TAnd? item:Property v:Value 
+            => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}}]
+            | list:PropertyList Connectives.TAnd Connectives.TMany item:Property
+            => PropertyList[valuesof(list), Property{Name{item}}]
+            | (' ')* TProperty Connectives.TAnd? Connectives.TMany item:Property v:Value 
+            => ProperyList[Property{Name{item}, DefaultValue{v}}]
+            | list:PropertyList Connectives.TAnd? Connectives.TMany item:Property v:Value 
+            => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}, Relation{"ManyToOne"}}];
             
         syntax WhenStatement 
-            = TWhen tl:TargetList TEach l:Loop"."?
+            = TWhen tl:TargetList TEach l:Loop
             => When{tl, l}
             | TWhen tl:TargetList c:Asserts.Constraints
             => When{tl, c};
 
         syntax TargetList
-        = item:Target (Connectives.TAnd | "," | ", the")? => TargetList[item]
-        | list:TargetList Connectives.TAnd item:Target (Connectives.TAnd | "," | ", the")? => TargetList[valuesof(list), item];
+            = item:Target (Connectives.TAnd | "," | ", the")?
+            => TargetList[item]
+            | list:TargetList Connectives.TAnd item:Target (Connectives.TAnd | "," | ", the")? 
+            => TargetList[valuesof(list), item];
 
         syntax Target
-        = m:Method (Connectives.TAll|TEach|" ") o:Object TResult
-        => Target{TargetMethod{Name{m}, Objects[o]}}
-        | o:Object m:Method (Connectives.TAnother | " a ") o2:Object
-        => Target{TargetMethod{Name{m}, Objects[o,o2]}}
-        | o:Object p:Property x:Operators v:Value
-        => Target{TargetProperty{Name{p},Objects[o], x, v}};
+            = m:Method (Connectives.TAll|TEach|" ") o:Object TResult
+            => Target{TargetMethod{Name{m}, Objects[o]}}
+            | o:Object m:Method (Connectives.TAnother | " a ") o2:Object
+            => Target{TargetMethod{Name{m}, Objects[o,o2]}}
+            | o:Object p:Property x:Operators v:Value
+            => Target{TargetProperty{Name{p},Objects[o], x, v}};
             
         syntax CreateMethodStatement
             = TCreate m:Method Connectives.TAll o:Object
             => CreateMethod{TargetMethod{Name{m},Objects[o]}}
-            | TCreate o:Object TMethod m:Method Connectives.TAnother o2:Object
-            => CreateMethod{TargetMethod{Name{m},Objects[o,o2]}}
-            | TCreate o:Object TMethod m:Method Connectives.TA o2:Object 
+            | TCreate o:Object TMethod m:Method (Connectives.TAnother | Connectives.TA) o2:Object
             => CreateMethod{TargetMethod{Name{m},Objects[o,o2]}}
             | TCreate m:Method o:Object p:Property
             => CreateMethod{TargetMethod{Name{m},Objects[o],Properties[Property{Name{p}}]}};
@@ -155,6 +148,7 @@ module Test
         | name:ObjectId v:Value => Object{Name{name}, Instance{v}};
         syntax Method = name:MethodId => name;
         syntax Property = name:PropertyId => name;
+        syntax Count = op:Operators? c:CountId => Count{Value{c}, op};
         syntax Value = " " '(' v:ValueId ')'=> Value{v}
         | '(' v:ValueId ')'=> Value{v}
         | '(' o:Object ')' => o
@@ -181,7 +175,7 @@ module Test
         token TEqual = " of " | "equal to " | " as " | " is ";
         token TContains = " contain" "s"?;
         token TNotContains = " not contain";
-        token TGreater = " greater than " | " later than ";
+        token TGreater = " greater than " | " later than " | " more than ";
         token TGreaterOrEqual = " greater than or" TEqual;
         token TLesser = " less than " | " earlier than ";
         token TLesserOrEqual = " less than or" TEqual;
@@ -198,12 +192,11 @@ module Test
         @{Classification["Method"]} token MethodId = '#' (Base.Letter|'-'|'_')+;
         @{Classification["Property"]} token PropertyId = '~' (Base.Letter|'-'|'_')+;
         @{Classification["Value"]} token ValueId = (Base.Letter|'_'|Base.Digit|'.')+ | Common.SingleQuotedText;
+        token CountId = Base.Digit+;
               
-        syntax StringLiteral
-          = val:Language.Grammar.TextLiteral => val;    
+        syntax StringLiteral = val:Language.Grammar.TextLiteral => val;    
                        
         interleave whitespace = Common.WhiteSpace | CommentToken | '\t' | (' ');  
-        //interleave Comment = CommentToken;  
         
         @{Classification["Comment"]}
         token CommentToken 

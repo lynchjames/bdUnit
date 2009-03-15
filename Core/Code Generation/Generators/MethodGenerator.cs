@@ -6,7 +6,7 @@ namespace bdUnit.Core.Generators
 {
     public interface IMethodGenerator
     {
-        StringBuilder Generate(IList<IStatement> statements, StringBuilder stringBuilder);
+        StringBuilder Generate(List<IStatement> statements, StringBuilder stringBuilder);
     }
 
     public class MethodGenerator : GeneratorBase, IMethodGenerator
@@ -19,7 +19,7 @@ namespace bdUnit.Core.Generators
             TestText = testText;
         }
 
-        public StringBuilder Generate(IList<IStatement> statements, StringBuilder stringBuilder)
+        public StringBuilder Generate(List<IStatement> statements, StringBuilder stringBuilder)
         {
             var statementCount = statements.Count;
             if (statementCount > 0)
@@ -38,34 +38,27 @@ namespace bdUnit.Core.Generators
                         var target = whenStatement.TargetList[0];
                         if (target.TargetProperty != null)
                         {
-                            var targetProperty = target.TargetProperty;
-                            stringBuilder = GenerateForTargetProperty(targetProperty, stringBuilder);
+                            stringBuilder = GenerateForTargetProperty(target.TargetProperty, stringBuilder);
                         }
                         else
                         {
                             var variables = new StringBuilder();
-                            var targetMethod = target.TargetMethod;
-                            //TODO Test specific property values on object after method used
-                            stringBuilder = GenerateForTargetMethod(targetMethod, variables, whenStatement, stringBuilder);
+                            stringBuilder = GenerateForTargetMethod(target.TargetMethod, variables, whenStatement, stringBuilder);
                         }
                     }
-                    if (whenStatement.Constraints.Count > 0)
-                    {
-                        for (var k = 0; k < whenStatement.Constraints.Count; k++)
-                        {
-                            var constraint = whenStatement.Constraints[k];
-                            if (constraint.Objects.Count > 0)
-                            {
-                                stringBuilder.Append(_assertGenerator.Generate(constraint.Objects[0],
-                                                                     new List<Constraint> { constraint }));
-                            }
-                            else if (constraint.Property != null)
-                            {
-                                stringBuilder.Append(_assertGenerator.Generate(constraint.Property.Object,
-                                                                     new List<Constraint> { constraint }));
-                            }
-                        }
-                    }
+                    ((List < Constraint >)whenStatement.Constraints).ForEach(c =>
+                                                                                 {
+                                                                                     if (c.Objects.Count > 0)
+                                                                                     {
+                                                                                         stringBuilder.Append(_assertGenerator.Generate(c.Objects[0],
+                                                                                                                              new List<Constraint> { c }));
+                                                                                     }
+                                                                                     else if (c.Property != null)
+                                                                                     {
+                                                                                         stringBuilder.Append(_assertGenerator.Generate(c.Property.Object,
+                                                                                                                              new List<Constraint> { c }));
+                                                                                     }
+                                                                                 });
                     _assertGenerator.GenerateForLoop(whenStatement, stringBuilder);
                     stringBuilder.AppendLine("\t\t}");
                 }

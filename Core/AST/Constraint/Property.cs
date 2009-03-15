@@ -2,17 +2,17 @@
 
 using System;
 using System.Collections.Generic;
-using Core.Enum;
+using bdUnit.Core.Enum;
 
 #endregion
 
 namespace bdUnit.Core.AST
 {
-    public class TargetProperty : IProperty, ITarget
+    public class Property : IProperty
     {
-        public TargetProperty()
+        public Property()
         {
-            Objects = new List<Object>();
+            Object = new Object();
             Operators = new List<Operator>();
             DefaultValue = new DefaultValue();
         }
@@ -20,9 +20,10 @@ namespace bdUnit.Core.AST
         public string Name { get; set; }
         public string Value { get; set; }
         public DefaultValue DefaultValue { get; set; }
-        public IList<Object> Objects { get; set; }
-        public IList<Operator> Operators { get; set; }
+        public Object Object { get; set; }
+        public List<Operator> Operators { get; set; }
         public string Relation { get; set; }
+        public Count Count { get; set; }
 
         public RelationQualifiedEnum GetRelationQualifiedEnum()
         {

@@ -4,7 +4,7 @@ using System.Windows;
 
 #endregion
 
-namespace Preview
+namespace bdUnit.Preview
 {
     /// <summary>
     /// Interaction logic for App.xaml

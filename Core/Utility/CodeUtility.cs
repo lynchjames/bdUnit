@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using bdUnit.Core.AST;
-using Core.Enum;
+using bdUnit.Core.Enum;
 
 #endregion
 
@@ -12,7 +12,7 @@ namespace bdUnit.Core.Utility
 {
     public class CodeUtility
     {
-        public static string Parameterize(RelationQualifiedEnum relation, List<Property> properties, string input, IList<Object> objects)
+        public static string Parameterize(RelationQualifiedEnum relation, List<Property> properties, string input, List<Object> objects)
         {
             var output = new StringBuilder();
             switch (relation)

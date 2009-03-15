@@ -87,15 +87,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AST\DefaultValue.cs" />
-    <Compile Include="AST\Instance.cs" />
-    <Compile Include="AST\IProperty.cs" />
-    <Compile Include="AST\ITarget.cs" />
-    <Compile Include="AST\Operator.cs" />
-    <Compile Include="AST\Target.cs" />
-    <Compile Include="AST\TargetProperty.cs" />
-    <Compile Include="AST\Type.cs" />
-    <Compile Include="AST\Object.cs" />
+    <Compile Include="AST\Objects\Count.cs" />
+    <Compile Include="AST\Objects\DefaultValue.cs" />
+    <Compile Include="AST\Objects\Instance.cs" />
+    <Compile Include="AST\Constraint\IProperty.cs" />
+    <Compile Include="AST\Target\ITarget.cs" />
+    <Compile Include="AST\Objects\Operator.cs" />
+    <Compile Include="AST\Target\Target.cs" />
+    <Compile Include="AST\Target\TargetProperty.cs" />
+    <Compile Include="AST\Test\Type.cs" />
+    <Compile Include="AST\Objects\Object.cs" />
     <Compile Include="Code Generation\CodeGenerator.cs" />
     <Compile Include="Code Generation\Generators\AssertGenerator.cs" />
     <Compile Include="Code Generation\Generators\GeneratorBase.cs" />
@@ -120,30 +121,27 @@
     <Compile Include="Utility\CodeUtility.cs" />
     <Compile Include="Utility\DynamicParserExtensions.cs" />
     <Compile Include="Utility\ReflectionExtensionMethods.cs" />
-    <Compile Include="AST\Constraint.cs" />
-    <Compile Include="AST\CreateMethod.cs" />
-    <Compile Include="AST\IStatement.cs" />
-    <Compile Include="AST\Loop.cs" />
-    <Compile Include="AST\Test.cs" />
-    <Compile Include="AST\Property.cs" />
-    <Compile Include="AST\Statement.cs" />
-    <Compile Include="AST\TargetMethod.cs" />
-    <Compile Include="AST\When.cs" />
+    <Compile Include="AST\Constraint\Constraint.cs" />
+    <Compile Include="AST\Test\CreateMethod.cs" />
+    <Compile Include="AST\Test\IStatement.cs" />
+    <Compile Include="AST\Constraint\Loop.cs" />
+    <Compile Include="AST\Test\Test.cs" />
+    <Compile Include="AST\Constraint\Property.cs" />
+    <Compile Include="AST\Test\Statement.cs" />
+    <Compile Include="AST\Target\TargetMethod.cs" />
+    <Compile Include="AST\Test\When.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>
       </SubType>
     </Compile>
     <Compile Include="Utility\RegexUtility.cs" />
-    <None Include="Grammar\TestWrapper.mg" />
+    <EmbeddedResource Include="Grammar\bdUnitMGrammar.mg" />
     <None Include="Inputs\LogansRun.input" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ExampleInterfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

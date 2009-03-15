@@ -3,13 +3,13 @@ using System.Text;
 using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
 using bdUnit.Core.Utility;
-using Core.Enum;
+using bdUnit.Core.Enum;
 
 namespace bdUnit.Core.Generators
 {
     public interface IPropertyGenerator
     {
-        string Generate(IList<Property> properties);
+        string Generate(List<Property> properties);
     }
 
     public class PropertyGenerator : GeneratorBase, IPropertyGenerator
@@ -20,7 +20,7 @@ namespace bdUnit.Core.Generators
             PropertyText = propertyText;
 
         }
-        public string Generate(IList<Property> properties)
+        public string Generate(List<Property> properties)
         {
             var stringBuilder = new StringBuilder();
             var count = properties.Count;

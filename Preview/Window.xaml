@@ -20,7 +20,7 @@
 		</Grid.RowDefinitions>
         <Controls:MenuToolbar Height="22" x:Name="Menu" Width="Auto" Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Top"></Controls:MenuToolbar>
             <TabControl x:Name="tabControl" TabStripPlacement="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Row="1" Margin="0,1.997,0,0">
-                <TabItem MaxWidth="120" MinWidth="100">
+                <!--<TabItem MaxWidth="120" MinWidth="100">
                     <TabItem.Header>
 					    <TextBlock Text="[Untitled]" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 				    </TabItem.Header>
@@ -32,7 +32,7 @@
                         </ContextMenu>
                     </TabItem.ContextMenu>
                     <Controls:bdUnitPreviewWindow />
-			</TabItem>
+			</TabItem>-->
 		</TabControl>
 	</Grid>
 </Window>

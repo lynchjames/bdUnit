@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Dataflow;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using bdUnit.Core.Utility;
@@ -80,10 +81,19 @@ namespace bdUnit.Core
 
         private void AddToList(object obj, object parentNode, object element)
         {
-            var propertyInfo = obj.GetType().GetProperty(builder.GetLabel(parentNode).ToString());
-            var value = propertyInfo.GetValue(obj, null);
-            var method = value.GetType().GetMethod("Add");
-            method.Invoke(value, new[] {DeserializeNode(element)});
+            try
+            {
+                var propertyInfo = obj.GetType().GetProperty(builder.GetLabel(parentNode).ToString());
+                var value = propertyInfo.GetValue(obj, null);
+                var method = value.GetType().GetMethod("Add");
+                method.Invoke(value, new[] { DeserializeNode(element) });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.InnerException);
+                Debug.WriteLine(ex.StackTrace);
+            }
         }
 
         private IEnumerable<object> DeserialzeSeq(object node)

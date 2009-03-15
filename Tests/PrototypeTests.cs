@@ -1,5 +1,6 @@
 ﻿#region Using Statements
 
+using System;
 using System.Collections.Generic;
 using bdUnit.Core;
 using NUnit.Framework;
@@ -16,15 +17,15 @@ namespace bdUnit.Tests
         private string _input =
             @"begin story ""LogansRun_Marriage"":
     //I want a @User to have a ~Spouse and a ~IsARunner and an ~Age.
-    I want a @User to be able to #Marry another @User.
-    I want to be able to #Total all @User's.
-    When a @User #Marry's another @User each @User should be ~Spouse as the other @User and should have ~IsARunner equal to (false) and should have ~Age equal to (30).
-    I want to be able to #Total @User ~Age.
+    I want a @User to be able to #Marry another @User
+    I want to be able to #Total all @User
+    When a @User #Marry another @User each @User should be ~Spouse as the other @User and should have ~IsARunner equal to (false) and should have ~Age equal to (30)
+    I want to be able to #Total @User ~Age
 end story
 
 begin story ""THE_RETURN"":
-    I want a @User to be able to #Marry another @User.
-    I want to be able to #Total all @User's.
+    I want a @User to be able to #Marry another @User
+    I want to be able to #Total all @User
 end story";
 
         private const string _grammar =

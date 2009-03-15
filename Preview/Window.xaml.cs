@@ -13,7 +13,7 @@ using System.Windows.Input;
 using bdUnit.Core;
 using bdUnit.Preview.Code;
 using bdUnit.Preview.Controls;
-using Core.Enum;
+using bdUnit.Core.Enum;
 using ContextMenu=System.Windows.Controls.ContextMenu;
 using MenuItem=System.Windows.Controls.MenuItem;
 using MessageBox=System.Windows.MessageBox;
@@ -27,17 +27,15 @@ namespace bdUnit.Preview
     /// </summary>
     public partial class Window1
     {
-        private Parser _parser;
-
         public Window1()
         {
             InitializeComponent();
             Loaded += Window1_Loaded;
-            //tabControl.TabItemAdded += tabControl_TabItemAdded;
         }
 
         #region Properties
 
+        private Parser _parser;
         private UnitTestFrameworkEnum CurrentFramework
         {
             get
@@ -55,6 +53,22 @@ namespace bdUnit.Preview
         private void Window1_Loaded(object sender, RoutedEventArgs e)
         {
             _parser = new Parser();
+            var tab = new TabItem
+            {
+                Header =
+                    new TextBlock
+                    {
+                        Text = "[Untitled]",
+                        TextTrimming = TextTrimming.CharacterEllipsis,
+                        TextWrapping = TextWrapping.NoWrap
+                    },
+                Content = new bdUnitPreviewWindow(_parser),
+                MaxWidth = 120,
+                MinWidth = 100
+            };
+            tab.ContextMenu = GenerateContextMenu(tab);
+            tabControl.Items.Add(tab);
+            tabControl.SelectedIndex = tabControl.Items.Count - 1;
             Closing += Window1_Closing;
             Menu.GenerateDll.Click += GenerateDll_Click;
             EventBus.TextChanged += EventBus_TextChanged;
@@ -90,8 +104,11 @@ namespace bdUnit.Preview
                 for (var i = 0; i < tabControl.Items.Count; i++)
                 {
                     var item = tabControl.Items[i] as TabItem;
-                    var bdUnitPreviewWindow1 = ((bdUnitPreviewWindow)item.Content);
-                    bdUnitPreviewWindow1.Dispose();
+                    if (item != null)
+                    {
+                        var bdUnitPreviewWindow1 = ((bdUnitPreviewWindow)item.Content);
+                        bdUnitPreviewWindow1.Dispose();
+                    }
                 }
             }
             catch (Exception)
@@ -165,10 +182,11 @@ namespace bdUnit.Preview
                     break;
                 case "Close":
                     var currentTab = tabControl.SelectedItem;
+                    var bdUnit = ((TabItem) currentTab).Content as bdUnitPreviewWindow;
+                    if (bdUnit != null) bdUnit.Dispose();
                     tabControl.Items.Remove(currentTab);
                     break;
                 case "Save":
-                    //TODO Add save for new docs
                     var preview = ((TabItem)tabControl.SelectedItem).Content as bdUnitPreviewWindow;
                     if (preview != null && !preview.IsSaved)
                     {
@@ -188,19 +206,20 @@ namespace bdUnit.Preview
                         {
                             File.WriteAllText(preview.FilePath, text);   
                         }
-                        else
+                        if (preview.FilePath != null)
                         {
                             var info = new FileInfo(preview.FilePath);
                             var writer = info.CreateText();
                             writer.Write(text);
                             writer.Close();
-                        }
-                        preview.IsSaved = true;
-                        var header = ((TabItem)tabControl.SelectedItem).Header as TextBlock;
-                        if (header != null)
-                        {
-                            header.Text = preview.FileName;
-                            header.FontWeight = FontWeights.Normal;
+
+                            preview.IsSaved = true;
+                            var header = ((TabItem)tabControl.SelectedItem).Header as TextBlock;
+                            if (header != null)
+                            {
+                                header.Text = preview.FileName;
+                                header.FontWeight = FontWeights.Normal;
+                            }
                         }
                     }
                     break;
@@ -233,56 +252,32 @@ namespace bdUnit.Preview
             if (parentFolder != null)
             {
                 Directory.SetCurrentDirectory(parentFolder.ToString());
-                MessageBox.Show(dllBuilder.CompileDll(filePaths, CurrentFramework));
-                Process.Start("explorer.exe", parentFolder.ToString());
+                var message = dllBuilder.CompileDll(filePaths, CurrentFramework);
+                MessageBox.Show(message);
+                if (message.Contains("Successfully"))
+                {
+                    Process.Start("explorer.exe", parentFolder.ToString());
+                }
             }
         }
-
-        private string[] GetOpenFilePaths()
-        {
-            var tabs = tabControl.Items;
-            var count = tabs.Count;
-            var paths = new string[count];
-            for (var i = 0; i < count; i++)
-            {
-                var tab = (TabItem) tabs[i];
-                var bdUnitPreview = tab.Content as bdUnitPreviewWindow;
-                if (bdUnitPreview != null) paths[i] = bdUnitPreview.FilePath;
-            }
-            return paths;
-        }
-
-        private ContextMenu GenerateContextMenu(TabItem tab)
-        {
-            var contextMenu = new ContextMenu {PlacementTarget = tab };
-            var close = new MenuItem {Header = "Close", Command = ApplicationCommands.Close};
-            var closeAll = new MenuItem {Header = "Close All", Name = "CloseAll"};
-            var closeAllBut = new MenuItem {Header = "Close All But This", Name = "CloseAllButThis"};
-            var menus = new List<MenuItem> {close, closeAll, closeAllBut};
-            menus.ForEach(m =>
-                              {
-                                  m.Click += ContextMenu_Click;
-                                  contextMenu.Items.Add(m);
-                              });
-            return contextMenu;
-        }
-
-        #endregion Events
 
         private void Command_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            //TODO Add required check to prevent new tab menu option
             e.CanExecute = true;
         }
 
         private void ContextMenu_Click(object sender, RoutedEventArgs e)
         {
-            var menuItem = ((MenuItem) e.Source);
+            var menuItem = ((MenuItem)e.Source);
             var menu = menuItem.Parent as ContextMenu;
             if (!string.IsNullOrEmpty(menuItem.Name) && menu != null)
             {
                 switch (menuItem.Name)
                 {
+                    case "Close":
+                        var selectedTab = ((TabItem) menu.PlacementTarget);
+                        tabControl.Items.Remove(selectedTab);
+                        break;
                     case "CloseAll":
                         tabControl.Items.Clear();
                         break;
@@ -303,8 +298,43 @@ namespace bdUnit.Preview
                         break;
                 }
             }
-            
-            
+
+
         }
+
+        #endregion Events
+
+        #region Methods
+
+        private string[] GetOpenFilePaths()
+        {
+            var tabs = tabControl.Items;
+            var count = tabs.Count;
+            var paths = new string[count];
+            for (var i = 0; i < count; i++)
+            {
+                var tab = (TabItem)tabs[i];
+                var bdUnitPreview = tab.Content as bdUnitPreviewWindow;
+                if (bdUnitPreview != null) paths[i] = bdUnitPreview.FilePath;
+            }
+            return paths;
+        }
+
+        private ContextMenu GenerateContextMenu(UIElement tab)
+        {
+            var contextMenu = new ContextMenu { PlacementTarget = tab };
+            var close = new MenuItem { Header = "Close", Name = "Close" };
+            var closeAll = new MenuItem { Header = "Close All", Name = "CloseAll" };
+            var closeAllBut = new MenuItem { Header = "Close All But This", Name = "CloseAllButThis" };
+            var menus = new List<MenuItem> { close, closeAll, closeAllBut };
+            menus.ForEach(m =>
+            {
+                m.Click += ContextMenu_Click;
+                contextMenu.Items.Add(m);
+            });
+            return contextMenu;
+        }
+
+        #endregion
     }
 }

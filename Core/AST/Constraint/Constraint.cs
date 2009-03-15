@@ -21,8 +21,8 @@ namespace bdUnit.Core.AST
             Operators = new List<Operator>();
         }
 
-        public IList<Object> Objects { get; set; }
-        public IList<Operator> Operators { get; set; }
+        public List<Object> Objects { get; set; }
+        public List<Operator> Operators { get; set; }
         public Property Property { get; set; }
     }
 }

@@ -16,7 +16,7 @@ using System.Windows.Threading;
 using bdUnit.Core;
 using bdUnit.Core.Utility;
 using bdUnit.Preview.Code;
-using Core.Enum;
+using bdUnit.Core.Enum;
 using ScintillaNet;
 using TextRange=System.Windows.Documents.TextRange;
 using Timer=System.Timers.Timer;
@@ -80,6 +80,12 @@ namespace bdUnit.Preview.Controls
         private Timer _timer;
         public int CurrentTabIndex { get; set; }
         public string FilePath { get; set; }
+        List<bdUnitSyntaxProvider.Tag> m_tags = new List<bdUnitSyntaxProvider.Tag>();
+        private bool IsUpdating;
+        public bool IsSaved;
+        public Guid Id;
+        public string FileName;
+        public Parser _parser;
 
         private Scintilla ScintillaEditor
         {
@@ -91,13 +97,6 @@ namespace bdUnit.Preview.Controls
                 return sciEditor;
             }
         }
-
-        List<bdUnitSyntaxProvider.Tag> m_tags = new List<bdUnitSyntaxProvider.Tag>();
-        private bool IsUpdating;
-        public bool IsSaved;
-        public Guid Id;
-        public string FileName;
-        public Parser _parser;
 
         #endregion
 
@@ -217,6 +216,8 @@ namespace bdUnit.Preview.Controls
         private void Highlight()
         {
             InputEditor.Background = Brushes.Black;
+            var existingRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
+            existingRange.ClearAllProperties();
             var navigator = InputEditor.Document.ContentStart;
             while (navigator.CompareTo(InputEditor.Document.ContentEnd) < 0)
             {
@@ -309,7 +310,6 @@ namespace bdUnit.Preview.Controls
         private void Update()
         {
             var framework = CurrentFramework;
-            var paths = new Dictionary<string, string> { { "grammar", Settings.GrammarPath } };
             var textRange = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
             textRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Black);
             if (!textRange.IsEmpty)
@@ -325,10 +325,10 @@ namespace bdUnit.Preview.Controls
                 catch (DynamicParserExtensions.ErrorException ex)
                 {
                     var errorStartLine =
-                        textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1);
+                        textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 2);
                     if (errorStartLine != null)
                     {
-                        var errorStartPoint = errorStartLine.GetPositionAtOffset(ex.Location.Span.Start.Column + 4);
+                        var errorStartPoint = errorStartLine.GetPositionAtOffset(ex.Location.Span.Start.Column + 8);
                         if (errorStartPoint != null)
                         {
                             var errorEndPoint = errorStartPoint.GetPositionAtOffset(ex.Location.Span.Length);
@@ -368,6 +368,7 @@ namespace bdUnit.Preview.Controls
             try
             {
                 Preview = null;
+                InputEditor = null;
             }
             catch (Exception)
             {

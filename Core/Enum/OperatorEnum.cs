@@ -1,4 +1,4 @@
-﻿namespace Core.Enum
+﻿namespace bdUnit.Core.Enum
 {
     public enum OperatorEnum
     {

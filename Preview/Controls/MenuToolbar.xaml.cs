@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using bdUnit.Preview.Code;
-using Core.Enum;
+using bdUnit.Core.Enum;
 
 #endregion
 

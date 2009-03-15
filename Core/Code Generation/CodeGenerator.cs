@@ -7,7 +7,7 @@ using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
 using bdUnit.Core.Generators;
 using bdUnit.Core.Utility;
-using Core.Enum;
+using bdUnit.Core.Enum;
 using Type=bdUnit.Core.AST.Type;
 
 #endregion

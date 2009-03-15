@@ -12,8 +12,8 @@ namespace bdUnit.Core.Generators
 
     public class InterfaceGenerator : GeneratorBase, IInterfaceGenerator
     {
-        private MethodSignatureGenerator _methodSignatureGenerator;
-        private PropertyGenerator _propertyGenerator;
+        private readonly MethodSignatureGenerator _methodSignatureGenerator;
+        private readonly PropertyGenerator _propertyGenerator;
 
         public InterfaceGenerator(AccessEnum access, string typeText, 
             IMethodSignatureGenerator methodSigGenerator, IPropertyGenerator propertyGenerator)

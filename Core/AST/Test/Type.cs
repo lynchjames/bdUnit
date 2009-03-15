@@ -15,7 +15,7 @@ namespace bdUnit.Core.AST
         }
 
         public Object Object { get; set; }
-        public IList<IStatement> StatementList { get; private set; }
-        public IList<Property> PropertyList { get; set; }
+        public List<IStatement> StatementList { get; private set; }
+        public List<Property> PropertyList { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace bdUnit.Core.AST
         }
 
         public Loop Loop { get; set; }
-        public IList<Target> TargetList { get; set; }
-        public IList<Constraint> Constraints { get; set; }
+        public List<Target> TargetList { get; set; }
+        public List<Constraint> Constraints { get; set; }
     }
 }

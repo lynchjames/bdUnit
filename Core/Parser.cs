@@ -8,7 +8,7 @@ using System.IO;
 using System.Xml.Linq;
 using bdUnit.Core.AST;
 using bdUnit.Core.Utility;
-using Core.Enum;
+using bdUnit.Core.Enum;
 using Microsoft.M.Grammar;
 using Type=bdUnit.Core.AST.Type;
 
@@ -18,23 +18,24 @@ namespace bdUnit.Core
 {
     public class Parser : IDisposable
     {
-        private Dictionary<Identifier, Type> explicitTypeMappings = new Dictionary<Identifier, Type>();
-        private Dictionary<Identifier, Type> labelToTypeMappings;
-        private List<Pair<XNamespace, string>> namespaces = new List<Pair<XNamespace, string>>();
-        private DynamicParser parser;
+        #region Properties
+
+        private DynamicParser _parser;
         private bool IsGrammarLoaded;
+        public string InputPath { get; set; }
+        public string TestFileName { get; set; }
+        private string Grammar { get; set; }
+        public string Input { get; set; }
+
+        #endregion
+
+        #region Constructor
 
         public Parser()
         {
-            
         }
 
         public Parser(string input)
-        {
-            Input = input;
-        }
-
-        public Parser(string input, IDictionary<string, string> grammarPath)
         {
             Input = input;
         }
@@ -48,16 +49,12 @@ namespace bdUnit.Core
             TestFileName = TestFileName.Insert(TestFileName.Length, ".cs");
         }
 
-        public string InputPath { get; set; }
-        public static string TestFileName { get; set; }
-        public string GrammarPath { get; set; }
-        public static string Grammar { get; set; }
-        public string Input { get; set; }
+        #endregion
 
         public void LoadGrammar()
         {
             var errorReporter = ErrorReporter.Standard;
-            Grammar = File.ReadAllText(Settings.GrammarPath);
+            Grammar = Settings.MGrammar;
             var compiler = new MGrammarCompiler
                                {
                                    SourceItems = new[]
@@ -69,8 +66,8 @@ namespace bdUnit.Core
                                                                  TextReader = new StringReader(Grammar)
                                                              },
                                                      },
+                                   References = new[] {"Languages", "Microsoft.Languages"},
                                };
-            compiler.References = new[] {"Languages", "Microsoft.Languages"};
 
             if (compiler.Compile(errorReporter) != 0 || errorReporter.HasErrors)
             {
@@ -81,7 +78,7 @@ namespace bdUnit.Core
             var dynamicParser = new DynamicParser();
             compiler.LoadDynamicParser(dynamicParser);
             compiler = null;
-            parser = dynamicParser;
+            _parser = dynamicParser;
         }
 
         public string Parse(UnitTestFrameworkEnum framework)
@@ -93,17 +90,9 @@ namespace bdUnit.Core
             }
             var deserializer = new Deserializer();
 
-            object root;
             var reporter = new DynamicParserExtensions.ExceptionErrorReporter();
 
-            if (Input != null)
-            {
-                root = parser.ParseObject(new StringReader(Input), reporter);
-            }
-            else
-            {
-                root = parser.ParseObject(InputPath, reporter);
-            }
+            var root = Input != null ? _parser.ParseObject(new StringReader(Input), reporter) : _parser.ParseObject(InputPath, reporter);
 
             var tests = deserializer.Deserialize(root) as IList<object>;
             var list = new List<Test>();
@@ -138,11 +127,11 @@ namespace bdUnit.Core
 
             if (Input != null)
             {
-                root = parser.ParseObject(new StringReader(Input), ErrorReporter.Standard);
+                root = _parser.ParseObject(new StringReader(Input), ErrorReporter.Standard);
             }
             else
             {
-                root = parser.ParseObject(InputPath, ErrorReporter.Standard);
+                root = _parser.ParseObject(InputPath, ErrorReporter.Standard);
             }
 
             var tests = deserializer.Deserialize(root) as IList<object>;
@@ -153,15 +142,11 @@ namespace bdUnit.Core
                 list.Add((Test)test);
             }
             Debug.Write(codegen.GenerateTestFixture(list, TestFileName));
-            //codegen.GenerateTest(test, "../../../Core/Inputs/LogansRunTest.cs", AccessEnum.@public);
         }
 
         public void Dispose()
         {
             Input = null;
-            namespaces = null;
-            explicitTypeMappings = null;
-            labelToTypeMappings = null;
         }
     }
 }

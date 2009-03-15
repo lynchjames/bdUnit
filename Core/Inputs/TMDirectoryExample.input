@@ -1,18 +1,18 @@
 begin story "TMDirectoryExample":
-    /*begin setup 
+    begin setup 
         @DomainBase to have an ~Id and a ~DateCreated
         I want a @DomainBase to be able to #Equals another @DomainBase
         @UserFriendlyDomainBase to have a ~Title
             and a ~UserFriendlyTitle
-    end setup*/
+    end setup
 
-    /*When a @DomainBase(a) #Equals another @DomainBase(b), @DomainBase(a) should be equal to @DomainBase(b)*/
+    /*When a @DomainBase(a) #Equals another @DomainBase(b), @DomainBase(a) ~Id should be equal to @DomainBase(b) ~Id*/
     
-    When @UserFiendlyDomainBaseTitle(a) ~Title is ("A WebPage."),
-    @UserFriendlyDomainBaseTitle(b) ~UserFriendlyTitle should contain ("blah")
+    When @UserFriendlyDomainBase(a) ~Title is ("A WebPage."),
+    @UserFriendlyDomainBase(a) ~UserFriendlyTitle should contain ("blah")
     
     When a @User(a) #Kill another @User(b), 
-        @User(b) should have ~IsDead as (true) 
-            and @User(a) ~IsDead should contain (false)
+        @User(b) should have ~IsDead as (true)
+            and @User(a) should have ~IsDead as (false)
     end story
 

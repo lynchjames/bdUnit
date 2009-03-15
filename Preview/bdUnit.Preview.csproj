@@ -153,9 +153,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Background.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Code\EventBus.cs" />
     <Compile Include="Code\TargetEventArgs.cs" />
     <Compile Include="Controls\bdUnitPreviewWindow.cs">

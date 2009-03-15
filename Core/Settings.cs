@@ -1,13 +1,10 @@
-﻿namespace bdUnit.Core
+﻿using bdUnit.Core.Utility;
+
+namespace bdUnit.Core
 {
     public class Settings
     {
-        private static string _grammarPath = "/Development/bdUnit/bdUnit/Core/Grammar/TestWrapper.mg";
-        
-        public static string GrammarPath
-        {
-            get { return _grammarPath ; }
-            set { _grammarPath = value; }
-        }
+        public static string MGrammar =
+            ReflectionExtensionMethods.GetResource("bdUnit.Core.Grammar.bdUnitMGrammar.mg");
     }
 }

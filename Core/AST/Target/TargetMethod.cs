@@ -15,8 +15,8 @@ namespace bdUnit.Core.AST
         }
 
         public string Name { get; set; }
-        public IList<Object> Objects { get; set; }
-        public IList<Property> Properties { get; set; }
+        public List<Object> Objects { get; set; }
+        public List<Property> Properties { get; set; }
         public Loop Loop { get; set; }
     }
 }

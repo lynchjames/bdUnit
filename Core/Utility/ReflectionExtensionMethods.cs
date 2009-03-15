@@ -1,6 +1,8 @@
 ﻿#region Using Statements
 
 using System;
+using System.IO;
+using System.Reflection;
 
 #endregion
 
@@ -17,6 +19,16 @@ namespace bdUnit.Core.Utility
             }
 
             propertyInfo.SetValue(obj, value, null);
+        }
+
+        public static string GetResource(string resourceName)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            TextReader textReader = new StreamReader(assembly.GetManifestResourceStream(resourceName));
+            string result = textReader.ReadToEnd();
+            textReader.Close();
+
+            return result;
         }
     }
 }

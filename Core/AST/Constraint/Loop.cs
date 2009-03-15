@@ -14,8 +14,8 @@ namespace bdUnit.Core.AST
             Objects = new List<Object>();
         }
 
-        public IList<Object> Objects { get; set; }
-        public IList<Constraint> Constraints { get; set; }
+        public List<Object> Objects { get; set; }
+        public List<Constraint> Constraints { get; set; }
 
         #region IStatement Members
 

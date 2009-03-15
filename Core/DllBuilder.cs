@@ -3,8 +3,9 @@
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-using Core.Enum;
+using bdUnit.Core.Enum;
 using Microsoft.CSharp;
 
 #endregion
@@ -62,7 +63,7 @@ namespace bdUnit.Core
                     }
                     return errorText.ToString();
                 }
-                return "Succesfully Generated Dll";
+                return "Successfully Generated Dll";
             }
             catch (Exception)
             {
@@ -75,8 +76,7 @@ namespace bdUnit.Core
             var source = new string[filePaths.Length];
             for (var i = 0; i < filePaths.Length; i++)
             {
-                _parser.InputPath = string.Format("{0}", filePaths[i]);
-                _parser.GrammarPath = Settings.GrammarPath;     
+                _parser.Input = File.ReadAllText(filePaths[i]);     
                 source[i] = _parser.Parse(framework);
             }
             return source;
