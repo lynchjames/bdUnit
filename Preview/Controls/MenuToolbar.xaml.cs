@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using bdUnit.Preview.Code;
 using bdUnit.Core.Enum;
+using bdUnit.Preview.Code;
 
 #endregion
 

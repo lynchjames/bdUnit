@@ -1,4 +1,8 @@
-﻿using bdUnit.Core.Utility;
+﻿#region Using Statements
+
+using bdUnit.Core.Utility;
+
+#endregion
 
 namespace bdUnit.Core
 {

@@ -14,13 +14,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using bdUnit.Core;
+using bdUnit.Core.Enum;
 using bdUnit.Core.Utility;
 using bdUnit.Preview.Code;
-using bdUnit.Core.Enum;
 using ScintillaNet;
 using TextRange=System.Windows.Documents.TextRange;
 using Timer=System.Timers.Timer;
-using System.Linq;
 
 #endregion
 

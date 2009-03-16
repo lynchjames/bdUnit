@@ -1,9 +1,12 @@
+#region Using Statements
+
 using System.Collections.Generic;
 using System.Text;
 using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
 using bdUnit.Core.Utility;
-using bdUnit.Core.Enum;
+
+#endregion
 
 namespace bdUnit.Core.Generators
 {

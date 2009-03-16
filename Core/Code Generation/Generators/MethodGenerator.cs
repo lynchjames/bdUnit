@@ -1,6 +1,10 @@
+#region Using Statements
+
 using System.Collections.Generic;
 using System.Text;
 using bdUnit.Core.AST;
+
+#endregion
 
 namespace bdUnit.Core.Generators
 {
@@ -31,7 +35,7 @@ namespace bdUnit.Core.Generators
                     if (whenStatement == null) continue;
                     if (whenStatement.TargetList.Count > 1)
                     {
-                        stringBuilder = GenerateForTargets(whenStatement.TargetList as List<Target>, stringBuilder);
+                        stringBuilder = GenerateForTargets(whenStatement.TargetList, stringBuilder);
                     }
                     else
                     {
@@ -46,7 +50,7 @@ namespace bdUnit.Core.Generators
                             stringBuilder = GenerateForTargetMethod(target.TargetMethod, variables, whenStatement, stringBuilder);
                         }
                     }
-                    ((List < Constraint >)whenStatement.Constraints).ForEach(c =>
+                    (whenStatement.Constraints).ForEach(c =>
                                                                                  {
                                                                                      if (c.Objects.Count > 0)
                                                                                      {

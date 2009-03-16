@@ -1,14 +1,10 @@
 ﻿#region Using Statements
 
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
 using bdUnit.Core.Generators;
-using bdUnit.Core.Utility;
-using bdUnit.Core.Enum;
-using Type=bdUnit.Core.AST.Type;
 
 #endregion
 

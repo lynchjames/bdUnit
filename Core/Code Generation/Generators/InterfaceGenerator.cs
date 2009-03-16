@@ -1,7 +1,11 @@
+#region Using Statements
+
 using System.Linq;
 using System.Text;
 using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
+
+#endregion
 
 namespace bdUnit.Core.Generators
 {

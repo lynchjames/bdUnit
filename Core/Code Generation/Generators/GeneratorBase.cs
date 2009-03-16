@@ -1,5 +1,9 @@
+#region Using Statements
+
 using System.Text;
 using bdUnit.Core.Enum;
+
+#endregion
 
 namespace bdUnit.Core.Generators
 {

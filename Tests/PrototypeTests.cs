@@ -1,6 +1,5 @@
 ﻿#region Using Statements
 
-using System;
 using System.Collections.Generic;
 using bdUnit.Core;
 using NUnit.Framework;

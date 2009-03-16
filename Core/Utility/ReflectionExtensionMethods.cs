@@ -23,9 +23,9 @@ namespace bdUnit.Core.Utility
 
         public static string GetResource(string resourceName)
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
+            var assembly = Assembly.GetExecutingAssembly();
             TextReader textReader = new StreamReader(assembly.GetManifestResourceStream(resourceName));
-            string result = textReader.ReadToEnd();
+            var result = textReader.ReadToEnd();
             textReader.Close();
 
             return result;

@@ -1,11 +1,15 @@
+#region Using Statements
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using bdUnit.Core.AST;
-using bdUnit.Core.Utility;
 using bdUnit.Core.Enum;
+using bdUnit.Core.Utility;
 using Object=bdUnit.Core.AST.Object;
+
+#endregion
 
 namespace bdUnit.Core.Generators
 {
@@ -17,7 +21,7 @@ namespace bdUnit.Core.Generators
 
     public class AssertGenerator : GeneratorBase, IAssertGenerator
     {
-        public int InstanceIdentifier = 0;
+        public int InstanceIdentifier;
 
         public AssertGenerator(string assertText)
         {

@@ -5,12 +5,10 @@ using System.Collections.Generic;
 using System.Dataflow;
 using System.Diagnostics;
 using System.IO;
-using System.Xml.Linq;
 using bdUnit.Core.AST;
-using bdUnit.Core.Utility;
 using bdUnit.Core.Enum;
+using bdUnit.Core.Utility;
 using Microsoft.M.Grammar;
-using Type=bdUnit.Core.AST.Type;
 
 #endregion
 

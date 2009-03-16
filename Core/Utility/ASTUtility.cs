@@ -1,6 +1,10 @@
+#region Using Statements
+
 using System.Collections.Generic;
-using bdUnit.Core.AST;
 using System.Linq;
+using bdUnit.Core.AST;
+
+#endregion
 
 namespace bdUnit.Core.Utility
 {
@@ -13,7 +17,7 @@ namespace bdUnit.Core.Utility
             if (statement is When)
             {
                 var whenStatement = statement as When;
-                ((List<Target>)whenStatement.TargetList).ForEach(t =>
+                (whenStatement.TargetList).ForEach(t =>
                                                                      {
                                                                          if (t.TargetMethod != null)
                                                                          {
