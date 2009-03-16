@@ -9,6 +9,7 @@ begin story "LogansRun":
                 and many ~Children(@User) 
             I want a @User to be able to #Kill another @User
             I want a @User to be able to #Marry another @User
+            I want a @User to be able to #Meet several @User
 /*I want a @User to be able to #Visit a @SleepShop with ~CreatedDate("01/01/1982") and ~Referrer("Bad Man")*/
             I want to be able to #Find all @User
         @SleepShop to have a ~Location(@Location)
@@ -18,7 +19,7 @@ begin story "LogansRun":
                 and a ~Longitude(0.0) 
     end setup
     
-    When a @User(Peter) #Marry another @User(Eve) and @User(Peter) ~Name is ("Peter"), 
+    When a @User(Peter) #Propose another @User(Eve) and @User(Peter) #Marry another @User(Eve) and @User(Peter) ~Name is ("Peter"), 
         each @User should have ~Spouse as the other @User 
             and should have ~IsARunner as (false) 
             and should have ~Age less than (21).

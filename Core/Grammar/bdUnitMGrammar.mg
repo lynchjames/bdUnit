@@ -142,7 +142,9 @@ module Test
             | TCreate o:Object TMethod m:Method (Connectives.TAnother | Connectives.TA) o2:Object
             => CreateMethod{TargetMethod{Name{m},Objects[o,o2]}}
             | TCreate m:Method o:Object p:Property
-            => CreateMethod{TargetMethod{Name{m},Objects[o],Properties[Property{Name{p}}]}};
+            => CreateMethod{TargetMethod{Name{m},Objects[o],Properties[Property{Name{p}}]}}
+            | TCreate o:Object TMethod m:Method Connectives.TMany o2:Object
+            => CreateMethod{TargetMethod{Name{m},Objects[o,o2], Relation{"ManyToOne"}}};
                    
         syntax Object = name:ObjectId => Object{Name{name}}
         | name:ObjectId v:Value => Object{Name{name}, Instance{v}};

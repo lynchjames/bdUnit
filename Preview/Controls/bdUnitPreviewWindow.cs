@@ -153,7 +153,7 @@ namespace bdUnit.Preview.Controls
             IsSaved = false;
             EventBus.TextChanged(this, new TargetEventArgs { TargetId = Id });
             _timer.Stop();
-            _timer.Interval = 500;
+            _timer.Interval = 400;
             _timer.Elapsed += _timer_Elapsed;
             _timer.Start();
         }
