@@ -10,7 +10,8 @@ begin story "LogansRun":
             I want a @User to be able to #Kill another @User
             I want a @User to be able to #Marry another @User
             I want a @User to be able to #Meet several @User
-/*I want a @User to be able to #Visit a @SleepShop with ~CreatedDate("01/01/1982") and ~Referrer("Bad Man")*/
+I want a @User to be able to #ProposeTo another @User
+//I want a @User to be able to #Visit a @SleepShop with ~CreatedDate("01/01/1982") and ~Referrer("Bad Man")
             I want to be able to #Find all @User
         @SleepShop to have a ~Location(@Location)
                 and an ~IsOpen(true) 
@@ -18,14 +19,18 @@ begin story "LogansRun":
         @Location to have a ~Latitude(0.0)
                 and a ~Longitude(0.0) 
     end setup
-    
-    When a @User(Peter) #Propose another @User(Eve) and @User(Peter) #Marry another @User(Eve) and @User(Peter) ~Name is ("Peter"), 
+    When a @User(Peter) #ProposeTo another @User(Patty) 
+and @User(Peter) #ProposeTo another @User(Patty)
+and @User(Peter) #Marry another @User(Eve)
+and @User(Peter) ~Name is ("Peter")
+and @User(Patty) ~Name is ("Patty"), 
         each @User should have ~Spouse as the other @User 
-            and should have ~IsARunner as (false) 
+         		   and should have ~IsARunner as (false) 
             and should have ~Age less than (21).
     When a @User(a) ~Name is ("kjh"), 
         @User(a) should have ~IsDead as (true) 
+and @User(a) ~Name should contain ("k")
             and @User(a) ~CreatedDate should be earlier than ("22/04/1983")
-            and @User(a) should have 3 ~Children
+            and @User(a) should have less than 3 ~Children
 end story
 

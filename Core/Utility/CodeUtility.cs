@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
+using bdUnit.Core.Generators;
 
 #endregion
 
@@ -42,12 +43,12 @@ namespace bdUnit.Core.Utility
                                 var other = i == 0 ? 1 : 0;
                                 var property = properties.ElementAt(0);
                                 var value = objects[other].Instance.Value;
-                                output.AppendLine(input.Replace("##clause##", 
-                                                                string.Format("{0}.{1} {2} {3}", 
-                                                                objects[i].Instance.Value, 
-                                                                property.Name, 
-                                                                property.Operators[0].Value, 
-                                                                value)));
+                                var clause = string.Format("{0}.{1} {2} {3}",
+                                                           objects[i].Instance.Value,
+                                                           property.Name,
+                                                           property.Operators[0].Value,
+                                                           value);
+                                output.AppendLine(input.Replace("##clause##", GeneratorBase.WriteAssertMessage(clause)));
                             }
                             break;
 

@@ -1,6 +1,5 @@
 #region Using Statements
 
-using System.Text;
 using bdUnit.Core.Enum;
 
 #endregion
@@ -21,11 +20,10 @@ namespace bdUnit.Core.Generators
 
         #endregion
 
-        protected static void WriteToTrace(StringBuilder text, string statement)
+        protected internal static string WriteAssertMessage(string statement)
         {
-            statement = statement.Replace("\t", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace("\"", @"\" + "\"");
-            text.AppendLine(string.Format("\t\t\tDebug.WriteLine(\"{0}\");", statement));
-            return;
+            var assertBody = statement.Replace("\t", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace("\"", @"\" + "\"");
+            return string.Format("{0}, \"Failed: {1}\"", statement, assertBody);
         }
     }
 }

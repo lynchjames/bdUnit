@@ -38,6 +38,7 @@ namespace bdUnit.Core.Generators
                 var property = constraint.Property;
                 if (string.IsNullOrEmpty(property.Relation))
                 {
+                    var assert = string.Empty;
                     var assertBody = string.Empty;
                     if (property.Count != null && property.Value == null)
                     {
@@ -45,47 +46,44 @@ namespace bdUnit.Core.Generators
                         var countOperator = property.Count.Operators.Count > 0
                                                 ? property.Count.Operators[0].Value
                                                 : "==";
-                        assertBody = AssertText.Replace("##clause##",
-                                                               string.Format("{0}.{1}.Count {2} {3}",
-                                                                             _object.Instance.Value, property.Name, countOperator, countValue));
+                        assert = string.Format("{0}.{1}.Count {2} {3}",
+                                               _object.Instance.Value, property.Name, countOperator, countValue);
+                        assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
                     }
                     else if (RegexUtility.IsBool(property.Value))
                     {
                         var value = Boolean.Parse(property.Value);
                         var boolQualifier = value ? string.Empty : "!";
-                        assertBody = AssertText.Replace("##clause##",
-                                                               string.Format("{0}{1}.{2}", boolQualifier,
-                                                                             _object.Instance.Value, property.Name));
+                        assert = string.Format("{0}{1}.{2}", boolQualifier, _object.Instance.Value, property.Name);
+                        assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
                     }
                     else if (RegexUtility.IsDateTime(property.Value))
                     {
                         var dtInstance = "dateTime" + InstanceIdentifier;
                         var dateTimeStatement = string.Format("\t\t\tvar {0} = DateTime.Parse(\"{1}\");", dtInstance,
                                                               property.Value);
-                        WriteToTrace(text, dateTimeStatement);
                         text.AppendLine(dateTimeStatement);
-                        assertBody = AssertText.Replace("##clause##",
-                                                                string.Format("{0}.{1} {2} {3}", _object.Instance.Value,
-                                                                              property.Name, property.Operators[0].Value,
-                                                                              dtInstance));
+                        assert = string.Format("{0}.{1} {2} {3}", _object.Instance.Value,
+                                               property.Name, property.Operators[0].Value,
+                                               dtInstance);
+                        assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
                         InstanceIdentifier++;
                     }
                     else if (property.Operators[0].Value.Contains("contains"))
                     {
                         var boolQualifier = property.Operators[0].Value == "contains" ? "" : "!";
-                        assertBody = AssertText.Replace("##clause##",
-                                                                string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
-                                                                              _object.Instance.Value, property.Name,
-                                                                              property.Value));
+                        assert = string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
+                                               _object.Instance.Value, property.Name,
+                                               property.Value);
+                        assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
                     }
                     else
                     {
-                        assertBody = AssertText.Replace("##clause##",
-                                                             string.Format("{0}.{1} {2} {3}", _object.Instance.Value,
-                                                                           property.Name, property.Operators[0].Value,
-                                                                           property.Value));
+                        assert = string.Format("{0}.{1} {2} {3}", _object.Instance.Value,
+                                               property.Name, property.Operators[0].Value,
+                                               property.Value);
+                        assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
                     }
-                    WriteToTrace(text, assertBody);
                     text.AppendLine(assertBody);
                 }
             }
@@ -114,7 +112,6 @@ namespace bdUnit.Core.Generators
                             var reciprocalAssert = CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal,
                                                                             new List<Property> { r.Property },
                                                                             AssertText, target.TargetMethod.Objects);
-                            WriteToTrace(stringBuilder, reciprocalAssert);
                             stringBuilder.Append(reciprocalAssert);
                         });
                 }
