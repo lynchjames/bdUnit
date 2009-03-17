@@ -8,7 +8,7 @@
     <scg:Dictionary x:TypeArguments='s:String,xl:XName'>
       <xl:XName x:Key='.d'>mti:MMode</xl:XName>
       <xl:XName x:Key='.m'>mti:MMode</xl:XName>
-      <xl:XName x:Key='.input'>mti:MGMode</xl:XName>
+      <xl:XName x:Key='.bdunit'>mti:MGMode</xl:XName>
       <xl:XName x:Key='.proj'>mti:MSBuildProjectMode</xl:XName>
       <xl:XName x:Key='.csproj'>mti:MSBuildProjectMode</xl:XName>
       <xl:XName x:Key='.vbproj'>mti:MSBuildProjectMode</xl:XName>

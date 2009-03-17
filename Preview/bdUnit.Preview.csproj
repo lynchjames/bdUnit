@@ -21,7 +21,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
     <SignAssembly>false</SignAssembly>
-    <PublishUrl>C:\Deploy\bdUnit\Publish_bdDUnit_20090316\</PublishUrl>
+    <PublishUrl>C:\Deploy\bdUnit\Publish_bdUnit_20080317\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>

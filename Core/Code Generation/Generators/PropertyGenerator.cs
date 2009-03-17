@@ -67,12 +67,12 @@ namespace bdUnit.Core.Generators
                         propertyText = OverrideDefault(propertyText, "\"" + property.DefaultValue.Value + "\"", property.Name, "string");
                     }
                 }
-                else if (RegexUtility.IsDecimal(property.DefaultValue.Value))
+                else if (RegexUtility.IsDouble(property.DefaultValue.Value))
                 {
-                    propertyText = propertyText.Replace("##typename##", "decimal");
+                    propertyText = propertyText.Replace("##typename##", "double");
                     if (property.DefaultValue.Value != "0.0")
                     {
-                        propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name, "decimal");
+                        propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name, "double");
                     }
                 }
                 else if (RegexUtility.IsInteger(property.DefaultValue.Value))
@@ -88,6 +88,8 @@ namespace bdUnit.Core.Generators
             return stringBuilder.ToString();
         }
 
+        //Deprecated as Interfaces are created with Auto-Properties only
+        [Obsolete]
         public string OverrideDefault(string text, string value, string propertyName, string type)
         {
             //text = text.Insert(0, string.Format("\t\t\tprivate {0} _{1} = {2};\n", type, propertyName, value));

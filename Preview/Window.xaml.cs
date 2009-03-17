@@ -63,7 +63,6 @@ namespace bdUnit.Preview
                         TextWrapping = TextWrapping.NoWrap
                     },
                 Content = new bdUnitPreviewWindow(_parser),
-                MaxWidth = 120,
                 MinWidth = 100
             };
             tab.ContextMenu = GenerateContextMenu(tab);
@@ -133,7 +132,6 @@ namespace bdUnit.Preview
                                                   TextWrapping = TextWrapping.NoWrap
                                               },
                                       Content = new bdUnitPreviewWindow(_parser),
-                                      MaxWidth= 120,
                                       MinWidth= 100
                                   };
                     tab.ContextMenu = GenerateContextMenu(tab);
@@ -144,7 +142,7 @@ namespace bdUnit.Preview
                     var openFileDialog = new OpenFileDialog
                                              {
                                                  Multiselect = true,
-                                                 Filter = "Input text | *.input",
+                                                 Filter = "bdUnit Input | *.bdunit",
                                                  RestoreDirectory = true
                                              };
                     if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -171,12 +169,12 @@ namespace bdUnit.Preview
                                                           },
                                                   Content = bdUnitPreview,
                                                   IsSelected = true,
-                                                  MaxWidth = 120,
                                                   MinWidth = 100
                                               };
                             openTab.ContextMenu = GenerateContextMenu(openTab);
                             tabControl.Items.Add(openTab);
                             tabControl.SelectedIndex = tabControl.Items.Count - 1;
+                            bdUnitPreview.UpdatePreview();
                         }
                     }
                     break;
@@ -239,7 +237,7 @@ namespace bdUnit.Preview
                 var openFileDialog = new OpenFileDialog
                                              {
                                                  Multiselect = true,
-                                                 Filter = "Input text | *.input",
+                                                 Filter = "bdUnit | *.bdunit",
                                                  RestoreDirectory = true
                                              };
                 if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)

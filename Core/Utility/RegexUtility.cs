@@ -19,7 +19,7 @@ namespace bdUnit.Core.Utility
             return Regex.IsMatch(target, "0|0*[1-9][0-9]*");
         }
 
-        public static bool IsDecimal(string target)
+        public static bool IsDouble(string target)
         {
             return Regex.IsMatch(target, "^\\d+(\\.\\d+)$");
         }
