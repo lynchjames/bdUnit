@@ -91,7 +91,6 @@ namespace bdUnit.Core
             var reporter = new DynamicParserExtensions.ExceptionErrorReporter();
 
             var root = Input != null ? _parser.ParseObject(new StringReader(Input), reporter) : _parser.ParseObject(InputPath, reporter);
-
             var tests = deserializer.Deserialize(root) as IList<object>;
             var list = new List<Test>();
             if (tests != null)

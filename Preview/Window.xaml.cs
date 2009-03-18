@@ -174,6 +174,7 @@ namespace bdUnit.Preview
                             openTab.ContextMenu = GenerateContextMenu(openTab);
                             tabControl.Items.Add(openTab);
                             tabControl.SelectedIndex = tabControl.Items.Count - 1;
+                            bdUnitPreview.InputEditor.TextChanged -= bdUnitPreview.InputEditor_TextChanged;
                             bdUnitPreview.UpdatePreview();
                         }
                     }

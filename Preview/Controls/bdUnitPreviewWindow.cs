@@ -147,7 +147,7 @@ namespace bdUnit.Preview.Controls
             }
         }
 
-        private void InputEditor_TextChanged(object sender, TextChangedEventArgs e)
+        public void InputEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
             IsSaved = false;
             EventBus.TextChanged(this, new TargetEventArgs { TargetId = Id });
@@ -185,7 +185,7 @@ namespace bdUnit.Preview.Controls
             InputEditor.Document.TextAlignment = TextAlignment.Justify;
             InputEditor.Document.LineHeight = 5;
             ErrorVerticalOffset = -1;
-            HighlightInputSyntax();
+            //HighlightInputSyntax();
         }
 
         private void LoadEditor()
