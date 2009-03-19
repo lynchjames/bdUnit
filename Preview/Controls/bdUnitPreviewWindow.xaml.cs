@@ -70,7 +70,6 @@ namespace bdUnit.Preview.Controls
 
         #region Properties
 
-        private string SelectedDirectory { get; set; }
         private TextPointer ErrorPoint { get; set; }
         private double ErrorVerticalOffset { get; set; }
         private bool BackgroundThreadIsRunning { get; set; }
@@ -86,7 +85,7 @@ namespace bdUnit.Preview.Controls
         public string FileName;
         public Parser _parser;
 
-        private Scintilla ScintillaEditor
+        private static Scintilla ScintillaEditor
         {
             get
             {
@@ -185,7 +184,6 @@ namespace bdUnit.Preview.Controls
             InputEditor.Document.TextAlignment = TextAlignment.Justify;
             InputEditor.Document.LineHeight = 5;
             ErrorVerticalOffset = -1;
-            //HighlightInputSyntax();
         }
 
         private void LoadEditor()
@@ -324,10 +322,10 @@ namespace bdUnit.Preview.Controls
                 catch (DynamicParserExtensions.ErrorException ex)
                 {
                     var errorStartLine =
-                        textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 2);
+                        textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1);
                     if (errorStartLine != null)
                     {
-                        var errorStartPoint = errorStartLine.GetPositionAtOffset(ex.Location.Span.Start.Column + 8);
+                        var errorStartPoint = errorStartLine.GetPositionAtOffset(ex.Location.Span.Start.Column);
                         if (errorStartPoint != null)
                         {
                             var errorEndPoint = errorStartPoint.GetPositionAtOffset(ex.Location.Span.Length);
@@ -336,7 +334,7 @@ namespace bdUnit.Preview.Controls
                                 var errorRange = new TextRange(errorStartPoint, errorEndPoint);
                                 errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.DimGray);
                                 ErrorPoint = errorEndPoint;
-                                ErrorVerticalOffset = ex.Location.Span.Start.Line - 1;
+                                ErrorVerticalOffset = (ex.Location.Span.Start.Line + 5) * InputEditor.Document.LineHeight;
                             }
                         }
                     }

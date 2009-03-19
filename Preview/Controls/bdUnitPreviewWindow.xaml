@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="bdUnit.Preview.Controls.bdUnitPreviewWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto">
+    <Grid x:Name="LayoutRoot" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="*" MinHeight="400"></RowDefinition>
+            <RowDefinition Height="*" MaxHeight="60"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Visibility="Collapsed" Height="42" Name="EditorButtons" 
+                    Orientation="Horizontal"  VerticalAlignment="Top" Grid.RowSpan="2" 
+                    Background="White" Grid.ColumnSpan="2"></StackPanel>
+        <RichTextBox x:Name="InputEditor" AcceptsReturn="True" AcceptsTab="True" 
+                     Block.TextAlignment="Left" FlowDirection="LeftToRight" Grid.Row="0" 
+                     Grid.Column="0" AllowDrop="True"  FontFamily="Consolas" FontSize="12" 
+                     ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto" BorderThickness="0" Background="Black" Grid.RowSpan="2">
+        	<FlowDocument PageWidth="800">
+        	</FlowDocument></RichTextBox>
+        <Frame x:Name="Preview" Grid.Column="1" ScrollViewer.CanContentScroll="True" Grid.Row="0" 
+               ScrollViewer.VerticalScrollBarVisibility="Auto" x:FieldModifier="public"  BorderThickness="0" Grid.RowSpan="2"/>
+        <StackPanel Grid.Row="2" Grid.RowSpan="1" Grid.Column="0" Grid.ColumnSpan="2" Background="DimGray" Orientation="Vertical" >
+            <TextBlock Text="Errors" Foreground="White" FontFamily="Consolas" FontSize="14" FontWeight="Bold" Margin="5"></TextBlock>
+            <TextBlock x:Name="ErrorOutput" TextWrapping="Wrap" Foreground="White" FontFamily="Consolas" 
+                       FontSize="12" Margin="5,0,0,20" Width="Auto"></TextBlock>
+        </StackPanel>
+    </Grid>
+</UserControl>
