@@ -166,9 +166,7 @@ namespace bdUnit.Preview.Controls
             {
                 BackgroundThreadIsRunning = true;
                 var BackgroundThreadStart = new ThreadStart(UpdatePreview);
-                var BackgroundThread = new Thread(BackgroundThreadStart);
-                BackgroundThread.Name = "Update Preview";
-                BackgroundThread.IsBackground = true;
+                var BackgroundThread = new Thread(BackgroundThreadStart) {Name = "Update Preview", IsBackground = true};
                 BackgroundThread.Start();
             }
         }

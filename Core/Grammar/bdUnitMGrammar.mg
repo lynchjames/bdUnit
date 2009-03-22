@@ -143,6 +143,8 @@ module Test
             => CreateMethod{TargetMethod{Name{m},Objects[o,o2]}}
             | TCreate m:Method o:Object p:Property
             => CreateMethod{TargetMethod{Name{m},Objects[o],Properties[Property{Name{p}}]}}
+            | TCreate m:Method Connectives.TA o:Object
+            => CreateMethod{TargetMethod{Name{m},Objects[o]}}
             | TCreate o:Object TMethod m:Method Connectives.TMany o2:Object
             => CreateMethod{TargetMethod{Name{m},Objects[o,o2], Relation{"ManyToOne"}}};
                    

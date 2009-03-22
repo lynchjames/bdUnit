@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using bdUnit.Interfaces;
-using StructureMap;
 
 namespace MyNewDomain
 {
-    [Pluggable("bdUnit")]
     public class Car 
     {
     }
 
-    [Pluggable("bdUnit")]
     public class User : IUser
     {
         public User()
         {
 
+        }
+
+        public void ProposeTo(IUser user)
+        {
         }
 
         public void Find()
@@ -26,10 +25,18 @@ namespace MyNewDomain
         }
 
         public IUser Spouse { get; set; }
-        public string Name { get; set; }
+        private string _name = "";
+        public string Name {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                this.IsDead = true;
+            } }
         public bool IsARunner { get; set; }
         public int Age { get; set; }
-        DateTime IUser.IsDead { get; set; }
+        public bool IsDead { get; set; }
+        public DateTime CreatedDate { get; set; }
         public IList<IUser> Children { get; set; }
         
         public void Kill(IUser user)
@@ -43,6 +50,11 @@ namespace MyNewDomain
             user.Spouse = this;
         }
 
+        public void Meet(IList<IUser> user)
+        {
+            
+        }
+
         public void Visit(ISleepShop sleepshop)
         {
 
@@ -54,7 +66,6 @@ namespace MyNewDomain
         }
     }
 
-    [Pluggable("bdUnit")]
     public class SleepShop : ISleepShop
     {
         public SleepShop()
@@ -77,12 +88,11 @@ namespace MyNewDomain
         }
     }
 
-    [Pluggable("bdUnit")]
     public class Location222 : ILocation
     {
-        public decimal Latitude { get; set; }
+        public double Latitude { get; set; }
 
-        public decimal Longitude { get; set; }
+        public double Longitude { get; set; }
     }
 
     //[Pluggable("bdUnit")]

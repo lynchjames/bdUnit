@@ -91,7 +91,7 @@ namespace bdUnit.Core.Generators
                     {
                         stringBuilder.AppendLine(
                             string.Format(
-                                "\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");",
+                                "\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();",
                                 obj.Instance.Value, obj.Name));
                         previouslyCreated.Add(obj.Instance.Value);
                     }
@@ -106,13 +106,13 @@ namespace bdUnit.Core.Generators
                     var variables = new StringBuilder();
                     if (!previouslyCreated.Contains(obj.Instance.Value))
                     {
-                        variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n",
+                        variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();\n",
                                                    obj.Instance.Value, obj.Name));
                         previouslyCreated.Add(obj.Instance.Value);
                     }
                     if (!previouslyCreated.Contains(otherObj.Instance.Value))
                     {
-                        variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n",
+                        variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();\n",
                                                    otherObj.Instance.Value, otherObj.Name));
                         previouslyCreated.Add(otherObj.Instance.Value);
                     }
@@ -140,7 +140,7 @@ namespace bdUnit.Core.Generators
             var title = string.Format("When_{0}_{1}_Is_Set", obj.Name, property.Name);
             stringBuilder.AppendLine(TestText.Replace("##testname##", title));
             stringBuilder.AppendLine("\t\t{");
-            stringBuilder.AppendLine(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");",
+            stringBuilder.AppendLine(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();",
                                            obj.Instance.Value, obj.Name));
             stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
             //stringBuilder.Append(Generate(property));
@@ -152,9 +152,9 @@ namespace bdUnit.Core.Generators
             var objects = target.Objects;
             var obj = objects[0];
             var otherObj = objects[1];
-            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n",
+            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();\n",
                                            obj.Instance.Value, obj.Name));
-            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetNamedInstance<I{1}>(\"bdUnit\");\n",
+            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();\n",
                                            otherObj.Instance.Value, otherObj.Name));
             var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name,
                                             otherObj.Instance.Value);
