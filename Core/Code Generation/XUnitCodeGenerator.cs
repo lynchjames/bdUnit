@@ -19,7 +19,7 @@ namespace bdUnit.Core
 
         public readonly string PropertyText = "\t\t##typename## ##propertyname## { get; set; }\n";
 
-        public readonly string TypeText = "\n\n\t[PluginFamily(\"bdUnit\")]\n\tpublic partial interface I##typename##\n\t{\n##content##\t}";
+        public readonly string TypeText = "\n\n\tpublic partial interface I##typename##\n\t{\n##content##\t}";
 
         public readonly string AssertText = "\t\t\tAssert.True(##clause##);";
 
