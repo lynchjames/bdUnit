@@ -1,35 +1,36 @@
 begin story "LogansRun":
     begin setup 
         @User to have a ~Spouse(@User) 
-            and a ~Name
-            and a ~IsActive(true) 
-            and an ~Age(0)
-            and a ~CreatedDate("01/01/1700")
-            and a ~Location(@Location)
-            and several ~Children(@User)
+                and a ~Name
+                and a ~IsARunner(true) 
+                and an ~Age(10)
+                and an ~IsDead(false)
+                and a ~CreatedDate("01/03/1980")
+                and many ~Children(@User) 
             I want a @User to be able to #Kill another @User
             I want a @User to be able to #Marry another @User
             I want a @User to be able to #Meet several @User
-            I want to be able to #Locate @User ~Location
-            //I want a @User to be able to #Visit a @SleepShop with ~CreatedDate("01/01/1982") and ~Referrer("Bad Man")
+			I want a @User to be able to #ProposeTo another @User
+//I want a @User to be able to #Visit a @SleepShop with ~CreatedDate("01/01/1982") and ~Referrer("Bad Man")
             I want to be able to #Find all @User
         @SleepShop to have a ~Location(@Location)
-            and an ~IsOpen(true) 
+                and an ~IsOpen(true) 
             I want to be able to #Find @SleepShop ~Location
         @Location to have a ~Latitude(0.0)
-            and a ~Longitude(0.0) 
+                and a ~Longitude(0.0) 
     end setup
     When a @User(Peter) #ProposeTo another @User(Patty) 
-        and @User(Peter) #ProposeTo another @User(Patty)
-        and @User(Peter) #Marry another @User(Patty)
-        and @User(Peter) ~Name is ("Peter")
-        and @User(Patty) ~Name is ("Patty"), 
+and @User(Peter) #ProposeTo another @User(Patty)
+and @User(Peter) #Marry another @User(Eve)
+and @User(Peter) ~Name is ("Peter")
+and @User(Patty) ~Name is ("Patty"), 
         each @User should have ~Spouse as the other @User 
-        and should have ~IsARunner as (false) 
-        and should have ~Age less than (21)
+         		   and should have ~IsARunner as (false) 
+            and should have ~Age less than (21).
     When a @User(a) ~Name is ("kjh"), 
         @User(a) should have ~IsDead as (true) 
-        and @User(a) ~Name should contain ("k")
-//            and @User(a) ~CreatedDate should be earlier than ("22/04/1983")
-//            and @User(a) should have less than 3 ~Children
+and @User(a) ~Name should contain ("k")
+            and @User(a) ~CreatedDate should be earlier than ("22/04/1983")
+            and @User(a) should have less than 3 ~Children
 end story
+
