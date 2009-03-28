@@ -60,11 +60,10 @@ namespace bdUnit.Core
                                                          new SourceItem
                                                              {
                                                                  Name = TestFileName ?? "Preview",
-                                                                 ContentType = GContentType.Mg,
+                                                                 ContentType = ContentType.Mg,
                                                                  TextReader = new StringReader(Grammar)
-                                                             },
-                                                     },
-                                   References = new[] {"Languages", "Microsoft.Languages"},
+                                                             }
+                                                     }
                                };
 
             if (compiler.Compile(errorReporter) != 0 || errorReporter.HasErrors)
@@ -90,7 +89,7 @@ namespace bdUnit.Core
 
             var reporter = new DynamicParserExtensions.ExceptionErrorReporter();
 
-            var root = Input != null ? _parser.ParseObject(new StringReader(Input), reporter) : _parser.ParseObject(InputPath, reporter);
+            var root = Input != null ? _parser.Parse<object>(null, new StringReader(Input), reporter) : _parser.Parse<object>(InputPath, new StringReader(File.ReadAllText(InputPath)), reporter);
             var tests = deserializer.Deserialize(root) as IList<object>;
             var list = new List<Test>();
             if (tests != null)
@@ -124,11 +123,11 @@ namespace bdUnit.Core
 
             if (Input != null)
             {
-                root = _parser.ParseObject(new StringReader(Input), ErrorReporter.Standard);
+                root = _parser.Parse<object>(null, new StringReader(Input), ErrorReporter.Standard);
             }
             else
             {
-                root = _parser.ParseObject(InputPath, ErrorReporter.Standard);
+                root = _parser.Parse<object>(InputPath, new StringReader(File.ReadAllText(InputPath)), ErrorReporter.Standard);
             }
 
             var tests = deserializer.Deserialize(root) as IList<object>;

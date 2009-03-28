@@ -1,7 +1,6 @@
-module Common
+﻿module Common
 {
     import Language;
-    import Microsoft.Languages;
     export Common;
     export Connectives;
     
@@ -41,7 +40,6 @@ module Common
 module Test
 {
     import Language;
-    import Microsoft.Languages;
     import Common;
     import TestLanguage as TL;
     
@@ -72,6 +70,7 @@ module Test
         token TConstraint = ' '? ("should be" | "should" | "should have" | "should have");
     }
     
+    @{CaseInsensitive}
     language TestLanguage
     {    
         syntax Main = item:Test => [item]
@@ -91,7 +90,7 @@ module Test
         | list:StatementList item:Statement => StatementList[valuesof(list), item];
         
         syntax Statement = 
-        | a:CreateMethodStatement "."? => a
+        a:CreateMethodStatement "."? => a
         | a:WhenStatement "."? => a;
         
         syntax SetupList = item:Setup "."? => TypeList[item]
@@ -174,7 +173,6 @@ module Test
         = "I want a " 
         | "I want" TMethod;
         token TMethod = " to be able to " | " the ability to ";
-        @{CaseSensitive[false]}
         token TProperty = "to have " ("a"|"an") " ";
         token TEqual = " of " | "equal to " | " as " | " is ";
         token TContains = " contain" "s"?;
@@ -186,7 +184,7 @@ module Test
         token TWhen = ("W"|"w")("hen " | "hen I " | "hen I" | "hen a ");
         
         token TResult = " the result ";
-        @{Classification["Comment"]} token Comment = "//" (Base.Letter|'-'|'_'|' ')*+;
+        @{Classification["Comment"]} token Comment = "//" (Base.Letter|'-'|'_'|' ')+;
         
         @{Classification["TestOperator"]} token TTest = "begin story ";
         @{Classification["TestOperator"]} token TEnd = "end story";

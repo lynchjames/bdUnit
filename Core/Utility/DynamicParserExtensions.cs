@@ -11,9 +11,9 @@ namespace bdUnit.Core.Utility
     {
         internal class ExceptionErrorReporter : ErrorReporter
         {
-            protected override void OnError(ISourceLocation sourceLocation, ErrorInformation errorInformation)
+            protected override void OnError(ErrorInformation errorInformation)
             {
-                throw new ErrorException(sourceLocation, errorInformation);
+                throw new ErrorException(errorInformation.Location, errorInformation);
             }
         }
 
@@ -32,7 +32,7 @@ namespace bdUnit.Core.Utility
 
             public override string Message
             {
-                get { return Error.ToBuildEventArgs(Location, String.Empty, String.Empty).Message; }
+                get { return Error.ToBuildEventArgs(Error.Arguments.ToString(), "").Message; }
             }
         }
     }
