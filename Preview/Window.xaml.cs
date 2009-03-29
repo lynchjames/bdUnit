@@ -193,7 +193,7 @@ namespace bdUnit.Preview
                         var text = range.Text;
                         if (string.IsNullOrEmpty(preview.FilePath))
                         {
-                            var saveFileDialog = new SaveFileDialog {Filter = "Input text | *.input", RestoreDirectory = true};
+                            var saveFileDialog = new SaveFileDialog {Filter = "bdUnit Input | *.bdunit", RestoreDirectory = true};
                             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                             {
                                 preview.FilePath = saveFileDialog.FileName;
