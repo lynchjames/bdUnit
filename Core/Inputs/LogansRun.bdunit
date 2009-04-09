@@ -3,13 +3,13 @@ begin story "LogansRun":
         @User to have a ~Spouse(@User) 
             and a ~Name
             and a ~IsActive(true)
-and a ~IsDead(false)
+			and a ~IsDead(false)
             and an ~Age(0)
             and a ~CreatedDate("01/01/1700")
             and a ~Location(@Location)
             and several ~Children(@User)
             I want a @User to be able to #Kill another @User
-I want a @User to be able to #ProposeTo another @User
+			I want a @User to be able to #ProposeTo another @User
             I want a @User to be able to #Marry another @User
             I want a @User to be able to #Meet several @User
             I want to be able to #Locate @User ~Location
