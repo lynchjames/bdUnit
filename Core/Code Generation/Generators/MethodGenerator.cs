@@ -59,7 +59,7 @@ namespace bdUnit.Core.Generators
                                                                                      }
                                                                                      else if (c.Property != null)
                                                                                      {
-                                                                                         stringBuilder.Append(_assertGenerator.Generate(c.Property.Object,
+                                                                                         stringBuilder.Append(_assertGenerator.Generate(c.Property.ConcreteClass,
                                                                                                                               new List<Constraint> { c }));
                                                                                      }
                                                                                  });
@@ -79,7 +79,7 @@ namespace bdUnit.Core.Generators
                 if (x.TargetProperty != null)
                 {
                     var property = x.TargetProperty;
-                    var obj = property.Objects[0];
+                    var obj = property.ConcreteClasses[0];
                     if (!titleSet)
                     {
                         var title = string.Format("When_{0}_Is_Set_...", property.Name);
@@ -100,7 +100,7 @@ namespace bdUnit.Core.Generators
                 else
                 {
                     var target = x.TargetMethod;
-                    var objects = target.Objects;
+                    var objects = target.ConcreteClasses;
                     var obj = objects[0];
                     var otherObj = objects[1];
                     var variables = new StringBuilder();
@@ -136,7 +136,7 @@ namespace bdUnit.Core.Generators
         //TODO Need to be able to test the returned object from a method?
         private StringBuilder GenerateForTargetProperty(TargetProperty property, StringBuilder stringBuilder)
         {
-            var obj = property.Objects[0];
+            var obj = property.ConcreteClasses[0];
             var title = string.Format("When_{0}_{1}_Is_Set", obj.Name, property.Name);
             stringBuilder.AppendLine(TestText.Replace("##testname##", title));
             stringBuilder.AppendLine("\t\t{");
@@ -149,7 +149,7 @@ namespace bdUnit.Core.Generators
 
         private StringBuilder GenerateForTargetMethod(ITarget target, StringBuilder variables, When whenStatement, StringBuilder stringBuilder)
         {
-            var objects = target.Objects;
+            var objects = target.ConcreteClasses;
             var obj = objects[0];
             var otherObj = objects[1];
             variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();\n",

@@ -14,7 +14,7 @@ namespace bdUnit.Core.AST
             StatementList = new List<IStatement>();
         }
 
-        public Object Object { get; set; }
+        public ConcreteClass ConcreteClass { get; set; }
         public List<IStatement> StatementList { get; private set; }
         public List<Property> PropertyList { get; set; }
     }

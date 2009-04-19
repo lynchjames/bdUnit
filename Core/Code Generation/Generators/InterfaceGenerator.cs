@@ -31,7 +31,7 @@ namespace bdUnit.Core.Generators
         public string Generate(Type type)
         {
             var wrapper = TypeText.Replace("##accesslevel##", Access.ToString()).Replace("##typename##",
-                                                                                            type.Object.Name);
+                                                                                            type.ConcreteClass.Name);
             var properties = type.PropertyList;
             var content = new StringBuilder();
             content.Append(_propertyGenerator.Generate(properties));

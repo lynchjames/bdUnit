@@ -12,12 +12,12 @@ namespace bdUnit.Core.AST
     {
         public TargetMethod()
         {
-            Objects = new List<Object>();
+            ConcreteClasses = new List<ConcreteClass>();
             Properties = new List<Property>();
         }
 
         public string Name { get; set; }
-        public List<Object> Objects { get; set; }
+        public List<ConcreteClass> ConcreteClasses { get; set; }
         public List<Property> Properties { get; set; }
         public Loop Loop { get; set; }
         public string Relation { get; set; }

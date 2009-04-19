@@ -13,7 +13,7 @@ namespace bdUnit.Core.Utility
 {
     public class CodeUtility
     {
-        public static string Parameterize(RelationQualifiedEnum relation, List<Property> properties, string input, List<Object> objects)
+        public static string Parameterize(RelationQualifiedEnum relation, List<Property> properties, string input, List<ConcreteClass> objects)
         {
             var output = new StringBuilder();
             switch (relation)
@@ -21,7 +21,7 @@ namespace bdUnit.Core.Utility
                         case RelationQualifiedEnum.OneToOne:
                             output.Append(input.Replace("##typename##",
                                                         string.Format("I{0}",
-                                                        properties.ElementAt(0).DefaultValue.Object.Name)));
+                                                        properties.ElementAt(0).DefaultValue.ConcreteClass.Name)));
                             break;
 
                         case RelationQualifiedEnum.OneToMany:
@@ -30,7 +30,7 @@ namespace bdUnit.Core.Utility
                         case RelationQualifiedEnum.ManyToOne:
                             output.Append(input.Replace("##typename##",
                                                         string.Format("IList<I{0}>", 
-                                                        properties.ElementAt(0).DefaultValue.Object.Name)));
+                                                        properties.ElementAt(0).DefaultValue.ConcreteClass.Name)));
                             break;
                 
                         case RelationQualifiedEnum.ManyToMany:

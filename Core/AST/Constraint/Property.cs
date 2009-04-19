@@ -12,7 +12,7 @@ namespace bdUnit.Core.AST
     {
         public Property()
         {
-            Object = new Object();
+            ConcreteClass = new ConcreteClass();
             Operators = new List<Operator>();
             DefaultValue = new DefaultValue();
         }
@@ -20,7 +20,7 @@ namespace bdUnit.Core.AST
         public string Name { get; set; }
         public string Value { get; set; }
         public DefaultValue DefaultValue { get; set; }
-        public Object Object { get; set; }
+        public ConcreteClass ConcreteClass { get; set; }
         public List<Operator> Operators { get; set; }
         public string Relation { get; set; }
         public Count Count { get; set; }

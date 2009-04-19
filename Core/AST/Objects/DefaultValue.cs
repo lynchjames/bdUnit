@@ -4,10 +4,10 @@
     {
         public DefaultValue()
         {
-            Object = new Object();
+            ConcreteClass = new ConcreteClass();
         }
 
         public string Value { get; set; }
-        public Object Object { get; set; }
+        public ConcreteClass ConcreteClass { get; set; }
     }
 }

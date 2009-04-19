@@ -50,21 +50,21 @@ module Test
         | cons:Constraints Connectives.TAnd c:Constraint => Constraints[valuesof(cons),c];
         
         syntax Constraint 
-        = TConstraint p:TL.Property Connectives.TOther o:TestLanguage.Object
-        => Constraint{Objects[o],Property[p]}
-        | TConstraint p:TL.Property x:TL.Operators Connectives.TOther o:TestLanguage.Object
+        = TConstraint p:TL.Property Connectives.TOther o:TestLanguage.ConcreteClass
+        => Constraint{ConcreteClasss[o],Property[p]}
+        | TConstraint p:TL.Property x:TL.Operators Connectives.TOther o:TestLanguage.ConcreteClass
         => Constraint{Property{Name{p},o,x,Relation{"Reciprocal"}}}
         | TConstraint p:TL.Property x:TestLanguage.Operators v:TestLanguage.Value
         => Constraint{Property{Name{p},v,x}}
-        | o:TL.Object TConstraint p:TL.Property x:TL.Operators v:TL.Value 
+        | o:TL.ConcreteClass TConstraint p:TL.Property x:TL.Operators v:TL.Value 
         => Constraint{Property{Name{p},v,o,x}}
-        | o:TL.Object TConstraint x:TL.Operators o2:TL.Object
-        => Constraint{Objects[o, o2], x}
+        | o:TL.ConcreteClass TConstraint x:TL.Operators o2:TL.ConcreteClass
+        => Constraint{ConcreteClasss[o, o2], x}
         | p:TL.Property TConstraint x:TL.Operators v:TL.Value
         => Constraint{Property{Name{p}, x, v}}
-        | o:TL.Object p:TL.Property TConstraint x:TL.Operators v:TL.Value
+        | o:TL.ConcreteClass p:TL.Property TConstraint x:TL.Operators v:TL.Value
         => Constraint{Property{Name{p}, o, x, v}}
-        | o:TL.Object TConstraint c:TL.Count p:TL.Property
+        | o:TL.ConcreteClass TConstraint c:TL.Count p:TL.Property
         => Constraint{Property{Name{p}, o, c}};
         
         token TConstraint = ' '? ("should be" | "should" | "should have" | "should have");
@@ -97,7 +97,7 @@ module Test
         | list:SetupList item:Setup "."? => TypeList[valuesof(list),item];
         
         syntax Setup
-            = o:Object prop:PropertyList sl:StatementList?
+            = o:ConcreteClass prop:PropertyList sl:StatementList?
             => Type{o, prop, sl};
             
         syntax PropertyList 
@@ -128,36 +128,36 @@ module Test
             => TargetList[valuesof(list), item];
 
         syntax Target
-            = m:Method (Connectives.TAll|TEach|" ") o:Object TResult
-            => Target{TargetMethod{Name{m}, Objects[o]}}
-            | o:Object m:Method (Connectives.TAnother | " a ") o2:Object
-            => Target{TargetMethod{Name{m}, Objects[o,o2]}}
-            | o:Object p:Property x:Operators v:Value
-            => Target{TargetProperty{Name{p},Objects[o], x, v}};
+            = m:Method (Connectives.TAll|TEach|" ") o:ConcreteClass TResult
+            => Target{TargetMethod{Name{m}, ConcreteClasses[o]}}
+            | o:ConcreteClass m:Method (Connectives.TAnother | " a ") o2:ConcreteClass
+            => Target{TargetMethod{Name{m}, ConcreteClasses[o,o2]}}
+            | o:ConcreteClass p:Property x:Operators v:Value
+            => Target{TargetProperty{Name{p},ConcreteClasses[o], x, v}};
             
         syntax CreateMethodStatement
-            = TCreate m:Method Connectives.TAll o:Object
-            => CreateMethod{TargetMethod{Name{m},Objects[o]}}
-            | TCreate o:Object TMethod m:Method (Connectives.TAnother | Connectives.TA) o2:Object
-            => CreateMethod{TargetMethod{Name{m},Objects[o,o2]}}
-            | TCreate m:Method o:Object p:Property
-            => CreateMethod{TargetMethod{Name{m},Objects[o],Properties[Property{Name{p}}]}}
-            | TCreate m:Method Connectives.TA o:Object
-            => CreateMethod{TargetMethod{Name{m},Objects[o]}}
-            | TCreate o:Object TMethod m:Method Connectives.TMany o2:Object
-            => CreateMethod{TargetMethod{Name{m},Objects[o,o2], Relation{"ManyToOne"}}};
+            = TCreate m:Method Connectives.TAll o:ConcreteClass
+            => CreateMethod{TargetMethod{Name{m},ConcreteClasses[o]}}
+            | TCreate o:ConcreteClass TMethod m:Method (Connectives.TAnother | Connectives.TA) o2:ConcreteClass
+            => CreateMethod{TargetMethod{Name{m},ConcreteClasses[o,o2]}}
+            | TCreate m:Method o:ConcreteClass p:Property
+            => CreateMethod{TargetMethod{Name{m},ConcreteClasses[o],Properties[Property{Name{p}}]}}
+            | TCreate m:Method Connectives.TA o:ConcreteClass
+            => CreateMethod{TargetMethod{Name{m},ConcreteClasses[o]}}
+            | TCreate o:ConcreteClass TMethod m:Method Connectives.TMany o2:ConcreteClass
+            => CreateMethod{TargetMethod{Name{m},ConcreteClasses[o,o2], Relation{"ManyToOne"}}};
                    
-        syntax Object = name:ObjectId => Object{Name{name}}
-        | name:ObjectId v:Value => Object{Name{name}, Instance{v}};
+        syntax ConcreteClass = name:ConcreteClassId => ConcreteClass{Name{name}}
+        | name:ConcreteClassId v:Value => ConcreteClass{Name{name}, Instance{v}};
         syntax Method = name:MethodId => name;
         syntax Property = name:PropertyId => name;
         syntax Count = op:Operators? c:CountId => Count{Value{c}, op};
         syntax Value = " " '(' v:ValueId ')'=> Value{v}
         | '(' v:ValueId ')'=> Value{v}
-        | '(' o:Object ')' => o
+        | '(' o:ConcreteClass ')' => o
         | '(' p:Property ')' => Value{p};
-        syntax Loop = o:Object c:Asserts.Constraints 
-        => Loop{Objects[o],c};
+        syntax Loop = o:ConcreteClass c:Asserts.Constraints 
+        => Loop{ConcreteClasses[o],c};
         syntax Operators = x:Equal | x:Contains | x:NotContains | x:Greater | x:GreaterOrEqual | x:Lesser | x:LesserOrEqual
          => x;
         syntax Equal = TEqual => Operator{Value{"=="}};
@@ -190,7 +190,7 @@ module Test
         @{Classification["TestOperator"]} token TEnd = "end story";
         @{Classification["TestOperator"]} token TSetupStart = "begin setup ";
         @{Classification["TestOperator"]} token TSetupEnd = "end setup";
-        @{Classification["Type"]} token ObjectId = '@' (Base.Letter|'-'|'_')+;
+        @{Classification["Type"]} token ConcreteClassId = '@' (Base.Letter|'-'|'_')+;
         @{Classification["Method"]} token MethodId = '#' (Base.Letter|'-'|'_')+;
         @{Classification["Property"]} token PropertyId = '~' (Base.Letter|'-'|'_')+;
         @{Classification["Value"]} token ValueId = (Base.Letter|'_'|Base.Digit|'.')+ | Common.SingleQuotedText;

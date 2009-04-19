@@ -92,13 +92,13 @@
     <Compile Include="AST\Objects\Count.cs" />
     <Compile Include="AST\Objects\DefaultValue.cs" />
     <Compile Include="AST\Objects\Instance.cs" />
-    <Compile Include="AST\Constraint\IProperty.cs" />
-    <Compile Include="AST\Target\ITarget.cs" />
+    <Compile Include="AST\Interfaces\IProperty.cs" />
+    <Compile Include="AST\Interfaces\ITarget.cs" />
     <Compile Include="AST\Objects\Operator.cs" />
     <Compile Include="AST\Target\Target.cs" />
     <Compile Include="AST\Target\TargetProperty.cs" />
     <Compile Include="AST\Test\Type.cs" />
-    <Compile Include="AST\Objects\Object.cs" />
+    <Compile Include="AST\Objects\ConcreteClass.cs" />
     <Compile Include="Code Generation\CodeGenerator.cs" />
     <Compile Include="Code Generation\Generators\AssertGenerator.cs" />
     <Compile Include="Code Generation\Generators\GeneratorBase.cs" />
@@ -125,7 +125,7 @@
     <Compile Include="Utility\ReflectionExtensionMethods.cs" />
     <Compile Include="AST\Constraint\Constraint.cs" />
     <Compile Include="AST\Test\CreateMethod.cs" />
-    <Compile Include="AST\Test\IStatement.cs" />
+    <Compile Include="AST\Interfaces\IStatement.cs" />
     <Compile Include="AST\Constraint\Loop.cs" />
     <Compile Include="AST\Test\Test.cs" />
     <Compile Include="AST\Constraint\Property.cs" />

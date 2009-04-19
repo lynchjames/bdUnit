@@ -9,6 +9,6 @@ namespace bdUnit.Core.AST
     public interface ITarget
     {
         string Name { get; set; }
-        List<Object> Objects { get; set; }
+        List<ConcreteClass> ConcreteClasses { get; set; }
     }
 }

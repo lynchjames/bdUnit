@@ -7,7 +7,6 @@ using System.Text;
 using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
 using bdUnit.Core.Utility;
-using Object=bdUnit.Core.AST.Object;
 
 #endregion
 
@@ -15,7 +14,7 @@ namespace bdUnit.Core.Generators
 {
     public interface IAssertGenerator
     {
-        string Generate(Object _object, List<Constraint> constraints);
+        string Generate(ConcreteClass _concreteClass, List<Constraint> constraints);
         StringBuilder GenerateForLoop(When whenStatement, StringBuilder stringBuilder);
     }
 
@@ -28,7 +27,7 @@ namespace bdUnit.Core.Generators
             AssertText = assertText;
         }
 
-        public string Generate(Object _object, List<Constraint> constraints)
+        public string Generate(ConcreteClass _concreteClass, List<Constraint> constraints)
         {
             var text = new StringBuilder();
             var count = constraints.Count;
@@ -47,14 +46,14 @@ namespace bdUnit.Core.Generators
                                                 ? property.Count.Operators[0].Value
                                                 : "==";
                         assert = string.Format("{0}.{1}.Count {2} {3}",
-                                               _object.Instance.Value, property.Name, countOperator, countValue);
+                                               _concreteClass.Instance.Value, property.Name, countOperator, countValue);
                         assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
                     }
                     else if (RegexUtility.IsBool(property.Value))
                     {
                         var value = Boolean.Parse(property.Value);
                         var boolQualifier = value ? string.Empty : "!";
-                        assert = string.Format("{0}{1}.{2}", boolQualifier, _object.Instance.Value, property.Name);
+                        assert = string.Format("{0}{1}.{2}", boolQualifier, _concreteClass.Instance.Value, property.Name);
                         assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
                     }
                     else if (RegexUtility.IsDateTime(property.Value))
@@ -63,7 +62,7 @@ namespace bdUnit.Core.Generators
                         var dateTimeStatement = string.Format("\t\t\tvar {0} = DateTime.Parse(\"{1}\");", dtInstance,
                                                               property.Value);
                         text.AppendLine(dateTimeStatement);
-                        assert = string.Format("{0}.{1} {2} {3}", _object.Instance.Value,
+                        assert = string.Format("{0}.{1} {2} {3}", _concreteClass.Instance.Value,
                                                property.Name, property.Operators[0].Value,
                                                dtInstance);
                         assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
@@ -73,13 +72,13 @@ namespace bdUnit.Core.Generators
                     {
                         var boolQualifier = property.Operators[0].Value == "contains" ? "" : "!";
                         assert = string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
-                                               _object.Instance.Value, property.Name,
+                                               _concreteClass.Instance.Value, property.Name,
                                                property.Value);
                         assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
                     }
                     else
                     {
-                        assert = string.Format("{0}.{1} {2} {3}", _object.Instance.Value,
+                        assert = string.Format("{0}.{1} {2} {3}", _concreteClass.Instance.Value,
                                                property.Name, property.Operators[0].Value,
                                                property.Value);
                         assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
@@ -108,10 +107,10 @@ namespace bdUnit.Core.Generators
                         {
                             var target =
                                 whenStatement.TargetList.Where(
-                                    x => x.TargetMethod != null && x.TargetMethod.Objects.Count == 2).FirstOrDefault();
+                                    x => x.TargetMethod != null && x.TargetMethod.ConcreteClasses.Count == 2).FirstOrDefault();
                             var reciprocalAssert = CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal,
                                                                             new List<Property> { r.Property },
-                                                                            AssertText, target.TargetMethod.Objects);
+                                                                            AssertText, target.TargetMethod.ConcreteClasses);
                             stringBuilder.Append(reciprocalAssert);
                         });
                 }

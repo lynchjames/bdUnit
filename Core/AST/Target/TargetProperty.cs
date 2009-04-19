@@ -12,7 +12,7 @@ namespace bdUnit.Core.AST
     {
         public TargetProperty()
         {
-            Objects = new List<Object>();
+            ConcreteClasses = new List<ConcreteClass>();
             Operators = new List<Operator>();
             DefaultValue = new DefaultValue();
         }
@@ -20,7 +20,7 @@ namespace bdUnit.Core.AST
         public string Name { get; set; }
         public string Value { get; set; }
         public DefaultValue DefaultValue { get; set; }
-        public List<Object> Objects { get; set; }
+        public List<ConcreteClass> ConcreteClasses { get; set; }
         public List<Operator> Operators { get; set; }
         public string Relation { get; set; }
 

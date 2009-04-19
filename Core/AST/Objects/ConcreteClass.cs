@@ -6,9 +6,9 @@
 
 namespace bdUnit.Core.AST
 {
-    public class Object
+    public class ConcreteClass
     {
-        public Object()
+        public ConcreteClass()
         {
             Instance = new Instance();
         }

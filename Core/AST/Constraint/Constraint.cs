@@ -17,11 +17,11 @@ namespace bdUnit.Core.AST
         public Constraint()
         {
             Property = new Property();
-            Objects = new List<Object>();
+            Objects = new List<ConcreteClass>();
             Operators = new List<Operator>();
         }
 
-        public List<Object> Objects { get; set; }
+        public List<ConcreteClass> Objects { get; set; }
         public List<Operator> Operators { get; set; }
         public Property Property { get; set; }
     }

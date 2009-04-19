@@ -34,7 +34,7 @@ namespace bdUnit.Core.Generators
                 var propertyText = "";
                 propertyText = PropertyText.Replace("##accesslevel##", Access.ToString());
                 propertyText = propertyText.Replace("##propertyname##", property.Name);
-                if (!string.IsNullOrEmpty(property.Relation) && property.GetRelationQualifiedEnum() != RelationQualifiedEnum.None && property.DefaultValue != null && property.DefaultValue.Object != null)
+                if (!string.IsNullOrEmpty(property.Relation) && property.GetRelationQualifiedEnum() != RelationQualifiedEnum.None && property.DefaultValue != null && property.DefaultValue.ConcreteClass != null)
                 {
                     propertyText = CodeUtility.Parameterize(property.GetRelationQualifiedEnum(), new List<Property> { property },
                                              propertyText, null);
@@ -42,7 +42,7 @@ namespace bdUnit.Core.Generators
                 }
                 else if (string.IsNullOrEmpty(property.DefaultValue.Value))
                 {
-                    if (property.DefaultValue.Object.Name != null)
+                    if (property.DefaultValue.ConcreteClass.Name != null)
                     {
                         propertyText = CodeUtility.Parameterize(RelationQualifiedEnum.OneToOne, new List<Property> {property}, propertyText, null);
                     }

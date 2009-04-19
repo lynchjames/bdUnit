@@ -28,15 +28,15 @@ namespace bdUnit.Core.Generators
             var signature = methodText.Replace("##methodname##", method.TargetMethod.Name);
             //TODO Define return type in MGrammar
             signature = signature.Replace("##returntype##", "void");
-            var paramCount = method.TargetMethod.Objects.Count;
+            var paramCount = method.TargetMethod.ConcreteClasses.Count;
             for (var j = 1; j < paramCount; j++)
             {
-                var parameter = method.TargetMethod.Objects[j];
+                var parameter = method.TargetMethod.ConcreteClasses[j];
                 var instanceName = string.Empty;
                 var parameterName = string.Empty;
                 //TODO need to work out how to recognize List<T> method arguments (taking the first for now) - also needs to work with args list
                 parameterName = !string.IsNullOrEmpty(method.TargetMethod.Relation) && j == 1
-                                    ? string.Format("IList<I{0}>", method.TargetMethod.Objects[1].Name)
+                                    ? string.Format("IList<I{0}>", method.TargetMethod.ConcreteClasses[1].Name)
                                     : "I" + parameter.Name;
                 if (!string.IsNullOrEmpty(parameter.Instance.Value))
                 {
