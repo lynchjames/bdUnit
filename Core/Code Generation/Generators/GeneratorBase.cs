@@ -20,7 +20,7 @@ namespace bdUnit.Core.Generators
 
         #endregion
 
-        protected internal static string WriteAssertMessage(string statement)
+        public static string WriteAssertMessage(string statement)
         {
             var assertBody = statement.Replace("\t", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty).Replace("\"", @"\" + "\"");
             return string.Format("{0}, \"Failed: {1}\"", statement, assertBody);

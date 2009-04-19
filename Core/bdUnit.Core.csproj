@@ -139,11 +139,16 @@
     </Compile>
     <Compile Include="Utility\RegexUtility.cs" />
     <EmbeddedResource Include="Grammar\bdUnitMGrammar.mg" />
-    <None Include="Inputs\LogansRun.input" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Inputs\ANewExample.bdunit" />
+    <None Include="Inputs\ExampleStory.bdunit" />
+    <None Include="Inputs\LogansRun.bdunit" />
+    <None Include="Inputs\TMDirectoryExample.bdunit" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -94,7 +94,7 @@ namespace bdUnit.Core.Generators
             if (whenStatement.Loop != null && whenStatement.Loop.Constraints.Count > 0)
             {
                 var loop = whenStatement.Loop;
-                var instanceObjects = ASTUtility.FindInstantiatedObjects(whenStatement);
+                var instanceObjects = ASTUtility.FindInstantiatedConcreteClasses(whenStatement);
                 instanceObjects.ForEach(io => stringBuilder.Append(Generate(io, loop.Constraints)));
                 var reciprocalRelationships =
                     loop.Constraints.Where(

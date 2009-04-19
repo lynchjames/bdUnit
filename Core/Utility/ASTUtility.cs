@@ -10,7 +10,7 @@ namespace bdUnit.Core.Utility
 {
     public class ASTUtility
     {
-        public static List<ConcreteClass> FindInstantiatedObjects(IStatement statement)
+        public static List<ConcreteClass> FindInstantiatedConcreteClasses(IStatement statement)
         {
             var list = new List<ConcreteClass>();
             //TODO Only using this for 'when' statements at the moment
@@ -28,12 +28,12 @@ namespace bdUnit.Core.Utility
                                                                              list.AddRange(t.TargetProperty.ConcreteClasses);
                                                                          }
                                                                      });
-                return list.Where(o => o.Instance.Value != null).Distinct(new ObjectComparer()) .ToList();
+                return list.Where(o => o.Instance.Value != null).Distinct(new ConcreteClassComparer()) .ToList();
             }
             return list;
         }
 
-        public class ObjectComparer : IEqualityComparer<ConcreteClass>
+        public class ConcreteClassComparer : IEqualityComparer<ConcreteClass>
         {
             public bool Equals(ConcreteClass x, ConcreteClass y)
             {
