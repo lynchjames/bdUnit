@@ -52,9 +52,9 @@ namespace bdUnit.Core.Generators
                     }
                     (whenStatement.Constraints).ForEach(c =>
                                                                                  {
-                                                                                     if (c.Objects.Count > 0)
+                                                                                     if (c.ConcreteClasses.Count > 0)
                                                                                      {
-                                                                                         stringBuilder.Append(_assertGenerator.Generate(c.Objects[0],
+                                                                                         stringBuilder.Append(_assertGenerator.Generate(c.ConcreteClasses[0],
                                                                                                                               new List<Constraint> { c }));
                                                                                      }
                                                                                      else if (c.Property != null)

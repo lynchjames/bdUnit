@@ -11,10 +11,10 @@ namespace bdUnit.Core.AST
         public Loop()
         {
             Constraints = new List<Constraint>();
-            Objects = new List<ConcreteClass>();
+            ConcreteClasses = new List<ConcreteClass>();
         }
 
-        public List<ConcreteClass> Objects { get; set; }
+        public List<ConcreteClass> ConcreteClasses { get; set; }
         public List<Constraint> Constraints { get; set; }
 
         #region IStatement Members

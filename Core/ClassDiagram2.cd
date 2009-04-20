@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="bdUnit.Core.AST.Constraint">
+    <Position X="34.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAIAA=</HashCode>
+      <FileName>AST\Constraint\Constraint.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Property" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="ConcreteClasses" />
+      <Property Name="Operators" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="bdUnit.Core.AST.Loop" BaseTypeListCollapsed="true">
+    <Position X="32.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAQAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST\Constraint\Loop.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TargetMethod" />
+      <Property Name="ConcreteClasses" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Constraints" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="bdUnit.Core.AST.Property" BaseTypeListCollapsed="true">
+    <Position X="40.25" Y="10" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAEAAAAAAQAAAhAAAAAAAAgAAAAIAA=</HashCode>
+      <FileName>AST\Constraint\Property.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DefaultValue" />
+      <Property Name="ConcreteClass" />
+      <Property Name="Count" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Operators" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="bdUnit.Core.AST.ConcreteClass">
+    <Position X="37.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>AST\Objects\ConcreteClass.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Instance" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="bdUnit.Core.AST.Count">
+    <Position X="44" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAIAA=</HashCode>
+      <FileName>AST\Objects\Count.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Operators" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="bdUnit.Core.AST.DefaultValue">
+    <Position X="34.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>AST\Objects\DefaultValue.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ConcreteClass" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="bdUnit.Core.AST.Instance">
+    <Position X="34.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>AST\Objects\Instance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bdUnit.Core.AST.Operator">
+    <Position X="41" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>AST\Objects\Operator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="bdUnit.Core.AST.Target">
+    <Position X="38.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>AST\Target\Target.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TargetProperty" />
+      <Property Name="TargetMethod" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="bdUnit.Core.AST.TargetMethod" BaseTypeListCollapsed="true">
+    <Position X="40.5" Y="7" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAIAAAAAEAAAAAAAAQAAAgAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>AST\Target\TargetMethod.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Loop" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Properties" />
+      <Property Name="ConcreteClasses" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="bdUnit.Core.AST.TargetProperty" BaseTypeListCollapsed="true">
+    <Position X="37.5" Y="4" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAEAAAAAAAAQAAAhAAAAAAAAgAAAAIAA=</HashCode>
+      <FileName>AST\Target\TargetProperty.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DefaultValue" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Operators" />
+      <Property Name="ConcreteClasses" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="bdUnit.Core.AST.CreateMethod" BaseTypeListCollapsed="true">
+    <Position X="43.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST\Test\CreateMethod.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TargetMethod" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="bdUnit.Core.AST.Statement">
+    <Position X="40.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAIAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>AST\Test\Statement.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="CreateMethod" />
+      <Property Name="When" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="bdUnit.Core.AST.Test">
+    <Position X="37.75" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAAAAAEAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>AST\Test\Test.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="StatementList" />
+      <Property Name="TypeList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="bdUnit.Core.AST.Type">
+    <Position X="37.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAEAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>AST\Test\Type.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ConcreteClass" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="StatementList" />
+      <Property Name="PropertyList" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="bdUnit.Core.AST.When" BaseTypeListCollapsed="true">
+    <Position X="32.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST\Test\When.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Loop" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Constraints" />
+      <Property Name="TargetList" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="bdUnit.Core.AST.IProperty">
+    <Position X="35.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAQAAAhAAAAAAAAgAAAAIAA=</HashCode>
+      <FileName>AST\Interfaces\IProperty.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DefaultValue" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Operators" />
+    </ShowAsCollectionAssociation>
+  </Interface>
+  <Interface Name="bdUnit.Core.AST.IStatement">
+    <Position X="37.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST\Interfaces\IStatement.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="bdUnit.Core.AST.ITarget" Collapsed="true">
+    <Position X="48.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AST\Interfaces\ITarget.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="bdUnit.Core.Generators.IPropertyGenerator" Collapsed="true">
+    <Position X="46.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Code Generation\Generators\PropertyGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="bdUnit.Core.Enum.OperatorEnum" Collapsed="true">
+    <Position X="46.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAABAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Enum\OperatorEnum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="bdUnit.Core.Enum.RelationEnum" Collapsed="true">
+    <Position X="48.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAGAAAA=</HashCode>
+      <FileName>Enum\RelationEnum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="bdUnit.Core.Enum.RelationQualifiedEnum" Collapsed="true">
+    <Position X="46.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAACAABQAABAAAAAAAAEAAAA=</HashCode>
+      <FileName>Enum\RelationQualifiedEnum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
