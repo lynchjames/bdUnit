@@ -145,8 +145,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
+    <None Include="ASTDiagram.cd" />
     <None Include="Inputs\ANewExample.bdunit" />
     <None Include="Inputs\ExampleStory.bdunit" />
     <None Include="Inputs\LogansRun.bdunit" />
