@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Text;
 using bdUnit.Core.AST;
+using bdUnit.Core.Extensions;
 
 #endregion
 
@@ -89,10 +90,7 @@ namespace bdUnit.Core.Generators
                     }
                     if (!previouslyCreated.Contains(obj.Instance.Value))
                     {
-                        stringBuilder.AppendLine(
-                            string.Format(
-                                "\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();",
-                                obj.Instance.Value, obj.Name));
+                        stringBuilder.AppendLine(obj.AsStructureMapInstance());
                         previouslyCreated.Add(obj.Instance.Value);
                     }
                     stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
@@ -106,14 +104,12 @@ namespace bdUnit.Core.Generators
                     var variables = new StringBuilder();
                     if (!previouslyCreated.Contains(obj.Instance.Value))
                     {
-                        variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();\n",
-                                                   obj.Instance.Value, obj.Name));
+                        variables.Append(obj.AsStructureMapInstance());
                         previouslyCreated.Add(obj.Instance.Value);
                     }
                     if (!previouslyCreated.Contains(otherObj.Instance.Value))
                     {
-                        variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();\n",
-                                                   otherObj.Instance.Value, otherObj.Name));
+                        variables.Append(otherObj.AsStructureMapInstance());
                         previouslyCreated.Add(otherObj.Instance.Value);
                     }
                     var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name,
@@ -140,8 +136,7 @@ namespace bdUnit.Core.Generators
             var title = string.Format("When_{0}_{1}_Is_Set", obj.Name, property.Name);
             stringBuilder.AppendLine(TestText.Replace("##testname##", title));
             stringBuilder.AppendLine("\t\t{");
-            stringBuilder.AppendLine(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();",
-                                           obj.Instance.Value, obj.Name));
+            stringBuilder.AppendLine(obj.AsStructureMapInstance());
             stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
             //stringBuilder.Append(Generate(property));
             return stringBuilder;
@@ -152,10 +147,8 @@ namespace bdUnit.Core.Generators
             var objects = target.ConcreteClasses;
             var obj = objects[0];
             var otherObj = objects[1];
-            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();\n",
-                                           obj.Instance.Value, obj.Name));
-            variables.Append(string.Format("\t\t\tI{1} {0} = ObjectFactory.GetInstance<I{1}>();\n",
-                                           otherObj.Instance.Value, otherObj.Name));
+            variables.Append(obj.AsStructureMapInstance());
+            variables.Append(string.Format(otherObj.AsStructureMapInstance()));
             var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name,
                                             otherObj.Instance.Value);
 

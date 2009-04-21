@@ -100,6 +100,7 @@
     <Compile Include="AST\Test\Type.cs" />
     <Compile Include="AST\Objects\ConcreteClass.cs" />
     <Compile Include="Code Generation\CodeGenerator.cs" />
+    <Compile Include="Code Generation\Extensions\CodeGenerationExtensions.cs" />
     <Compile Include="Code Generation\Generators\AssertGenerator.cs" />
     <Compile Include="Code Generation\Generators\GeneratorBase.cs" />
     <Compile Include="Code Generation\Generators\InterfaceGenerator.cs" />
