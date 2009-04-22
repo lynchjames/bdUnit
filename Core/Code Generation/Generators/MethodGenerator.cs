@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using bdUnit.Core.AST;
 using bdUnit.Core.Extensions;
+using bdUnit.Core.NVelocity;
 
 #endregion
 
@@ -90,7 +91,7 @@ namespace bdUnit.Core.Generators
                     }
                     if (!previouslyCreated.Contains(obj.Instance.Value))
                     {
-                        stringBuilder.AppendLine(obj.AsStructureMapInstance());
+                        stringBuilder.AppendLine(obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
                         previouslyCreated.Add(obj.Instance.Value);
                     }
                     stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
@@ -104,12 +105,12 @@ namespace bdUnit.Core.Generators
                     var variables = new StringBuilder();
                     if (!previouslyCreated.Contains(obj.Instance.Value))
                     {
-                        variables.Append(obj.AsStructureMapInstance());
+                      variables.Append(obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
                         previouslyCreated.Add(obj.Instance.Value);
                     }
                     if (!previouslyCreated.Contains(otherObj.Instance.Value))
                     {
-                        variables.Append(otherObj.AsStructureMapInstance());
+                      variables.Append(otherObj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
                         previouslyCreated.Add(otherObj.Instance.Value);
                     }
                     var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name,
@@ -136,7 +137,7 @@ namespace bdUnit.Core.Generators
             var title = string.Format("When_{0}_{1}_Is_Set", obj.Name, property.Name);
             stringBuilder.AppendLine(TestText.Replace("##testname##", title));
             stringBuilder.AppendLine("\t\t{");
-            stringBuilder.AppendLine(obj.AsStructureMapInstance());
+            stringBuilder.AppendLine(obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
             stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
             //stringBuilder.Append(Generate(property));
             return stringBuilder;
@@ -147,8 +148,8 @@ namespace bdUnit.Core.Generators
             var objects = target.ConcreteClasses;
             var obj = objects[0];
             var otherObj = objects[1];
-            variables.Append(obj.AsStructureMapInstance());
-            variables.Append(string.Format(otherObj.AsStructureMapInstance()));
+            variables.Append(obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
+            variables.Append(string.Format(otherObj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance)));
             var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name,
                                             otherObj.Instance.Value);
 

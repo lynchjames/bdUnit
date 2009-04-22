@@ -52,6 +52,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\NUnit\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="NVelocity, Version=0.4.2.8580, Culture=neutral, PublicKeyToken=44382d1b57473eda">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\NVelocity\NVelocity.dll</HintPath>
+    </Reference>
     <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Library\Rhino Mocks\Rhino.Mocks.dll</HintPath>
@@ -100,7 +104,7 @@
     <Compile Include="AST\Test\Type.cs" />
     <Compile Include="AST\Objects\ConcreteClass.cs" />
     <Compile Include="Code Generation\CodeGenerator.cs" />
-    <Compile Include="Code Generation\Extensions\CodeGenerationExtensions.cs" />
+    <Compile Include="Code Generation\Extensions\NVelocityCodeGenerationExtensions.cs" />
     <Compile Include="Code Generation\Generators\AssertGenerator.cs" />
     <Compile Include="Code Generation\Generators\GeneratorBase.cs" />
     <Compile Include="Code Generation\Generators\InterfaceGenerator.cs" />
@@ -109,6 +113,9 @@
     <Compile Include="Code Generation\Generators\PropertyGenerator.cs" />
     <Compile Include="Code Generation\ICodeGenerator.cs" />
     <Compile Include="Code Generation\MbUnitCodeGenerator.cs" />
+    <Compile Include="Code Generation\NVelocity\NVelocityInitializer.cs" />
+    <None Include="Code Generation\NVelocity\Templates\StructureMapInstance.vm" />
+    <Compile Include="Code Generation\NVelocity\TemplateEnum.cs" />
     <Compile Include="Code Generation\XUnitCodeGenerator.cs" />
     <Compile Include="DllBuilder.cs" />
     <Compile Include="Enum\OperatorEnum.cs" />
