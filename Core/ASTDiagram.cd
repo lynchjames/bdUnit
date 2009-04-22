@@ -22,7 +22,6 @@
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="TargetMethod" />
-      <Property Name="ConcreteClasses" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Constraints" />
@@ -110,8 +109,8 @@
       <Property Name="Loop" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="Properties" />
       <Property Name="ConcreteClasses" />
+      <Property Name="Properties" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
@@ -125,8 +124,8 @@
       <Property Name="DefaultValue" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="Operators" />
       <Property Name="ConcreteClasses" />
+      <Property Name="Operators" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
@@ -159,8 +158,8 @@
       <FileName>AST\Test\Test.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="StatementList" />
       <Property Name="TypeList" />
+      <Property Name="StatementList" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="bdUnit.Core.AST.Type">
@@ -187,8 +186,8 @@
       <Property Name="Loop" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="Constraints" />
       <Property Name="TargetList" />
+      <Property Name="Constraints" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
@@ -223,7 +222,7 @@
     <Position X="46.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
-      <FileName>Code Generation\Generators\PropertyGenerator.cs</FileName>
+      <FileName>CodeGeneration\Generators\PropertyGenerator.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Enum Name="bdUnit.Core.Enum.OperatorEnum" Collapsed="true">

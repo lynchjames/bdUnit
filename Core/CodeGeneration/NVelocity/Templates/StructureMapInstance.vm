@@ -1,0 +1,2 @@
+			I$concreteClass.Name $concreteClass.Instance.Value = ObjectFactory.GetInstance<I$concreteClass.Name>();
+			

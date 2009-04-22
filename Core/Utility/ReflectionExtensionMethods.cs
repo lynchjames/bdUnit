@@ -35,5 +35,12 @@ namespace bdUnit.Core.Utility
             }
             return string.Empty;
         }
+
+        public static Stream GetResourceStream(this string resourceName)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resource = assembly.GetManifestResourceStream(resourceName);
+            return resource;
+        }
     }
 }
