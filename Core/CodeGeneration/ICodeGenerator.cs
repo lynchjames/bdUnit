@@ -11,9 +11,9 @@ namespace bdUnit.Core
     public interface ICodeGenerator
     {
         #region Properties
-        
-        AccessEnum Access { get; set; } 
-        
+
+        AccessEnum Access { get; set; }
+
         #endregion
 
         #region Methods

@@ -9,6 +9,6 @@ namespace bdUnit.Core
     public class Settings
     {
         public static string MGrammar =
-            ReflectionExtensionMethods.GetResource("bdUnit.Core.Grammar.bdUnitMGrammar.mg");
+            "bdUnit.Core.Grammar.bdUnitMGrammar.mg".GetResource();
     }
 }

@@ -11,8 +11,6 @@ namespace bdUnit.Tests
     [TestFixture]
     public class PrototypeTests
     {
-        #region Text
-
         private string _input =
             @"begin story ""LogansRun_Marriage"":
     //I want a @User to have a ~Spouse and a ~IsARunner and an ~Age.
@@ -254,8 +252,6 @@ module Test
               |  '\u2029'); // Paragraph Separator    
     }
 }";
-
-        #endregion
 
         [Test]
         public void LogansRun_WithFile()

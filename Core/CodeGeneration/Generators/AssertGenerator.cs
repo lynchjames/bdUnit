@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
+using bdUnit.Core.Extensions;
+using bdUnit.Core.Templates;
 using bdUnit.Core.Utility;
-using Assert=NUnit.Framework.Assert;
 
 #endregion
 
@@ -28,6 +29,8 @@ namespace bdUnit.Core.Generators
             AssertText = assertText;
         }
 
+        #region IAssertGenerator Members
+
         public string Generate(ConcreteClass _concreteClass, List<Constraint> constraints)
         {
             var text = new StringBuilder();
@@ -44,8 +47,8 @@ namespace bdUnit.Core.Generators
                     {
                         var countValue = Int32.Parse(property.Count.Value);
                         var countOperator = property.Count.Operators.Count > 0
-                                                ? property.Count.Operators[0].Value
-                                                : "==";
+                                                   ? property.Count.Operators[0].Value
+                                                   : "==";
                         assert = string.Format("{0}.{1}.Count {2} {3}",
                                                _concreteClass.Instance.Value, property.Name, countOperator, countValue);
                         assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
@@ -60,8 +63,9 @@ namespace bdUnit.Core.Generators
                     else if (RegexUtility.IsDateTime(property.Value))
                     {
                         var dtInstance = "dateTime" + InstanceIdentifier;
-                        var dateTimeStatement = string.Format("\t\t\tvar {0} = DateTime.Parse(\"{1}\");", dtInstance,
-                                                              property.Value);
+                        var dateTimeStatement =
+                            new Dictionary<string, object> {{"instance", dtInstance}, {"value", property.Value}}.
+                                AsNVelocityTemplate(TemplateEnum.DateTimeVariable);
                         text.AppendLine(dateTimeStatement);
                         assert = string.Format("{0}.{1} {2} {3}", _concreteClass.Instance.Value,
                                                property.Name, property.Operators[0].Value,
@@ -105,18 +109,22 @@ namespace bdUnit.Core.Generators
                 {
                     reciprocalRelationships.ForEach(
                         r =>
-                        {
-                            var target =
-                                whenStatement.TargetList.Where(
-                                    x => x.TargetMethod != null && x.TargetMethod.ConcreteClasses.Count == 2).FirstOrDefault();
-                            var reciprocalAssert = CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal,
-                                                                            new List<Property> { r.Property },
-                                                                            AssertText, target.TargetMethod.ConcreteClasses);
-                            stringBuilder.Append(reciprocalAssert);
-                        });
+                            {
+                                var target =
+                                    whenStatement.TargetList.Where(
+                                        x => x.TargetMethod != null && x.TargetMethod.ConcreteClasses.Count == 2).
+                                        FirstOrDefault();
+                                var reciprocalAssert = CodeUtility.Parameterize(RelationQualifiedEnum.Reciprocal,
+                                                                                   new List<Property> {r.Property},
+                                                                                   AssertText,
+                                                                                   target.TargetMethod.ConcreteClasses);
+                                stringBuilder.Append(reciprocalAssert);
+                            });
                 }
             }
             return stringBuilder;
         }
+
+        #endregion
     }
 }

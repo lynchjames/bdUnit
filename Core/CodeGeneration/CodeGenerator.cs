@@ -12,13 +12,14 @@ namespace bdUnit.Core
 {
     public class CodeGenerator : GeneratorBase, ICodeGenerator
     {
-        public IAssertGenerator _assertGenerator;
-        public IMethodGenerator _methodGenerator;
-        public IInterfaceGenerator _interfaceGenerator;
         private readonly IMethodSignatureGenerator _methodSignatureGenerator;
         private readonly IPropertyGenerator _propertGenerator;
+        public IAssertGenerator _assertGenerator;
+        public IInterfaceGenerator _interfaceGenerator;
+        public IMethodGenerator _methodGenerator;
 
-        public CodeGenerator(string fixtureText, string testText, string methodText, string propertyText, string typeText, string assertText)
+        public CodeGenerator(string fixtureText, string testText, string methodText, string propertyText,
+                             string typeText, string assertText)
         {
             var access = AccessEnum.@public;
             TestFixtureText = fixtureText;
@@ -33,6 +34,8 @@ namespace bdUnit.Core
             _propertGenerator = new PropertyGenerator(access, propertyText);
             _interfaceGenerator = new InterfaceGenerator(access, typeText, _methodSignatureGenerator, _propertGenerator);
         }
+
+        #region ICodeGenerator Members
 
         public string GenerateTestFixture(List<Test> tests, string fileName)
         {
@@ -71,5 +74,7 @@ namespace bdUnit.Core
             stringBuilder = _methodGenerator.Generate(statementList, stringBuilder);
             return stringBuilder.ToString();
         }
+
+        #endregion
     }
 }

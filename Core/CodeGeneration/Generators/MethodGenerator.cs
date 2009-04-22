@@ -25,6 +25,8 @@ namespace bdUnit.Core.Generators
             TestText = testText;
         }
 
+        #region IMethodGenerator Members
+
         public StringBuilder Generate(List<IStatement> statements, StringBuilder stringBuilder)
         {
             var statementCount = statements.Count;
@@ -49,22 +51,27 @@ namespace bdUnit.Core.Generators
                         else
                         {
                             var variables = new StringBuilder();
-                            stringBuilder = GenerateForTargetMethod(target.TargetMethod, variables, whenStatement, stringBuilder);
+                            stringBuilder = GenerateForTargetMethod(target.TargetMethod, variables, whenStatement,
+                                                                    stringBuilder);
                         }
                     }
                     (whenStatement.Constraints).ForEach(c =>
-                                                                                 {
-                                                                                     if (c.ConcreteClasses.Count > 0)
-                                                                                     {
-                                                                                         stringBuilder.Append(_assertGenerator.Generate(c.ConcreteClasses[0],
-                                                                                                                              new List<Constraint> { c }));
-                                                                                     }
-                                                                                     else if (c.Property != null)
-                                                                                     {
-                                                                                         stringBuilder.Append(_assertGenerator.Generate(c.Property.ConcreteClass,
-                                                                                                                              new List<Constraint> { c }));
-                                                                                     }
-                                                                                 });
+                                                            {
+                                                                if (c.ConcreteClasses.Count > 0)
+                                                                {
+                                                                    stringBuilder.Append(
+                                                                        _assertGenerator.Generate(c.ConcreteClasses[0],
+                                                                                                  new List<Constraint>
+                                                                                                      {c}));
+                                                                }
+                                                                else if (c.Property != null)
+                                                                {
+                                                                    stringBuilder.Append(
+                                                                        _assertGenerator.Generate(
+                                                                            c.Property.ConcreteClass,
+                                                                            new List<Constraint> {c}));
+                                                                }
+                                                            });
                     _assertGenerator.GenerateForLoop(whenStatement, stringBuilder);
                     stringBuilder.AppendLine("\t\t}");
                 }
@@ -72,61 +79,69 @@ namespace bdUnit.Core.Generators
             return stringBuilder;
         }
 
+        #endregion
+
         private StringBuilder GenerateForTargets(List<Target> list, StringBuilder stringBuilder)
         {
             var titleSet = false;
             var previouslyCreated = new List<string>();
             list.ForEach(x =>
-            {
-                if (x.TargetProperty != null)
-                {
-                    var property = x.TargetProperty;
-                    var obj = property.ConcreteClasses[0];
-                    if (!titleSet)
-                    {
-                        var title = string.Format("When_{0}_Is_Set_...", property.Name);
-                        stringBuilder.AppendLine(TestText.Replace("##testname##", title));
-                        stringBuilder.AppendLine("\t\t{");
-                        titleSet = true;
-                    }
-                    if (!previouslyCreated.Contains(obj.Instance.Value))
-                    {
-                        stringBuilder.AppendLine(obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
-                        previouslyCreated.Add(obj.Instance.Value);
-                    }
-                    stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
-                }
-                else
-                {
-                    var target = x.TargetMethod;
-                    var objects = target.ConcreteClasses;
-                    var obj = objects[0];
-                    var otherObj = objects[1];
-                    var variables = new StringBuilder();
-                    if (!previouslyCreated.Contains(obj.Instance.Value))
-                    {
-                      variables.Append(obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
-                        previouslyCreated.Add(obj.Instance.Value);
-                    }
-                    if (!previouslyCreated.Contains(otherObj.Instance.Value))
-                    {
-                      variables.Append(otherObj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
-                        previouslyCreated.Add(otherObj.Instance.Value);
-                    }
-                    var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name,
-                                                    otherObj.Instance.Value);
+                             {
+                                 if (x.TargetProperty != null)
+                                 {
+                                     var property = x.TargetProperty;
+                                     var obj = property.ConcreteClasses[0];
+                                     if (!titleSet)
+                                     {
+                                         var title = string.Format("When_{0}_Is_Set_...", property.Name);
+                                         stringBuilder.AppendLine(TestText.Replace("##testname##", title));
+                                         stringBuilder.AppendLine("\t\t{");
+                                         titleSet = true;
+                                     }
+                                     if (!previouslyCreated.Contains(obj.Instance.Value))
+                                     {
+                                         stringBuilder.AppendLine(
+                                             obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
+                                         previouslyCreated.Add(obj.Instance.Value);
+                                     }
+                                     stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value,
+                                                                            property.Name,
+                                                                            property.Operators[0].Value.Replace("==",
+                                                                                                                "="),
+                                                                            property.Value));
+                                 }
+                                 else
+                                 {
+                                     var target = x.TargetMethod;
+                                     var objects = target.ConcreteClasses;
+                                     var obj = objects[0];
+                                     var otherObj = objects[1];
+                                     var variables = new StringBuilder();
+                                     if (!previouslyCreated.Contains(obj.Instance.Value))
+                                     {
+                                         variables.Append(obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
+                                         previouslyCreated.Add(obj.Instance.Value);
+                                     }
+                                     if (!previouslyCreated.Contains(otherObj.Instance.Value))
+                                     {
+                                         variables.Append(otherObj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
+                                         previouslyCreated.Add(otherObj.Instance.Value);
+                                     }
+                                     var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value,
+                                                                        target.Name,
+                                                                        otherObj.Instance.Value);
 
-                    if (!titleSet)
-                    {
-                        var title = string.Format("When_{0}_{1}_{2}", obj.Name, target.Name,
-                                                  otherObj.Name);
-                        stringBuilder.AppendLine(TestText.Replace("##testname##", title));
-                        stringBuilder.AppendLine("\t\t{");
-                        titleSet = true;
-                    }
-                    stringBuilder.Append(variables).Append(methodUsage);
-                }
-            });
+                                     if (!titleSet)
+                                     {
+                                         var title = string.Format("When_{0}_{1}_{2}", obj.Name, target.Name,
+                                                                      otherObj.Name);
+                                         stringBuilder.AppendLine(TestText.Replace("##testname##", title));
+                                         stringBuilder.AppendLine("\t\t{");
+                                         titleSet = true;
+                                     }
+                                     stringBuilder.Append(variables).Append(methodUsage);
+                                 }
+                             });
             return stringBuilder;
         }
 
@@ -138,12 +153,14 @@ namespace bdUnit.Core.Generators
             stringBuilder.AppendLine(TestText.Replace("##testname##", title));
             stringBuilder.AppendLine("\t\t{");
             stringBuilder.AppendLine(obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
-            stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name, property.Operators[0].Value.Replace("==", "="), property.Value));
+            stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name,
+                                                   property.Operators[0].Value.Replace("==", "="), property.Value));
             //stringBuilder.Append(Generate(property));
             return stringBuilder;
         }
 
-        private StringBuilder GenerateForTargetMethod(ITarget target, StringBuilder variables, When whenStatement, StringBuilder stringBuilder)
+        private StringBuilder GenerateForTargetMethod(ITarget target, StringBuilder variables, When whenStatement,
+                                                      StringBuilder stringBuilder)
         {
             var objects = target.ConcreteClasses;
             var obj = objects[0];
@@ -151,7 +168,7 @@ namespace bdUnit.Core.Generators
             variables.Append(obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
             variables.Append(string.Format(otherObj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance)));
             var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name,
-                                            otherObj.Instance.Value);
+                                               otherObj.Instance.Value);
 
             //TODO: Add logic to determine type constuctor @User(Name = Jim, Age = 25) should correspond to var Jim = new User() {Name = "Jim", Age = 25};
             var title = string.Format("When_{0}_{1}_{2}", obj.Name, target.Name, otherObj.Name);

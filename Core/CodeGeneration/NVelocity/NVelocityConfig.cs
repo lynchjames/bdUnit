@@ -1,29 +1,40 @@
 #region Using Statements
 
-using System.Collections.Generic;
 using NVelocity;
 using NVelocity.App;
-using bdUnit.Core.Utility;
 
 #endregion
 
 namespace bdUnit.Core.Templates
 {
-  public static class NVelocityConfig
-  {
-    private static VelocityEngine velocity;
-
-    static NVelocityConfig()
+    public static class NVelocityConfig
     {
-      velocity = new VelocityEngine();
-      velocity.AddProperty("assembly.resource.loader.assembly", new[] { "bdUnit.Core" });
-      velocity.Init();
-    }
+        private static readonly string[] TemplateResourceLocations = {
+                                                                         "Templates", "Templates.NUnit", "Templates.XUnit",
+                                                                         "Templates.MbUnit"
+                                                                     };
+        private static readonly VelocityEngine velocity;
 
-    public static Template GetTemplate(TemplateEnum template)
-    {
-        var templateResource = template.ToString().GetResource();
-        return velocity.GetTemplate(string.Format("bdUnit.Core.CodeGeneration.NVelocity.Templates.{0}.vm", template));
+        static NVelocityConfig()
+        {
+            velocity = new VelocityEngine();
+            velocity.AddProperty("assembly.resource.loader.assembly", new[] {"bdUnit.Core"});
+            velocity.Init();
+        }
+
+        public static Template GetTemplate(TemplateEnum template)
+        {
+            var count = TemplateResourceLocations.Length;
+            for (var i = 0; i < count; i++)
+            {
+                var folder = TemplateResourceLocations[i];
+                var location = string.Format("bdUnit.Core.CodeGeneration.NVelocity.Templates.{0}.{1}.vm", folder, template);
+                if (velocity.TemplateExists(location))
+                {
+                    return velocity.GetTemplate(location);
+                }
+            }
+            return null;
+        }
     }
-  }
 }

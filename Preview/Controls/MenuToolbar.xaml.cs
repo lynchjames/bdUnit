@@ -17,23 +17,20 @@ namespace bdUnit.Preview.Controls
     /// </summary>
     public partial class MenuToolbar
     {
-        public UnitTestFrameworkEnum CurrentFramework { get; set; }
-
-        private List<MenuItem> FrameworkMenuItems
-        {
-            get
-            {
-                return new List<MenuItem> { NUnit, XUnit, MbUnit };
-            }
-        }
-
         public MenuToolbar()
         {
             InitializeComponent();
             Loaded += MenuToolbar_Loaded;
         }
 
-        void MenuToolbar_Loaded(object sender, RoutedEventArgs e)
+        public UnitTestFrameworkEnum CurrentFramework { get; set; }
+
+        private List<MenuItem> FrameworkMenuItems
+        {
+            get { return new List<MenuItem> {NUnit, XUnit, MbUnit}; }
+        }
+
+        private void MenuToolbar_Loaded(object sender, RoutedEventArgs e)
         {
             NUnit.IsChecked = true;
         }
@@ -42,7 +39,7 @@ namespace bdUnit.Preview.Controls
         {
             var menuItem = (MenuItem) sender;
             FrameworkMenuItems.Where(mi => mi.Name != menuItem.Name).ToList().ForEach(mi => mi.IsChecked = false);
-            CurrentFramework = (UnitTestFrameworkEnum)Enum.Parse(typeof(UnitTestFrameworkEnum), menuItem.Name);
+            CurrentFramework = (UnitTestFrameworkEnum) Enum.Parse(typeof (UnitTestFrameworkEnum), menuItem.Name);
             EventBus.OnFrameworkChecked(this, new EventArgs());
         }
 
@@ -55,7 +52,7 @@ namespace bdUnit.Preview.Controls
         {
             if (DllFromSelectedDocs == null || DllFromOpenDocs == null) return;
 
-            var menuItem = (MenuItem)sender;
+            var menuItem = (MenuItem) sender;
             if (menuItem.Name == "DllFromOpenDocs")
             {
                 DllFromSelectedDocs.IsChecked = false;

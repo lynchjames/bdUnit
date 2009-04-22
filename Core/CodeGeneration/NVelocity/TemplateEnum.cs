@@ -1,7 +1,8 @@
 namespace bdUnit.Core.Templates
 {
-  public enum TemplateEnum
-  {
-    StructureMapInstance
-  }
+    public enum TemplateEnum
+    {
+        StructureMapInstance,
+        DateTimeVariable
+    }
 }

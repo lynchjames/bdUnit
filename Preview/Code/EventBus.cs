@@ -8,10 +8,10 @@ namespace bdUnit.Preview.Code
 {
     public class EventBus
     {
+        public static EventHandler AppExit;
         public static EventHandler FrameworkChecked;
         public static EventHandler TextChanged;
         public static EventHandler TextSaved;
-        public static EventHandler AppExit;
 
         public static void OnFrameworkChecked(object sender, EventArgs e)
         {

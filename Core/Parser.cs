@@ -49,6 +49,15 @@ namespace bdUnit.Core
 
         #endregion
 
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            Input = null;
+        }
+
+        #endregion
+
         public void LoadGrammar()
         {
             var errorReporter = ErrorReporter.Standard;
@@ -89,14 +98,16 @@ namespace bdUnit.Core
 
             var reporter = new DynamicParserExtensions.ExceptionErrorReporter();
 
-            var root = Input != null ? _parser.Parse<object>(null, new StringReader(Input), reporter) : _parser.Parse<object>(InputPath, new StringReader(File.ReadAllText(InputPath)), reporter);
+            var root = Input != null
+                              ? _parser.Parse<object>(null, new StringReader(Input), reporter)
+                              : _parser.Parse<object>(InputPath, new StringReader(File.ReadAllText(InputPath)), reporter);
             var tests = deserializer.Deserialize(root) as IList<object>;
             var list = new List<Test>();
             if (tests != null)
             {
                 foreach (var test in tests)
                 {
-                    list.Add((Test)test);
+                    list.Add((Test) test);
                 }
                 switch (framework)
                 {
@@ -127,7 +138,8 @@ namespace bdUnit.Core
             }
             else
             {
-                root = _parser.Parse<object>(InputPath, new StringReader(File.ReadAllText(InputPath)), ErrorReporter.Standard);
+                root = _parser.Parse<object>(InputPath, new StringReader(File.ReadAllText(InputPath)),
+                                             ErrorReporter.Standard);
             }
 
             var tests = deserializer.Deserialize(root) as IList<object>;
@@ -135,14 +147,9 @@ namespace bdUnit.Core
             var codegen = new NUnitCodeGenerator();
             foreach (var test in tests)
             {
-                list.Add((Test)test);
+                list.Add((Test) test);
             }
             Debug.Write(codegen.GenerateTestFixture(list, TestFileName));
-        }
-
-        public void Dispose()
-        {
-            Input = null;
         }
     }
 }

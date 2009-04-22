@@ -22,8 +22,10 @@ namespace bdUnit.Core.Generators
         {
             Access = access;
             PropertyText = propertyText;
-
         }
+
+        #region IPropertyGenerator Members
+
         public string Generate(List<Property> properties)
         {
             var stringBuilder = new StringBuilder();
@@ -34,17 +36,20 @@ namespace bdUnit.Core.Generators
                 var propertyText = "";
                 propertyText = PropertyText.Replace("##accesslevel##", Access.ToString());
                 propertyText = propertyText.Replace("##propertyname##", property.Name);
-                if (!string.IsNullOrEmpty(property.Relation) && property.GetRelationQualifiedEnum() != RelationQualifiedEnum.None && property.DefaultValue != null && property.DefaultValue.ConcreteClass != null)
+                if (!string.IsNullOrEmpty(property.Relation) &&
+                    property.GetRelationQualifiedEnum() != RelationQualifiedEnum.None && property.DefaultValue != null &&
+                    property.DefaultValue.ConcreteClass != null)
                 {
-                    propertyText = CodeUtility.Parameterize(property.GetRelationQualifiedEnum(), new List<Property> { property },
-                                             propertyText, null);
-
+                    propertyText = CodeUtility.Parameterize(property.GetRelationQualifiedEnum(),
+                                                            new List<Property> {property},
+                                                            propertyText, null);
                 }
                 else if (string.IsNullOrEmpty(property.DefaultValue.Value))
                 {
                     if (property.DefaultValue.ConcreteClass.Name != null)
                     {
-                        propertyText = CodeUtility.Parameterize(RelationQualifiedEnum.OneToOne, new List<Property> {property}, propertyText, null);
+                        propertyText = CodeUtility.Parameterize(RelationQualifiedEnum.OneToOne,
+                                                                new List<Property> {property}, propertyText, null);
                     }
                     propertyText = propertyText.Replace("##typename##", "string");
                 }
@@ -59,13 +64,15 @@ namespace bdUnit.Core.Generators
                         propertyText = propertyText.Replace("##typename##", "bool");
                         if (property.DefaultValue.Value == "true")
                         {
-                            propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name, "bool");
+                            propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name,
+                                                           "bool");
                         }
                     }
                     else
                     {
                         propertyText = propertyText.Replace("##typename##", "string");
-                        propertyText = OverrideDefault(propertyText, "\"" + property.DefaultValue.Value + "\"", property.Name, "string");
+                        propertyText = OverrideDefault(propertyText, "\"" + property.DefaultValue.Value + "\"",
+                                                       property.Name, "string");
                     }
                 }
                 else if (RegexUtility.IsDouble(property.DefaultValue.Value))
@@ -73,7 +80,8 @@ namespace bdUnit.Core.Generators
                     propertyText = propertyText.Replace("##typename##", "double");
                     if (property.DefaultValue.Value != "0.0")
                     {
-                        propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name, "double");
+                        propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name,
+                                                       "double");
                     }
                 }
                 else if (RegexUtility.IsInteger(property.DefaultValue.Value))
@@ -88,6 +96,8 @@ namespace bdUnit.Core.Generators
             }
             return stringBuilder.ToString();
         }
+
+        #endregion
 
         //Deprecated as Interfaces are created with Auto-Properties only
         [Obsolete]

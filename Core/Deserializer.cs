@@ -41,12 +41,12 @@ namespace bdUnit.Core
             var name = builder.GetLabel(node) as Identifier;
             Debug.WriteLine(name);
 
-            foreach (object child in builder.GetSuccessors(node))
+            foreach (var child in builder.GetSuccessors(node))
             {
                 if (child is string)
                 {
                     //Keep quotes for string values
-                    if (name == "Value" && RegexUtility.IsString((string)child))
+                    if (name == "Value" && RegexUtility.IsString((string) child))
                     {
                         return child as string;
                     }
@@ -55,7 +55,8 @@ namespace bdUnit.Core
             }
 
             var obj =
-                Activator.CreateInstance(Assembly.GetExecutingAssembly().FullName, "bdUnit.Core.AST." + name.Text).Unwrap();
+                Activator.CreateInstance(Assembly.GetExecutingAssembly().FullName, "bdUnit.Core.AST." + name.Text).
+                    Unwrap();
 
             InitializeObject(obj, node);
 
@@ -64,11 +65,11 @@ namespace bdUnit.Core
 
         private void InitializeObject(object obj, object node)
         {
-            foreach (object child in builder.GetSuccessors(node))
+            foreach (var child in builder.GetSuccessors(node))
             {
                 if (builder.IsSequence(child))
                 {
-                    foreach (object element in builder.GetSequenceElements(child))
+                    foreach (var element in builder.GetSequenceElements(child))
                     {
                         AddToList(obj, child, element);
                     }
@@ -87,7 +88,7 @@ namespace bdUnit.Core
                 var propertyInfo = obj.GetType().GetProperty(builder.GetLabel(parentNode).ToString());
                 var value = propertyInfo.GetValue(obj, null);
                 var method = value.GetType().GetMethod("Add");
-                method.Invoke(value, new[] { DeserializeNode(element) });
+                method.Invoke(value, new[] {DeserializeNode(element)});
             }
             catch (Exception ex)
             {
@@ -99,7 +100,7 @@ namespace bdUnit.Core
 
         private IEnumerable<object> DeserialzeSeq(object node)
         {
-            foreach (object element in builder.GetSequenceElements(node))
+            foreach (var element in builder.GetSequenceElements(node))
             {
                 var obj = DeserializeNode(element);
                 yield return obj;

@@ -10,45 +10,44 @@ namespace bdUnit.Core.Utility
 {
     public class bdUnitSyntaxProvider
     {
-        static List<string> tags = new List<string>();
-        static List<char> specials = new List<char>();
-
-        public struct Tag
-        {
-            public TextPointer StartPosition;
-            public TextPointer EndPosition;
-            public string Word;
-        }
+        private static readonly SolidColorBrush CommentColor = new SolidColorBrush(Colors.ForestGreen);
+        private static readonly SolidColorBrush DefaultKeywordColor = new SolidColorBrush(Colors.Orange);
+        private static readonly SolidColorBrush MethodColor = new SolidColorBrush(Colors.LightSkyBlue);
+        private static readonly SolidColorBrush PropertyColor = new SolidColorBrush(Colors.BlueViolet);
+        private static readonly SolidColorBrush SetupColor = new SolidColorBrush(Colors.Red);
+        private static readonly List<char> specials = new List<char>();
+        private static readonly List<string> tags = new List<string>();
+        private static readonly SolidColorBrush TypeColor = new SolidColorBrush(Colors.Yellow);
 
         static bdUnitSyntaxProvider()
         {
             string[] strs = {
-                "@",
-                "~",
-                "#",
-                "another",
-                "several",
-                "many",
-                "other",
-                "all",
-                "begin",
-                "end",
-                "story",
-                "setup"
-            };
+                                "@",
+                                "~",
+                                "#",
+                                "another",
+                                "several",
+                                "many",
+                                "other",
+                                "all",
+                                "begin",
+                                "end",
+                                "story",
+                                "setup"
+                            };
             tags = new List<string>(strs);
 
             char[] chrs = {
-                '.',
-                ')',
-                '(',
-                '[',
-                ']',
-                '>',
-                '<',
-                ':',
-                ';'
-            };
+                              '.',
+                              ')',
+                              '(',
+                              '[',
+                              ']',
+                              '>',
+                              '<',
+                              ':',
+                              ';'
+                          };
             specials = new List<char>(chrs);
         }
 
@@ -56,25 +55,21 @@ namespace bdUnit.Core.Utility
         {
             get { return specials; }
         }
+
         public static List<string> GetTags
         {
             get { return tags; }
         }
+
         public static bool IsKnownTag(string tag)
         {
             return tags.Exists(s => tag.ToLower().Contains(s.ToLower()));
         }
+
         public static List<string> GetJSProvider(string tag)
         {
             return tags.FindAll(s => s.ToLower().StartsWith(tag.ToLower()));
         }
-
-        private static readonly SolidColorBrush TypeColor = new SolidColorBrush(Colors.Yellow);
-        private static readonly SolidColorBrush PropertyColor = new SolidColorBrush(Colors.BlueViolet);
-        private static readonly SolidColorBrush MethodColor = new SolidColorBrush(Colors.LightSkyBlue);
-        private static readonly SolidColorBrush SetupColor = new SolidColorBrush(Colors.Red);
-        private static readonly SolidColorBrush DefaultKeywordColor = new SolidColorBrush(Colors.Orange);
-        private static readonly SolidColorBrush CommentColor = new SolidColorBrush(Colors.ForestGreen);
 
         public static SolidColorBrush GetBrushColor(string tag)
         {
@@ -100,5 +95,16 @@ namespace bdUnit.Core.Utility
             }
             return DefaultKeywordColor;
         }
+
+        #region Nested type: Tag
+
+        public struct Tag
+        {
+            public TextPointer EndPosition;
+            public TextPointer StartPosition;
+            public string Word;
+        }
+
+        #endregion
     }
 }

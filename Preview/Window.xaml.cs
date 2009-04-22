@@ -36,13 +36,14 @@ namespace bdUnit.Preview
         #region Properties
 
         private Parser _parser;
+
         private UnitTestFrameworkEnum CurrentFramework
         {
             get
             {
-                var options = new List<MenuItem> { Menu.NUnit, Menu.XUnit, Menu.MbUnit };
+                var options = new List<MenuItem> {Menu.NUnit, Menu.XUnit, Menu.MbUnit};
                 var selectedOption = options.Find(o => o.IsChecked);
-                return (UnitTestFrameworkEnum)Enum.Parse(typeof(UnitTestFrameworkEnum), selectedOption.Name);
+                return (UnitTestFrameworkEnum) Enum.Parse(typeof (UnitTestFrameworkEnum), selectedOption.Name);
             }
         }
 
@@ -54,17 +55,17 @@ namespace bdUnit.Preview
         {
             _parser = new Parser();
             var tab = new TabItem
-            {
-                Header =
-                    new TextBlock
-                    {
-                        Text = "[Untitled]",
-                        TextTrimming = TextTrimming.CharacterEllipsis,
-                        TextWrapping = TextWrapping.NoWrap
-                    },
-                Content = new bdUnitPreviewWindow(_parser),
-                MinWidth = 100
-            };
+                          {
+                              Header =
+                                  new TextBlock
+                                      {
+                                          Text = "[Untitled]",
+                                          TextTrimming = TextTrimming.CharacterEllipsis,
+                                          TextWrapping = TextWrapping.NoWrap
+                                      },
+                              Content = new bdUnitPreviewWindow(_parser),
+                              MinWidth = 100
+                          };
             tab.ContextMenu = GenerateContextMenu(tab);
             tabControl.Items.Add(tab);
             tabControl.SelectedIndex = tabControl.Items.Count - 1;
@@ -81,22 +82,23 @@ namespace bdUnit.Preview
 
         private void EventBus_TextChanged(object sender, EventArgs e)
         {
-            var id = ((TargetEventArgs)e).TargetId;
+            var id = ((TargetEventArgs) e).TargetId;
             var tabs = tabControl.Items;
             var tabCount = tabs.Count;
             for (var i = 0; i < tabCount; i++)
             {
                 var tab = tabs[i] as TabItem;
-                if (tab != null && ((bdUnitPreviewWindow)tab.Content).Id == id && !((TextBlock)tab.Header).Text.Contains("*"))
+                if (tab != null && ((bdUnitPreviewWindow) tab.Content).Id == id &&
+                    !((TextBlock) tab.Header).Text.Contains("*"))
                 {
-                    var header = ((TextBlock)tab.Header);
+                    var header = ((TextBlock) tab.Header);
                     header.Text = header.Text + "*";
                     header.FontWeight = FontWeights.Bold;
                 }
             }
         }
 
-        void Window1_Closing(object sender, CancelEventArgs e)
+        private void Window1_Closing(object sender, CancelEventArgs e)
         {
             try
             {
@@ -105,20 +107,19 @@ namespace bdUnit.Preview
                     var item = tabControl.Items[i] as TabItem;
                     if (item != null)
                     {
-                        var bdUnitPreviewWindow1 = ((bdUnitPreviewWindow)item.Content);
+                        var bdUnitPreviewWindow1 = ((bdUnitPreviewWindow) item.Content);
                         bdUnitPreviewWindow1.Dispose();
                     }
                 }
             }
             catch (Exception)
             {
-
             }
         }
 
         private void Command_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var command = (RoutedUICommand)e.Command;
+            var command = (RoutedUICommand) e.Command;
             switch (command.Text)
             {
                 case "New":
@@ -132,7 +133,7 @@ namespace bdUnit.Preview
                                                   TextWrapping = TextWrapping.NoWrap
                                               },
                                       Content = new bdUnitPreviewWindow(_parser),
-                                      MinWidth= 100
+                                      MinWidth = 100
                                   };
                     tab.ContextMenu = GenerateContextMenu(tab);
                     tabControl.Items.Add(tab);
@@ -153,11 +154,11 @@ namespace bdUnit.Preview
                         for (var i = 0; i < fileCount; i++)
                         {
                             var bdUnitPreview = new bdUnitPreviewWindow(filePaths[i], Menu.CurrentFramework, _parser)
-                            {
-                                CurrentTabIndex = tabControl.Items.Count,
-                                FilePath = filePaths[i],
-                                FileName = fileNames[i]
-                            };
+                                                    {
+                                                        CurrentTabIndex = tabControl.Items.Count,
+                                                        FilePath = filePaths[i],
+                                                        FileName = fileNames[i]
+                                                    };
                             var openTab = new TabItem
                                               {
                                                   Header =
@@ -186,14 +187,16 @@ namespace bdUnit.Preview
                     tabControl.Items.Remove(currentTab);
                     break;
                 case "Save":
-                    var preview = ((TabItem)tabControl.SelectedItem).Content as bdUnitPreviewWindow;
+                    var preview = ((TabItem) tabControl.SelectedItem).Content as bdUnitPreviewWindow;
                     if (preview != null && !preview.IsSaved)
                     {
-                        var range = new TextRange(preview.InputEditor.Document.ContentStart, preview.InputEditor.Document.ContentEnd);
+                        var range = new TextRange(preview.InputEditor.Document.ContentStart,
+                                                  preview.InputEditor.Document.ContentEnd);
                         var text = range.Text;
                         if (string.IsNullOrEmpty(preview.FilePath))
                         {
-                            var saveFileDialog = new SaveFileDialog {Filter = "bdUnit Input | *.bdunit", RestoreDirectory = true};
+                            var saveFileDialog = new SaveFileDialog
+                                                     {Filter = "bdUnit Input | *.bdunit", RestoreDirectory = true};
                             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                             {
                                 preview.FilePath = saveFileDialog.FileName;
@@ -203,7 +206,7 @@ namespace bdUnit.Preview
                         }
                         if (File.Exists(preview.FilePath))
                         {
-                            File.WriteAllText(preview.FilePath, text);   
+                            File.WriteAllText(preview.FilePath, text);
                         }
                         if (preview.FilePath != null)
                         {
@@ -213,7 +216,7 @@ namespace bdUnit.Preview
                             writer.Close();
 
                             preview.IsSaved = true;
-                            var header = ((TabItem)tabControl.SelectedItem).Header as TextBlock;
+                            var header = ((TabItem) tabControl.SelectedItem).Header as TextBlock;
                             if (header != null)
                             {
                                 header.Text = preview.FileName;
@@ -236,11 +239,11 @@ namespace bdUnit.Preview
             if (Menu.DllFromSelectedDocs.IsChecked)
             {
                 var openFileDialog = new OpenFileDialog
-                                             {
-                                                 Multiselect = true,
-                                                 Filter = "bdUnit | *.bdunit",
-                                                 RestoreDirectory = true
-                                             };
+                                         {
+                                             Multiselect = true,
+                                             Filter = "bdUnit | *.bdunit",
+                                             RestoreDirectory = true
+                                         };
                 if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     filePaths = openFileDialog.FileNames;
@@ -267,7 +270,7 @@ namespace bdUnit.Preview
 
         private void ContextMenu_Click(object sender, RoutedEventArgs e)
         {
-            var menuItem = ((MenuItem)e.Source);
+            var menuItem = ((MenuItem) e.Source);
             var menu = menuItem.Parent as ContextMenu;
             if (!string.IsNullOrEmpty(menuItem.Name) && menu != null)
             {
@@ -282,12 +285,12 @@ namespace bdUnit.Preview
                         break;
                     case "CloseAllButThis":
                         var tabs = tabControl.Items;
-                        var selected = ((TabItem)menu.PlacementTarget).Content as bdUnitPreviewWindow;
+                        var selected = ((TabItem) menu.PlacementTarget).Content as bdUnitPreviewWindow;
                         var count = tabs.Count;
                         var tabsToRemove = new List<TabItem>();
                         for (var i = 0; i < count; i++)
                         {
-                            var preview = ((TabItem)tabs[i]).Content as bdUnitPreviewWindow;
+                            var preview = ((TabItem) tabs[i]).Content as bdUnitPreviewWindow;
                             if (preview.Id != selected.Id)
                             {
                                 tabsToRemove.Add(tabs[i] as TabItem);
@@ -297,8 +300,6 @@ namespace bdUnit.Preview
                         break;
                 }
             }
-
-
         }
 
         #endregion Events
@@ -312,7 +313,7 @@ namespace bdUnit.Preview
             var paths = new string[count];
             for (var i = 0; i < count; i++)
             {
-                var tab = (TabItem)tabs[i];
+                var tab = (TabItem) tabs[i];
                 var bdUnitPreview = tab.Content as bdUnitPreviewWindow;
                 if (bdUnitPreview != null) paths[i] = bdUnitPreview.FilePath;
             }
@@ -321,16 +322,16 @@ namespace bdUnit.Preview
 
         private ContextMenu GenerateContextMenu(UIElement tab)
         {
-            var contextMenu = new ContextMenu { PlacementTarget = tab };
-            var close = new MenuItem { Header = "Close", Name = "Close" };
-            var closeAll = new MenuItem { Header = "Close All", Name = "CloseAll" };
-            var closeAllBut = new MenuItem { Header = "Close All But This", Name = "CloseAllButThis" };
-            var menus = new List<MenuItem> { close, closeAll, closeAllBut };
+            var contextMenu = new ContextMenu {PlacementTarget = tab};
+            var close = new MenuItem {Header = "Close", Name = "Close"};
+            var closeAll = new MenuItem {Header = "Close All", Name = "CloseAll"};
+            var closeAllBut = new MenuItem {Header = "Close All But This", Name = "CloseAllButThis"};
+            var menus = new List<MenuItem> {close, closeAll, closeAllBut};
             menus.ForEach(m =>
-            {
-                m.Click += ContextMenu_Click;
-                contextMenu.Items.Add(m);
-            });
+                              {
+                                  m.Click += ContextMenu_Click;
+                                  contextMenu.Items.Add(m);
+                              });
             return contextMenu;
         }
 

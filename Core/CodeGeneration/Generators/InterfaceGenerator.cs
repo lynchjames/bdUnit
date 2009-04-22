@@ -19,14 +19,16 @@ namespace bdUnit.Core.Generators
         private readonly MethodSignatureGenerator _methodSignatureGenerator;
         private readonly PropertyGenerator _propertyGenerator;
 
-        public InterfaceGenerator(AccessEnum access, string typeText, 
-            IMethodSignatureGenerator methodSigGenerator, IPropertyGenerator propertyGenerator)
+        public InterfaceGenerator(AccessEnum access, string typeText,
+                                  IMethodSignatureGenerator methodSigGenerator, IPropertyGenerator propertyGenerator)
         {
             Access = access;
             TypeText = typeText;
             _methodSignatureGenerator = methodSigGenerator as MethodSignatureGenerator;
             _propertyGenerator = propertyGenerator as PropertyGenerator;
         }
+
+        #region IInterfaceGenerator Members
 
         public string Generate(Type type)
         {
@@ -37,9 +39,11 @@ namespace bdUnit.Core.Generators
             content.Append(_propertyGenerator.Generate(properties));
             var methodStatments =
                 type.StatementList.Where(s => s.GetType().Name == "CreateMethod").ToList();
-            methodStatments.ForEach(ms => content.AppendLine(_methodSignatureGenerator.Generate((CreateMethod)ms)));
+            methodStatments.ForEach(ms => content.AppendLine(_methodSignatureGenerator.Generate((CreateMethod) ms)));
             wrapper = wrapper.Replace("##content##", content.ToString());
             return wrapper;
         }
+
+        #endregion
     }
 }

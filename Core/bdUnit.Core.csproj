@@ -156,6 +156,12 @@
     <None Include="Inputs\LogansRun.bdunit" />
     <None Include="Inputs\TMDirectoryExample.bdunit" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\DateTimeVariable.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CodeGeneration\NVelocity\Templates\NUnit\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

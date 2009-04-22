@@ -17,10 +17,6 @@ namespace bdUnit.Core.AST
         public List<ConcreteClass> ConcreteClasses { get; set; }
         public List<Constraint> Constraints { get; set; }
 
-        #region IStatement Members
-
         public TargetMethod TargetMethod { get; set; }
-
-        #endregion
     }
 }

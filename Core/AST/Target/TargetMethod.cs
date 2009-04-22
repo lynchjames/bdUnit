@@ -16,17 +16,22 @@ namespace bdUnit.Core.AST
             Properties = new List<Property>();
         }
 
-        public string Name { get; set; }
-        public List<ConcreteClass> ConcreteClasses { get; set; }
         public List<Property> Properties { get; set; }
         public Loop Loop { get; set; }
         public string Relation { get; set; }
+
+        #region ITarget Members
+
+        public string Name { get; set; }
+        public List<ConcreteClass> ConcreteClasses { get; set; }
+
+        #endregion
 
         public RelationQualifiedEnum GetRelationQualifiedEnum()
         {
             try
             {
-                return (RelationQualifiedEnum)System.Enum.Parse(typeof(RelationQualifiedEnum), Relation);
+                return (RelationQualifiedEnum) System.Enum.Parse(typeof (RelationQualifiedEnum), Relation);
             }
             catch (Exception)
             {

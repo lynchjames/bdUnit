@@ -21,6 +21,8 @@ namespace bdUnit.Core.Generators
             MethodText = methodText;
         }
 
+        #region IMethodSignatureGenerator Members
+
         public string Generate(CreateMethod method)
         {
             var methodText = MethodText.Replace("##accesslevel##", Access.ToString());
@@ -52,5 +54,7 @@ namespace bdUnit.Core.Generators
             signature = signature.Replace("##params##", _params.ToString());
             return signature;
         }
+
+        #endregion
     }
 }

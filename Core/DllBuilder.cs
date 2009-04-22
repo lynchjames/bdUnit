@@ -14,39 +14,40 @@ namespace bdUnit.Core
 {
     public class DllBuilder
     {
+        private readonly Parser _parser;
+
+        private readonly string[] References =
+            new[]
+                {
+                    "Rhino.Mocks", "nunit.core", "nunit.core.interfaces", "nunit.framework",
+                    "xunit", "MbUnit.Framework", "StructureMap", "StructureMap.AutoMocking"
+                };
+
         public DllBuilder(Parser parser)
         {
             _parser = parser;
         }
 
-        private readonly string[] References = 
-            new[]   {
-                        "Rhino.Mocks", "nunit.core", "nunit.core.interfaces", "nunit.framework",
-                        "xunit", "MbUnit.Framework", "StructureMap", "StructureMap.AutoMocking"
-                    };
-
-        private Parser _parser;
-
         public string CompileDll(string[] filePaths, UnitTestFrameworkEnum currentFramework)
         {
             CodeDomProvider compiler = new CSharpCodeProvider(new Dictionary<string, string>
-                                                                    {
-                                                                        {"CompilerVersion","v3.5"}
-                                                                    });
-            
+                                                                  {
+                                                                      {"CompilerVersion", "v3.5"}
+                                                                  });
+
             var parameters = new CompilerParameters
-                             {
-                                 GenerateInMemory = false,
-                                 GenerateExecutable = false,
-                                 IncludeDebugInformation = true,
-                                 OutputAssembly = string.Format("bdUnit_{0}.dll", currentFramework),
-                                 ReferencedAssemblies = {"System.dll"}
-                             };
-            
+                                 {
+                                     GenerateInMemory = false,
+                                     GenerateExecutable = false,
+                                     IncludeDebugInformation = true,
+                                     OutputAssembly = string.Format("bdUnit_{0}.dll", currentFramework),
+                                     ReferencedAssemblies = {"System.dll"}
+                                 };
+
             foreach (var reference in References)
             {
                 parameters.ReferencedAssemblies.Add(AppDomain.CurrentDomain.BaseDirectory
-                                                            + string.Format("\\{0}.dll", reference));
+                                                    + string.Format("\\{0}.dll", reference));
             }
             try
             {
@@ -76,7 +77,7 @@ namespace bdUnit.Core
             var source = new string[filePaths.Length];
             for (var i = 0; i < filePaths.Length; i++)
             {
-                _parser.Input = File.ReadAllText(filePaths[i]);     
+                _parser.Input = File.ReadAllText(filePaths[i]);
                 source[i] = _parser.Parse(framework);
             }
             return source;

@@ -59,7 +59,7 @@ namespace bdUnit.Preview.Controls
             var range = new TextRange(InputEditor.Document.ContentStart, InputEditor.Document.ContentEnd);
             var text = File.ReadAllText(filePath);
             range.Text = text;
-            
+
             CurrentFramework = framework;
             IsSaved = true;
             Load();
@@ -70,28 +70,34 @@ namespace bdUnit.Preview.Controls
 
         #region Properties
 
+        private readonly List<bdUnitSyntaxProvider.Tag> m_tags = new List<bdUnitSyntaxProvider.Tag>();
+        public Parser _parser;
+        private Timer _timer;
+        public string FileName;
+        public Guid Id;
+        public bool IsSaved;
+        private bool IsUpdating;
         private TextPointer ErrorPoint { get; set; }
         private double ErrorVerticalOffset { get; set; }
         private bool BackgroundThreadIsRunning { get; set; }
         private DateTime LastUpdated { get; set; }
         private UnitTestFrameworkEnum CurrentFramework { get; set; }
-        private Timer _timer;
         public int CurrentTabIndex { get; set; }
         public string FilePath { get; set; }
-        List<bdUnitSyntaxProvider.Tag> m_tags = new List<bdUnitSyntaxProvider.Tag>();
-        private bool IsUpdating;
-        public bool IsSaved;
-        public Guid Id;
-        public string FileName;
-        public Parser _parser;
 
         private static Scintilla ScintillaEditor
         {
             get
             {
-                var sciEditor = new Scintilla { Name = "sciEditor", AcceptsReturn = true, AcceptsTab = true, Encoding = Encoding.UTF8 };
-                sciEditor.ConfigurationManager.Language = "cs";
-                sciEditor.LineWrap.Mode = WrapMode.None;
+                var sciEditor = new Scintilla
+                                    {
+                                        Name = "sciEditor",
+                                        AcceptsReturn = true,
+                                        AcceptsTab = true,
+                                        Encoding = Encoding.UTF8,
+                                        ConfigurationManager = {Language = "cs"},
+                                        LineWrap = {Mode = WrapMode.None}
+                                    };
                 return sciEditor;
             }
         }
@@ -112,14 +118,14 @@ namespace bdUnit.Preview.Controls
 
         private void EventBus_FrameworkChecked(object sender, EventArgs e)
         {
-            var menu = (MenuToolbar)sender;
+            var menu = (MenuToolbar) sender;
             if (menu != null)
             {
                 CurrentFramework = menu.CurrentFramework;
             }
         }
 
-        void ErrorOutput_MouseLeave(object sender, MouseEventArgs e)
+        private void ErrorOutput_MouseLeave(object sender, MouseEventArgs e)
         {
             if (ErrorVerticalOffset != -1)
             {
@@ -128,7 +134,7 @@ namespace bdUnit.Preview.Controls
             }
         }
 
-        void ErrorOutput_MouseEnter(object sender, MouseEventArgs e)
+        private void ErrorOutput_MouseEnter(object sender, MouseEventArgs e)
         {
             if (ErrorVerticalOffset != -1)
             {
@@ -137,7 +143,7 @@ namespace bdUnit.Preview.Controls
             }
         }
 
-        void ErrorOutput_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void ErrorOutput_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (ErrorVerticalOffset != -1)
             {
@@ -149,19 +155,19 @@ namespace bdUnit.Preview.Controls
         public void InputEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
             IsSaved = false;
-            EventBus.TextChanged(this, new TargetEventArgs { TargetId = Id });
+            EventBus.TextChanged(this, new TargetEventArgs {TargetId = Id});
             _timer.Stop();
             _timer.Interval = 400;
             _timer.Elapsed += _timer_Elapsed;
             _timer.Start();
         }
 
-        void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _timer.Stop();
             _timer.Elapsed -= _timer_Elapsed;
             InputEditor.TextChanged -= InputEditor_TextChanged;
-            
+
             if (!BackgroundThreadIsRunning && !IsUpdating)
             {
                 BackgroundThreadIsRunning = true;
@@ -175,7 +181,7 @@ namespace bdUnit.Preview.Controls
 
         #region Methods
 
-        void Load()
+        private void Load()
         {
             LoadEditor();
             _timer = new Timer();
@@ -219,14 +225,14 @@ namespace bdUnit.Preview.Controls
                 var context = navigator.GetPointerContext(LogicalDirection.Backward);
                 if (context == TextPointerContext.ElementStart && navigator.Parent is Run)
                 {
-                    CheckWordsInRun((Run)navigator.Parent);
+                    CheckWordsInRun((Run) navigator.Parent);
                 }
                 navigator = navigator.GetNextContextPosition(LogicalDirection.Forward);
             }
             Format();
         }
 
-        void Format()
+        private void Format()
         {
             for (var i = 0; i < m_tags.Count; i++)
             {
@@ -238,7 +244,7 @@ namespace bdUnit.Preview.Controls
             m_tags.Clear();
         }
 
-        void CheckWordsInRun(Run run)
+        private void CheckWordsInRun(Run run)
         {
             var text = run.Text;
 
@@ -248,7 +254,8 @@ namespace bdUnit.Preview.Controls
             {
                 if (Char.IsWhiteSpace(text[i]) | bdUnitSyntaxProvider.GetSpecials.Contains(text[i]))
                 {
-                    if (i > 0 && !(Char.IsWhiteSpace(text[i - 1]) | bdUnitSyntaxProvider.GetSpecials.Contains(text[i - 1])))
+                    if (i > 0 &&
+                        !(Char.IsWhiteSpace(text[i - 1]) | bdUnitSyntaxProvider.GetSpecials.Contains(text[i - 1])))
                     {
                         if (text.Contains("//"))
                         {
@@ -279,7 +286,8 @@ namespace bdUnit.Preview.Controls
             {
                 var t = new bdUnitSyntaxProvider.Tag();
                 t.StartPosition = run.ContentStart.GetPositionAtOffset(sIndex, LogicalDirection.Forward);
-                t.EndPosition = run.ContentStart.GetPositionAtOffset(eIndex + lastWord.Length + 2, LogicalDirection.Backward);
+                t.EndPosition = run.ContentStart.GetPositionAtOffset(eIndex + lastWord.Length + 2,
+                                                                     LogicalDirection.Backward);
                 t.Word = lastWord;
                 m_tags.Add(t);
             }
@@ -332,7 +340,7 @@ namespace bdUnit.Preview.Controls
                                 var errorRange = new TextRange(errorStartPoint, errorEndPoint);
                                 errorRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.DimGray);
                                 ErrorPoint = errorEndPoint;
-                                ErrorVerticalOffset = (ex.Location.Span.Start.Line + 5) * InputEditor.Document.LineHeight;
+                                ErrorVerticalOffset = (ex.Location.Span.Start.Line + 5)*InputEditor.Document.LineHeight;
                             }
                         }
                     }
@@ -341,7 +349,8 @@ namespace bdUnit.Preview.Controls
                 }
                 finally
                 {
-                    var host = (Preview.Content as WindowsFormsHost) ?? new WindowsFormsHost { Child = ScintillaEditor };
+                    var host = (Preview.Content as WindowsFormsHost) ??
+                                            new WindowsFormsHost {Child = ScintillaEditor};
                     var sciEditor = host.Child as Scintilla;
                     if (sciEditor != null)
                     {
@@ -367,7 +376,6 @@ namespace bdUnit.Preview.Controls
             }
             catch (Exception)
             {
-                
             }
         }
 
