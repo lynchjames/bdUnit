@@ -21,14 +21,19 @@ namespace bdUnit.Core.Utility
             propertyInfo.SetValue(obj, value, null);
         }
 
-        public static string GetResource(string resourceName)
+        public static string GetResource(this string resourceName)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            TextReader textReader = new StreamReader(assembly.GetManifestResourceStream(resourceName));
-            var result = textReader.ReadToEnd();
-            textReader.Close();
+            var resource = assembly.GetManifestResourceStream(resourceName);
+            if (resource != null)
+            {
+                TextReader textReader = new StreamReader(resource);
+                var result = textReader.ReadToEnd();
+                textReader.Close();
 
-            return result;
+                return result;
+            }
+            return string.Empty;
         }
     }
 }

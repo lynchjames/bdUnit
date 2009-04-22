@@ -113,8 +113,8 @@
     <Compile Include="Code Generation\Generators\PropertyGenerator.cs" />
     <Compile Include="Code Generation\ICodeGenerator.cs" />
     <Compile Include="Code Generation\MbUnitCodeGenerator.cs" />
-    <Compile Include="Code Generation\NVelocity\NVelocityInitializer.cs" />
-    <None Include="Code Generation\NVelocity\Templates\StructureMapInstance.vm" />
+    <Compile Include="Code Generation\NVelocity\NVelocityConfig.cs" />
+    <EmbeddedResource Include="Code Generation\NVelocity\Templates\StructureMapInstance.vm" />
     <Compile Include="Code Generation\NVelocity\TemplateEnum.cs" />
     <Compile Include="Code Generation\XUnitCodeGenerator.cs" />
     <Compile Include="DllBuilder.cs" />

@@ -17,7 +17,7 @@ namespace bdUnit.Core.Extensions
     public static string ToTemplatedString(this VelocityContext context, TemplateEnum templateName)
     {
       var writer = new StringWriter();
-      var template = NVelocityInitializer.GetTemplate(templateName);
+      var template = NVelocityConfig.GetTemplate(templateName);
       template.Merge(context, writer);
       return writer.GetStringBuilder().ToString();
     }
