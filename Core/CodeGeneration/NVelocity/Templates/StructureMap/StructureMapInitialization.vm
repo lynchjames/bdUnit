@@ -1,0 +1,24 @@
+using System;
+using StructureMap;
+
+namespace bdUnit.Tests
+{
+    public static class StructureMapInitializer
+    {
+        private static bool IsConfigured { get; set; }
+    
+        public static void Initialize()
+        {
+            if(IsConfigured) return;
+            ObjectFactory.Initialize(
+            x => x.Scan(scanner =>
+            {
+                var location = AppDomain.CurrentDomain.BaseDirectory;
+                scanner.AssembliesFromPath(location);
+                scanner.WithDefaultConventions();
+            }));
+            
+            IsConfigured = true;
+        }
+    }
+}

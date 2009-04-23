@@ -41,5 +41,11 @@ namespace bdUnit.Core.Extensions
             context.Put(placeHolderName, text);
             return NVelocityConfig.MergeTemplate(context, template);
         }
+
+        public static string GetNVelocityTemplate(TemplateEnum template)
+        {
+            var context = new VelocityContext();
+            return NVelocityConfig.MergeTemplate(context, template);
+        }
     }
 }

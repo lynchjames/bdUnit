@@ -43,7 +43,7 @@ namespace bdUnit.Core
         {
             var stringBuilder = new StringBuilder();
             var count = tests.Count;
-            var testFixture = "";
+            var templateInputs = new Dictionary<string, object>();
             for (var i = 0; i < count; i++)
             {
                 stringBuilder.Append(GenerateTest(tests[i], "", AccessEnum.@public));
@@ -56,16 +56,18 @@ namespace bdUnit.Core
                     {
                         interfaceText.Append(_interfaceGenerator.Generate(typeList[j]));
                     }
-                    testFixture = interfaceText.ToString().AsNVelocityTemplate("interfaces", TestFixtureTemplate);
+                    templateInputs.Add("interfaces", interfaceText.ToString());
                 }
                 else
                 {
-                    testFixture = string.Empty.AsNVelocityTemplate("interfaces", TestFixtureTemplate);
+                    templateInputs.Add("interfaces", string.Empty);
                 }
             }
-            testFixture = testFixture.Replace("##fixturename##", tests[0].Title);
-            testFixture = testFixture.Replace("##tests##", stringBuilder.ToString());
-            return testFixture;
+            //testFixture = testFixture.Replace("##fixturename##", tests[0].Title);
+            //testFixture = testFixture.Replace("##tests##", stringBuilder.ToString());
+            templateInputs.Add("testTitle", tests[0].Title);
+            templateInputs.Add("tests", stringBuilder.ToString());
+            return templateInputs.AsNVelocityTemplate(TestFixtureTemplate);
         }
 
         public string GenerateTest(Test test, string path, AccessEnum access)

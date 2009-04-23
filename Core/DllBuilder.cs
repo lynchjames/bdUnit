@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using bdUnit.Core.Enum;
+using bdUnit.Core.Extensions;
+using bdUnit.Core.Templates;
 using Microsoft.CSharp;
 
 #endregion
@@ -66,21 +68,23 @@ namespace bdUnit.Core
                 }
                 return "Successfully Generated Dll";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return "One or more documents could not be parsed. Please check and try again.";
+                throw ex;
+                return "One or more documents could not be parsed. Please check and try again. Exception: " + ex.Message;
             }
         }
 
         private string[] GetSource(string[] filePaths, UnitTestFrameworkEnum framework)
         {
-            var source = new string[filePaths.Length];
+            var source = new List<string>();
             for (var i = 0; i < filePaths.Length; i++)
             {
                 _parser.Input = File.ReadAllText(filePaths[i]);
-                source[i] = _parser.Parse(framework);
+                source.Add(_parser.Parse(framework));
             }
-            return source;
+            source.Add(NVelocityCodeGenerationExtensions.GetNVelocityTemplate(TemplateEnum.StructureMapInitialization)));
+            return source.ToArray();
         }
     }
 }

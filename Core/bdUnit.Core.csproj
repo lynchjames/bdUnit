@@ -111,7 +111,7 @@
     <Compile Include="CodeGeneration\ICodeGenerator.cs" />
     <Compile Include="CodeGeneration\MbUnitCodeGenerator.cs" />
     <Compile Include="CodeGeneration\NVelocity\NVelocityConfig.cs" />
-    <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\StructureMapInstance.vm" />
+    <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\StructureMap\StructureMapInstance.vm" />
     <Compile Include="CodeGeneration\NVelocity\TemplateEnum.cs" />
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\NUnit\NUnitTestFixture.vm" />
     <Compile Include="CodeGeneration\XUnitCodeGenerator.cs" />
@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ASTDiagram.cd" />
+    <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\StructureMap\StructureMapInitialization.vm" />
     <None Include="Inputs\ANewExample.bdunit" />
     <None Include="Inputs\ExampleStory.bdunit" />
     <None Include="Inputs\LogansRun.bdunit" />

@@ -19,6 +19,11 @@ namespace MyNewDomain
         {
         }
 
+        public void Locate()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Find()
         {
             
@@ -33,8 +38,27 @@ namespace MyNewDomain
                 _name = value;
                 this.IsDead = true;
             } }
+
+        public bool IsActive
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         public bool IsARunner { get; set; }
         public int Age { get; set; }
+        int IUser.CreatedDate
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public ILocation Location
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
         public bool IsDead { get; set; }
         public DateTime CreatedDate { get; set; }
         public IList<IUser> Children { get; set; }

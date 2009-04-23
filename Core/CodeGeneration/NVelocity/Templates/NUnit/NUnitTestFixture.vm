@@ -12,15 +12,20 @@ using System;
 
 namespace bdUnit.Interfaces 
 {
-		$interfaces
+	$interfaces
 }
 
 namespace bdUnit.Tests 
 {
-		[TestFixture]
-		public class ##fixturename##
+	[TestFixture]
+	public class $testTitle
+	{
+	    [TestFixtureSetUp]
+		public void Setup()
 		{
-				$structuremap
-				$tests
+			StructureMapInitializer.Initialize();
 		}
+		
+		$tests
+	}
 }

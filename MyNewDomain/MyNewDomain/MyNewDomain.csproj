@@ -51,6 +51,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Library\NUnit\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap, Version=2.5.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Library\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -84,6 +88,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)\Library\NUnit\nunit.exe $(TargetDir)bdunit_NUnit.dll /run</PostBuildEvent>
+    <PostBuildEvent>C:\Development\bdUnit\Library\NUnit\nunit.exe $(TargetDir)bdunit_NUnit.dll /run</PostBuildEvent>
   </PropertyGroup>
 </Project>
