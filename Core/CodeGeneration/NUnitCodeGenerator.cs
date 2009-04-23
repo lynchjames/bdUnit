@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using bdUnit.Core.AST;
+using bdUnit.Core.Templates;
 
 #endregion
 
@@ -42,7 +43,7 @@ namespace bdUnit.Core
 
         public string GenerateTestFixture(List<Test> tests, string fileName)
         {
-            var generator = new CodeGenerator(TestFixtureText, TestText, MethodText, PropertyText, TypeText,
+            var generator = new CodeGenerator(TemplateEnum.NUnitTestFixture, TestText, MethodText, PropertyText, TypeText,
                                               AssertText);
             var code = generator.GenerateTestFixture(tests, fileName);
             generator = null;

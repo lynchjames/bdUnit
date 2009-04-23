@@ -113,6 +113,7 @@
     <Compile Include="CodeGeneration\NVelocity\NVelocityConfig.cs" />
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\StructureMapInstance.vm" />
     <Compile Include="CodeGeneration\NVelocity\TemplateEnum.cs" />
+    <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\NUnit\NUnitTestFixture.vm" />
     <Compile Include="CodeGeneration\XUnitCodeGenerator.cs" />
     <Compile Include="DllBuilder.cs" />
     <Compile Include="Enum\OperatorEnum.cs" />
@@ -158,9 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\DateTimeVariable.vm" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CodeGeneration\NVelocity\Templates\NUnit\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

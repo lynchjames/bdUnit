@@ -3,6 +3,9 @@ namespace bdUnit.Core.Templates
     public enum TemplateEnum
     {
         StructureMapInstance,
-        DateTimeVariable
+        DateTimeVariable,
+        NUnitTestFixture,
+        XUnitTestFixture,
+        MbUnitTestFixture
     }
 }

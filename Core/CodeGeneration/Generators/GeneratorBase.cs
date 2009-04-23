@@ -1,6 +1,7 @@
 #region Using Statements
 
 using bdUnit.Core.Enum;
+using bdUnit.Core.Templates;
 
 #endregion
 
@@ -13,7 +14,7 @@ namespace bdUnit.Core.Generators
         public string AssertText;
         public string MethodText;
         public string PropertyText;
-        public string TestFixtureText;
+        public TemplateEnum TestFixtureTemplate;
         public string TestText;
         public string TypeText;
         public AccessEnum Access { get; set; }

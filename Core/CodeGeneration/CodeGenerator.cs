@@ -5,6 +5,8 @@ using System.Text;
 using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
 using bdUnit.Core.Generators;
+using bdUnit.Core.Extensions;
+using bdUnit.Core.Templates;
 
 #endregion
 
@@ -18,11 +20,11 @@ namespace bdUnit.Core
         public IInterfaceGenerator _interfaceGenerator;
         public IMethodGenerator _methodGenerator;
 
-        public CodeGenerator(string fixtureText, string testText, string methodText, string propertyText,
+        public CodeGenerator(TemplateEnum fixtureTemplate, string testText, string methodText, string propertyText,
                              string typeText, string assertText)
         {
             var access = AccessEnum.@public;
-            TestFixtureText = fixtureText;
+            TestFixtureTemplate = fixtureTemplate;
             TestText = testText;
             MethodText = methodText;
             PropertyText = propertyText;
@@ -54,11 +56,11 @@ namespace bdUnit.Core
                     {
                         interfaceText.Append(_interfaceGenerator.Generate(typeList[j]));
                     }
-                    testFixture = TestFixtureText.Replace("##interfaces##", interfaceText.ToString());
+                    testFixture = interfaceText.ToString().AsNVelocityTemplate("interfaces", TestFixtureTemplate);
                 }
                 else
                 {
-                    testFixture = TestFixtureText.Replace("##interfaces##", "");
+                    testFixture = string.Empty.AsNVelocityTemplate("interfaces", TestFixtureTemplate);
                 }
             }
             testFixture = testFixture.Replace("##fixturename##", tests[0].Title);

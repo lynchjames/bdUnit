@@ -1,0 +1,26 @@
+#region Using Statements
+
+using System.Collections.Generic;
+using System.Diagnostics;
+using bdUnit.Interfaces;
+using NUnit.Framework;
+using Rhino.Mocks;
+using StructureMap;
+using System;
+
+#endregion
+
+namespace bdUnit.Interfaces 
+{
+		$interfaces
+}
+
+namespace bdUnit.Tests 
+{
+		[TestFixture]
+		public class ##fixturename##
+		{
+				$structuremap
+				$tests
+		}
+}

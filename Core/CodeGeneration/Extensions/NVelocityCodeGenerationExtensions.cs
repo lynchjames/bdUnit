@@ -1,11 +1,9 @@
 #region Using Statements
 
 using System.Collections.Generic;
-using System.IO;
 using bdUnit.Core.AST;
 using bdUnit.Core.Templates;
 using NVelocity;
-using NVelocity.Context;
 
 #endregion
 
@@ -17,14 +15,14 @@ namespace bdUnit.Core.Extensions
         {
             var context = new VelocityContext();
             context.Put("concreteClass", @class);
-            return context.ToTemplatedString(template);
+            return NVelocityConfig.MergeTemplate(context, template);
         }
 
         public static string AsNVelocityTemplate(this TargetProperty property, TemplateEnum template)
         {
             var context = new VelocityContext();
             context.Put("property", property);
-            return context.ToTemplatedString(template);
+            return NVelocityConfig.MergeTemplate(context, template);
         }
 
         public static string AsNVelocityTemplate(this Dictionary<string, object> inputs, TemplateEnum template)
@@ -34,15 +32,14 @@ namespace bdUnit.Core.Extensions
             {
                 context.Put(input.Key, input.Value);
             }
-            return context.ToTemplatedString(template);
+            return NVelocityConfig.MergeTemplate(context, template);
         }
 
-        private static string ToTemplatedString(this IContext context, TemplateEnum templateName)
+        public static string AsNVelocityTemplate(this string text, string placeHolderName, TemplateEnum template)
         {
-            var writer = new StringWriter();
-            var template = NVelocityConfig.GetTemplate(templateName);
-            template.Merge(context, writer);
-            return writer.GetStringBuilder().ToString();
+            var context = new VelocityContext();
+            context.Put(placeHolderName, text);
+            return NVelocityConfig.MergeTemplate(context, template);
         }
     }
 }

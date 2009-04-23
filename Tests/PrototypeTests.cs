@@ -257,7 +257,7 @@ module Test
         public void LogansRun_WithFile()
         {
             var paths = new Dictionary<string, string>();
-            paths["input"] = "../../../Core/Inputs/LogansRun.input";
+            paths["input"] = "../../../Core/Inputs/LogansRun.bdunit";
             paths["grammar"] = "../../../Core/Grammar/TestWrapper.mg";
             var parser = new Parser(paths);
             parser.DoWork();

@@ -1,7 +1,9 @@
 #region Using Statements
 
+using System.IO;
 using NVelocity;
 using NVelocity.App;
+using NVelocity.Context;
 
 #endregion
 
@@ -35,6 +37,14 @@ namespace bdUnit.Core.Templates
                 }
             }
             return null;
+        }
+
+        public static string MergeTemplate(IContext context, TemplateEnum templateName)
+        {
+            var writer = new StringWriter();
+            var template = GetTemplate(templateName);
+            template.Merge(context, writer);
+            return writer.GetStringBuilder().ToString();
         }
     }
 }
