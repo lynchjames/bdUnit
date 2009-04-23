@@ -28,7 +28,7 @@ namespace bdUnit.Core.Templates
             for (var i = 0; i < count; i++)
             {
                 var folder = TemplateResourceLocations[i];
-                var location = string.Format("bdUnit.Core.CodeGeneration.NVelocity.Templates.{0}.{1}.vm", folder, template);
+                var location = string.Format("bdUnit.Core.CodeGeneration.NVelocity.{0}.{1}.vm", folder, template);
                 if (velocity.TemplateExists(location))
                 {
                     return velocity.GetTemplate(location);
