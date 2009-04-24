@@ -83,7 +83,8 @@ namespace bdUnit.Core
                 _parser.Input = File.ReadAllText(filePaths[i]);
                 source.Add(_parser.Parse(framework));
             }
-            source.Add(NVelocityCodeGenerationExtensions.GetNVelocityTemplate(TemplateEnum.StructureMapInitialization)));
+            source.Add(NVelocityCodeGenerationExtensions.GetNVelocityTemplate(TemplateEnum.StructureMapInitialization));
+            
             return source.ToArray();
         }
     }
