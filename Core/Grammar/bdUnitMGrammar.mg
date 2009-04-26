@@ -129,9 +129,7 @@ module Test
             | "if" tl:TargetList "then" c:Asserts.Constraints "else" c2:Asserts.Constraints
             => If{tl, Then{c}, Else{c2}}
             | "if" tl:TargetList "then" c:Asserts.Constraints "else" if:IfStatement
-            => If{tl, Then{c}, Else{if}}
-            | "if" tl:TargetList "then" c:Asserts.Constraints "else" c:Asserts.Constraints
-            => If{tl, Then{c}, Else{c}};         
+            => If{tl, Then{c}, Else{if}};
 
         syntax TargetList
             = item:Target (Connectives.TAnd | "," | ", the")?
