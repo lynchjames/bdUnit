@@ -4,25 +4,22 @@
 
 #region Using Statements
 
+using System;
 using System.Collections.Generic;
 
 #endregion
 
 namespace bdUnit.Core.AST
 {
-    public class When : IStatement
+    public class If : IStatement
     {
-        public When()
+        public If()
         {
-            Loop = new Loop();
             TargetList = new List<Target>();
-            Constraints = new List<Constraint>();
-
         }
 
-        public Loop Loop { get; set; }
-        public If If { get; set; }
         public List<Target> TargetList { get; set; }
-        public List<Constraint> Constraints { get; set; }
+        public Then Then { get; set; }
+        public Else Else { get; set; }
     }
 }

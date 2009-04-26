@@ -1,0 +1,12 @@
+﻿if ($condition)
+{
+    $constraints
+}
+#if(isNested)
+#if($nestedif != null)
+else $nestedIf
+#else
+else 
+{
+    $elseConstraints
+}

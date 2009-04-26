@@ -17,7 +17,7 @@ namespace bdUnit.Core.Generators
 
     public class MethodGenerator : GeneratorBase, IMethodGenerator
     {
-        private readonly AssertGenerator _assertGenerator;
+        private readonly IAssertGenerator _assertGenerator;
 
         public MethodGenerator(IAssertGenerator assertGenerator, string testText)
         {
@@ -166,7 +166,7 @@ namespace bdUnit.Core.Generators
             var obj = objects[0];
             var otherObj = objects[1];
             variables.Append(obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
-            variables.Append(string.Format(otherObj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance)));
+            variables.Append(otherObj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));
             var methodUsage = string.Format("\t\t\t{0}.{1}({2});\n", obj.Instance.Value, target.Name,
                                                otherObj.Instance.Value);
 

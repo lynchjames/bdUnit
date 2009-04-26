@@ -8,7 +8,7 @@ namespace bdUnit.Core.AST
     {
         public ConcreteClass()
         {
-            Instance = new Instance();
+            //Instance = new Instance();
         }
 
         public string Name { get; set; }

@@ -7,6 +7,8 @@ namespace bdUnit.Core.Templates
         DateTimeVariable,
         NUnitTestFixture,
         XUnitTestFixture,
-        MbUnitTestFixture
+        MbUnitTestFixture,
+        IfStatement,
+        IfElseStatement
     }
 }

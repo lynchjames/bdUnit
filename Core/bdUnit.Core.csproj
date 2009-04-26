@@ -98,12 +98,17 @@
     <Compile Include="AST\Objects\Operator.cs" />
     <Compile Include="AST\Target\Target.cs" />
     <Compile Include="AST\Target\TargetProperty.cs" />
+    <Compile Include="AST\Test\Then.cs" />
+    <Compile Include="AST\Test\Else.cs" />
+    <Compile Include="AST\Test\If.cs" />
     <Compile Include="AST\Test\Type.cs" />
     <Compile Include="AST\Objects\ConcreteClass.cs" />
     <Compile Include="CodeGeneration\CodeGenerator.cs" />
     <Compile Include="CodeGeneration\Extensions\NVelocityCodeGenerationExtensions.cs" />
     <Compile Include="CodeGeneration\Generators\AssertGenerator.cs" />
+    <Compile Include="CodeGeneration\Generators\BooleanGenerator.cs" />
     <Compile Include="CodeGeneration\Generators\GeneratorBase.cs" />
+    <Compile Include="CodeGeneration\Generators\IfStatementGenerator.cs" />
     <Compile Include="CodeGeneration\Generators\InterfaceGenerator.cs" />
     <Compile Include="CodeGeneration\Generators\MethodGenerator.cs" />
     <Compile Include="CodeGeneration\Generators\MethodSignatureGenerator.cs" />
@@ -153,6 +158,8 @@
   <ItemGroup>
     <None Include="ASTDiagram.cd" />
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\StructureMap\StructureMapInitialization.vm" />
+    <None Include="CodeGeneration\NVelocity\Templates\IfElseStatement.vm" />
+    <None Include="CodeGeneration\NVelocity\Templates\IfStatement.vm" />
     <None Include="Inputs\ANewExample.bdunit" />
     <None Include="Inputs\ExampleStory.bdunit" />
     <None Include="Inputs\LogansRun.bdunit" />

@@ -1,10 +1,10 @@
-begin story "LogansRun":
+﻿begin story "LogansRun":
 
     begin setup 
         @User to have a ~Spouse(@User) 
             and a ~Name
             and an ~UnMarried(true)
-	    and an ~IsDead(false)
+            and an ~IsDead(false)
             and an ~Age(0)
             and a ~CreatedDate("01/01/1700")
             and a ~Location(@Location)
@@ -16,7 +16,7 @@ begin story "LogansRun":
             I want to be able to #Locate @User ~Location
             //I want a @User to be able to #Visit a @SleepShop with ~CreatedDate("01/01/1982") and ~Referrer("Bad Man")
             I want to be able to #Find all @User
-        @SleepShop to have a ~Location(@Location)
+        @SleepShop to have a ~Location(@Location) 
             and an ~IsOpen(true) 
             I want to be able to #Find @SleepShop ~Location
         @Location to have a ~Latitude(0.0)
@@ -30,10 +30,20 @@ begin story "LogansRun":
         each @User should have ~Spouse as the other @User 
         and should have ~UnMarried as (false) 
         and should have ~Age less than (21)
+        
     When a @User(user) ~Name is ("Logan"), 
         @User(user) should have ~IsDead as (true)
-	and @User(user) ~Name should contain ("Log")
-	and @User(user) ~CreatedDate should be earlier than ("22/04/2010")
-	and @User(user) should have less than 3 ~Children
+	    and @User(user) ~Name should contain ("Log")
+	    and @User(user) ~CreatedDate should be earlier than ("22/04/2010")
+	    and @User(user) should have less than 3 ~Children
+    
+    When a @User(user) ~Name is ("Logan"),
+        if @User(user) ~CreatedDate is ("22/04/2010")
+            then @User(user) should have ~IsDead as (true)
+        	     and @User(user) ~Name should contain ("Log")
+        else 
+            if @User(user) ~CreatedDate is ("22/04/2010")
+                then @User(user) should have less than 3 ~Children   
+            else @User(user) should have more than 3 ~Children
 
 end story

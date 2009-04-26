@@ -14,7 +14,7 @@ namespace bdUnit.Core.AST
         {
             ConcreteClasses = new List<ConcreteClass>();
             Operators = new List<Operator>();
-            DefaultValue = new DefaultValue();
+            //DefaultValue = new DefaultValue();
         }
 
         #region IProperty Members
@@ -24,6 +24,7 @@ namespace bdUnit.Core.AST
         public DefaultValue DefaultValue { get; set; }
         public List<Operator> Operators { get; set; }
         public string Relation { get; set; }
+        public Count Count { get; set; }
 
         public RelationQualifiedEnum GetRelationQualifiedEnum()
         {

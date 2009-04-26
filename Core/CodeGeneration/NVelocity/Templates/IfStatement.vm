@@ -1,0 +1,4 @@
+﻿if ($condition)
+{
+    $constraints
+}

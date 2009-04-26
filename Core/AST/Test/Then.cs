@@ -10,19 +10,13 @@ using System.Collections.Generic;
 
 namespace bdUnit.Core.AST
 {
-    public class When : IStatement
+    public class Then : IStatement
     {
-        public When()
+        public Then()
         {
-            Loop = new Loop();
-            TargetList = new List<Target>();
             Constraints = new List<Constraint>();
-
         }
 
-        public Loop Loop { get; set; }
-        public If If { get; set; }
-        public List<Target> TargetList { get; set; }
         public List<Constraint> Constraints { get; set; }
     }
 }

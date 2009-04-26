@@ -14,7 +14,6 @@ namespace bdUnit.Core.AST
     {
         public Constraint()
         {
-            Property = new Property();
             ConcreteClasses = new List<ConcreteClass>();
             Operators = new List<Operator>();
         }
