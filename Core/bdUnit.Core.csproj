@@ -160,6 +160,7 @@
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\StructureMap\StructureMapInitialization.vm" />
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\IfElseStatement.vm" />
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\IfStatement.vm" />
+    <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\NUnit\NUnitTest.vm" />
     <None Include="Inputs\LogansRun.bdunit" />
   </ItemGroup>
   <ItemGroup>

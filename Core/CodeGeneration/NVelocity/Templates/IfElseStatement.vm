@@ -1,12 +1,12 @@
 ﻿            if ($condition)
             {
-                $constraints
+    $constraints
             }
 #if($isNested && $hasNestedIf)
             else $nestedIf
 #elseif($isNested)
             else
             {
-                $elseConstraints
+    $elseConstraints
             }
 #end

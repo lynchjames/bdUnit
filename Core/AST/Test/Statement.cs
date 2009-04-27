@@ -10,10 +10,5 @@ namespace bdUnit.Core.AST
     {
         public CreateMethod CreateMethod { get; set; }
         public When When { get; set; }
-
-        public void Print()
-        {
-            Debug.WriteLine("\tI am Statement");
-        }
     }
 }

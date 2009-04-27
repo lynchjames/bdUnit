@@ -1,7 +1,9 @@
 ﻿#region Using Statements
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using bdUnit.Core;
+using bdUnit.Core.Enum;
 using NUnit.Framework;
 
 #endregion
@@ -260,7 +262,7 @@ module Test
             paths["input"] = "../../../Core/Inputs/LogansRun.bdunit";
             paths["grammar"] = "../../../Core/Grammar/TestWrapper.mg";
             var parser = new Parser(paths);
-            parser.DoWork();
+            Debug.Write(parser.Parse(UnitTestFrameworkEnum.NUnit));
         }
 
         [Test]

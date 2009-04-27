@@ -186,11 +186,11 @@ module Test
         token TProperty = "to have " ("a"|"an") " ";
         token TEqual = " of " | "equal to " | " as " | " is ";
         token TContains = " contain" "s"?;
-        token TNotContains = " not contain";
-        token TGreater = " greater than " | " later than " | " more than ";
-        token TGreaterOrEqual = " greater than or" TEqual;
-        token TLesser = " less than " | " earlier than ";
-        token TLesserOrEqual = " less than or" TEqual;
+        token TNotContains = "does"? " not contain";
+        token TGreater = (" is"?) (" greater than " | " later than " | " more than ");
+        token TGreaterOrEqual = (" is"?) (" greater than or" TEqual);
+        token TLesser = (" is"?) (" less than " | " earlier than ");
+        token TLesserOrEqual = (" is"?) (" less than or" TEqual);
         token TWhen = ("W"|"w")("hen " | "hen I " | "hen I" | "hen a ");
         
         token TResult = " the result ";

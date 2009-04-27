@@ -48,18 +48,19 @@ namespace bdUnit.Core.Generators
                         var target = whenStatement.TargetList[0];
                         if (target.TargetProperty != null)
                         {
-                            stringBuilder = GenerateForTargetProperty(target.TargetProperty, stringBuilder);
+                            GenerateForTargetProperty(target.TargetProperty, ref stringBuilder);
                         }
                         else
                         {
                             var variables = new StringBuilder();
-                            stringBuilder = GenerateForTargetMethod(target.TargetMethod, variables, whenStatement,
-                                                                    stringBuilder);
+                            GenerateForTargetMethod(target.TargetMethod, variables,
+                                                                    ref stringBuilder);
                         }
                     }
                     if (whenStatement.If != null)
                     {
-                        stringBuilder.AppendLine(_ifGenerator.GenerateRecursive(whenStatement.If));
+                        var text = _ifGenerator.GenerateRecursive(whenStatement.If, ref stringBuilder);
+                        stringBuilder.AppendLine(text.Replace("else             if", "else if"));
                     }
                     else
                     {
@@ -156,7 +157,7 @@ namespace bdUnit.Core.Generators
         }
 
         //TODO Need to be able to test the returned object from a method?
-        private StringBuilder GenerateForTargetProperty(TargetProperty property, StringBuilder stringBuilder)
+        private void GenerateForTargetProperty(TargetProperty property, ref StringBuilder stringBuilder)
         {
             var obj = property.ConcreteClasses[0];
             var title = string.Format("When_{0}_{1}_Is_Set", obj.Name, property.Name);
@@ -166,11 +167,9 @@ namespace bdUnit.Core.Generators
             stringBuilder.AppendLine(string.Format("\t\t\t{0}.{1} {2} {3};", obj.Instance.Value, property.Name,
                                                    property.Operators[0].Value.Replace("==", "="), property.Value));
             //stringBuilder.Append(Generate(property));
-            return stringBuilder;
         }
 
-        private StringBuilder GenerateForTargetMethod(ITarget target, StringBuilder variables, When whenStatement,
-                                                      StringBuilder stringBuilder)
+        private void GenerateForTargetMethod(ITarget target, StringBuilder variables, ref StringBuilder stringBuilder)
         {
             var objects = target.ConcreteClasses;
             var obj = objects[0];
@@ -185,7 +184,7 @@ namespace bdUnit.Core.Generators
             stringBuilder.AppendLine(TestText.Replace("##testname##", title));
             stringBuilder.AppendLine("\t\t{");
             stringBuilder.Append(variables).Append(methodUsage);
-            return stringBuilder;
+            return;
         }
     }
 }

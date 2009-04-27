@@ -6,6 +6,7 @@ namespace bdUnit.Core.Templates
         StructureMapInitialization,
         DateTimeVariable,
         NUnitTestFixture,
+        NUnitTest,
         XUnitTestFixture,
         MbUnitTestFixture,
         IfStatement,

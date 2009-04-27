@@ -12,11 +12,16 @@ using bdUnit.Core.Utility;
 
 namespace bdUnit.Core.Generators
 {
-    public class BooleanGenerator
+    public interface IBooleanGenerator
     {
-        private static int InstanceIdentifier = 20;
+        string Generate(List<Target> targets, ref StringBuilder stringBuilder);
+    }
 
-        public static string Generate(List<Target> targets)
+    public class BooleanGenerator : IBooleanGenerator
+    {
+        private int InstanceIdentifier = 20;
+
+        public string Generate(List<Target> targets, ref StringBuilder stringBuilder)
         {
             var text = new StringBuilder();
             var count = targets.Count;
@@ -49,7 +54,7 @@ namespace bdUnit.Core.Generators
                         var dateTimeStatement =
                             new Dictionary<string, object> { { "instance", dtInstance }, { "value", property.Value } }.
                                 AsNVelocityTemplate(TemplateEnum.DateTimeVariable);
-                        text.AppendLine(dateTimeStatement);
+                        stringBuilder.AppendLine(dateTimeStatement);
                         boolStatement = string.Format("{0}.{1} {2} {3}", _concreteClass.Instance.Value,
                                                property.Name, property.Operators[0].Value,
                                                dtInstance);
@@ -68,7 +73,8 @@ namespace bdUnit.Core.Generators
                                                property.Name, property.Operators[0].Value,
                                                property.Value);
                     }
-                    text.Append(" && " + boolStatement);
+                    boolStatement = count > 1 && i + 1 < count ? boolStatement + " && " : boolStatement;
+                    text.Append(boolStatement);
                 }
             }
             return text.ToString();

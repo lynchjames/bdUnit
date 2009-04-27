@@ -80,6 +80,8 @@ namespace bdUnit.Core
             var source = new List<string>();
             for (var i = 0; i < filePaths.Length; i++)
             {
+                if (filePaths[i] == null) continue;
+
                 _parser.Input = File.ReadAllText(filePaths[i]);
                 source.Add(_parser.Parse(framework));
             }

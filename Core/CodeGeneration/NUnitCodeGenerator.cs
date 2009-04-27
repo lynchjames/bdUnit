@@ -46,7 +46,6 @@ namespace bdUnit.Core
             var generator = new CodeGenerator(TemplateEnum.NUnitTestFixture, TestText, MethodText, PropertyText, TypeText,
                                               AssertText);
             var code = generator.GenerateTestFixture(tests, fileName);
-            generator = null;
             return code;
         }
     }

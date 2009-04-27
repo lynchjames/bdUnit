@@ -39,7 +39,7 @@ namespace bdUnit.Core
         private object DeserializeNode(object node)
         {
             var name = builder.GetLabel(node) as Identifier;
-            Debug.WriteLine(name);
+            //Debug.WriteLine(name);
 
             foreach (var child in builder.GetSuccessors(node))
             {
