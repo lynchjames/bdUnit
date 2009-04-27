@@ -6,7 +6,12 @@ using bdUnit.Core.Extensions;
 
 namespace bdUnit.Core.Generators
 {
-    public class IfStatementGenerator : GeneratorBase
+    public interface IIfStatementGenerator
+    {
+        string GenerateRecursive(If ifStatement);
+    }
+
+    public class IfStatementGenerator : GeneratorBase, IIfStatementGenerator
     {
         private readonly IAssertGenerator _assertGenerator;
 
@@ -15,7 +20,7 @@ namespace bdUnit.Core.Generators
             _assertGenerator = assertGenerator as AssertGenerator;
         }
 
-        public string Generate(If ifStatement)
+        public string GenerateRecursive(If ifStatement)
         {
             object nestedIf = null;
             if (ifStatement.Else == null)
@@ -26,7 +31,7 @@ namespace bdUnit.Core.Generators
             {
                 if (ifStatement.Else.If != null)
                 {
-                    nestedIf = Generate(ifStatement.Else.If);
+                    nestedIf = GenerateRecursive(ifStatement.Else.If);
                 }
                 return TemplateIfStatement(ifStatement, nestedIf, true);
             }
@@ -54,7 +59,8 @@ namespace bdUnit.Core.Generators
                                      {
                                          {"condition", conditionText},
                                          {"constraints", constraintText.ToString()},
-                                         {"nestedIf", nestedIfText.ToString()},
+                                         {"nestedIf", nestedIfText},
+                                         {"hasNestedIf", nestedIfText != null},
                                          {"isNested", isNested}
                                      };
             return templateParams.AsNVelocityTemplate(TemplateEnum.IfElseStatement);

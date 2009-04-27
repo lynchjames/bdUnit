@@ -1,12 +1,12 @@
-﻿if ($condition)
-{
-    $constraints
-}
-#if(isNested)
-#if($nestedif != null)
-else $nestedIf
-#else
-else 
-{
-    $elseConstraints
-}
+﻿            if ($condition)
+            {
+                $constraints
+            }
+#if($isNested && $hasNestedIf)
+            else $nestedIf
+#elseif($isNested)
+            else
+            {
+                $elseConstraints
+            }
+#end

@@ -18,10 +18,12 @@ namespace bdUnit.Core.Generators
     public class MethodGenerator : GeneratorBase, IMethodGenerator
     {
         private readonly IAssertGenerator _assertGenerator;
+        private readonly IIfStatementGenerator _ifGenerator;
 
         public MethodGenerator(IAssertGenerator assertGenerator, string testText)
         {
             _assertGenerator = assertGenerator as AssertGenerator;
+            _ifGenerator = new IfStatementGenerator(_assertGenerator);
             TestText = testText;
         }
 
@@ -55,7 +57,13 @@ namespace bdUnit.Core.Generators
                                                                     stringBuilder);
                         }
                     }
-                    (whenStatement.Constraints).ForEach(c =>
+                    if (whenStatement.If != null)
+                    {
+                        stringBuilder.AppendLine(_ifGenerator.GenerateRecursive(whenStatement.If));
+                    }
+                    else
+                    {
+                        whenStatement.Constraints.ForEach(c =>
                                                             {
                                                                 if (c.ConcreteClasses.Count > 0)
                                                                 {
@@ -72,6 +80,8 @@ namespace bdUnit.Core.Generators
                                                                             new List<Constraint> {c}));
                                                                 }
                                                             });
+                    }
+                    
                     _assertGenerator.GenerateForLoop(whenStatement, stringBuilder);
                     stringBuilder.AppendLine("\t\t}");
                 }

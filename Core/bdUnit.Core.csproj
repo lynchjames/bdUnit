@@ -158,12 +158,9 @@
   <ItemGroup>
     <None Include="ASTDiagram.cd" />
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\StructureMap\StructureMapInitialization.vm" />
-    <None Include="CodeGeneration\NVelocity\Templates\IfElseStatement.vm" />
-    <None Include="CodeGeneration\NVelocity\Templates\IfStatement.vm" />
-    <None Include="Inputs\ANewExample.bdunit" />
-    <None Include="Inputs\ExampleStory.bdunit" />
+    <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\IfElseStatement.vm" />
+    <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\IfStatement.vm" />
     <None Include="Inputs\LogansRun.bdunit" />
-    <None Include="Inputs\TMDirectoryExample.bdunit" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\DateTimeVariable.vm" />

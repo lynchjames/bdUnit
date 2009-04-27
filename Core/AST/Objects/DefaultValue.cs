@@ -4,7 +4,7 @@
     {
         public DefaultValue()
         {
-            //ConcreteClass = new ConcreteClass();
+            ConcreteClass = new ConcreteClass();
         }
 
         public string Value { get; set; }
