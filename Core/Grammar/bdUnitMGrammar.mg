@@ -198,11 +198,11 @@ module Test
         
         @{Classification["TestOperator"]} token TTest = "begin story ";
         @{Classification["TestOperator"]} token TEnd = "end story";
-        @{Classification["TestOperator"]} token TSetupStart = "begin setup ";
+        @{Classification["TestOperator"]} token TSetupStart = "begin setup";
         @{Classification["TestOperator"]} token TSetupEnd = "end setup";
         @{Classification["Type"]} token ConcreteClassId = '@' (Base.Letter|'-'|'_')+;
         @{Classification["Method"]} token MethodId = '#' (Base.Letter|'-'|'_')+;
-        @{Classification["Property"]} token PropertyId = '~' (Base.Letter|'-'|'_')+;
+        @{Classification["Property"]} token PropertyId = '~' (Base.Letter|'-'|'_'|Base.Digit)+;
         @{Classification["Value"]} token ValueId = (Base.Letter|'_'|Base.Digit|'.')+ | Common.SingleQuotedText;
         token CountId = Base.Digit+;
               
