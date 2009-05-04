@@ -104,7 +104,7 @@ namespace bdUnit.Core.Generators
                                      var obj = property.ConcreteClasses[0];
                                      if (!titleSet)
                                      {
-                                         var title = string.Format("When_{0}_Is_Set_...", property.Name);
+                                         var title = string.Format("When_{0}_Is_Set", property.Name);
                                          stringBuilder.AppendLine(TestText.Replace("##testname##", title));
                                          stringBuilder.AppendLine("\t\t{");
                                          titleSet = true;

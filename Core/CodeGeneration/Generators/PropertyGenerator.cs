@@ -31,7 +31,7 @@ namespace bdUnit.Core.Generators
             var stringBuilder = new StringBuilder();
             var count = properties.Count;
             for (var i = 0; i < count; i++)
-            {
+            { 
                 var property = properties[i];
                 var propertyText = "";
                 propertyText = PropertyText.Replace("##accesslevel##", Access.ToString());
@@ -67,6 +67,10 @@ namespace bdUnit.Core.Generators
                             propertyText = OverrideDefault(propertyText, property.DefaultValue.Value, property.Name,
                                                            "bool");
                         }
+                    }
+                    else if (property.DefaultValue.Value == "id")
+                    {
+                        propertyText = propertyText.Replace("##typename##", "Guid");
                     }
                     else
                     {
