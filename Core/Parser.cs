@@ -124,32 +124,5 @@ namespace bdUnit.Core
             }
             return string.Empty;
         }
-
-        public void DoWork()
-        {
-            LoadGrammar();
-            var deserializer = new Deserializer();
-
-            object root;
-
-            if (Input != null)
-            {
-                root = _parser.Parse<object>(null, new StringReader(Input), ErrorReporter.Standard);
-            }
-            else
-            {
-                root = _parser.Parse<object>(InputPath, new StringReader(File.ReadAllText(InputPath)),
-                                             ErrorReporter.Standard);
-            }
-
-            var tests = deserializer.Deserialize(root) as IList<object>;
-            var list = new List<Test>();
-            var codegen = new NUnitCodeGenerator();
-            foreach (var test in tests)
-            {
-                list.Add((Test) test);
-            }
-            Debug.Write(codegen.GenerateTestFixture(list, TestFileName));
-        }
     }
 }

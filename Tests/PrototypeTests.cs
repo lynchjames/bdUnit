@@ -271,7 +271,7 @@ module Test
             var input = _input.Replace("\"\"", "\"");
             var grammar = _grammar.Replace("\"\"", "\"");
             var parser = new Parser(input);
-            parser.DoWork();
+            Debug.Write(parser.Parse(UnitTestFrameworkEnum.NUnit));
         }
     }
 }
