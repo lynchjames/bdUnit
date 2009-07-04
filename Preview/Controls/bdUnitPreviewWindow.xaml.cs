@@ -325,7 +325,7 @@ namespace bdUnit.Preview.Controls
                 {
                     outputCode = parser.Parse(framework);
                 }
-                catch (DynamicParserExtensions.ErrorException ex)
+                catch (DynamicParserExtensions.ParserErrorException ex)
                 {
                     var errorStartLine =
                         textRange.Start.GetLineStartPosition(ex.Location.Span.Start.Line - 1);
