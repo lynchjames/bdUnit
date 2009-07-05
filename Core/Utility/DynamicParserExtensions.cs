@@ -9,11 +9,11 @@ namespace bdUnit.Core.Utility
 {
     public class DynamicParserExtensions
     {
-        #region Nested type: ErrorException
+        #region Nested type: ParserErrorException
 
-        public class ErrorException : Exception
+        public class ParserErrorException : Exception
         {
-            public ErrorException(ISourceLocation location, ErrorInformation information)
+            public ParserErrorException(ISourceLocation location, ErrorInformation information)
             {
                 Error = information;
                 Location = location;
@@ -36,7 +36,7 @@ namespace bdUnit.Core.Utility
         {
             protected override void OnError(ErrorInformation errorInformation)
             {
-                throw new ErrorException(errorInformation.Location, errorInformation);
+                throw new ParserErrorException(errorInformation.Location, errorInformation);
             }
         }
 

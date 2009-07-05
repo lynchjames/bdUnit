@@ -59,7 +59,9 @@ module Test
         | o:TL.ConcreteClass TConstraint p:TL.Property x:TL.Operators v:TL.Value 
         => Constraint{Property{Name{p},v,o,x}}
         | o:TL.ConcreteClass TConstraint x:TL.Operators o2:TL.ConcreteClass
-        => Constraint{ConcreteClasss[o, o2], x}
+        => Constraint{ConcreteClass[o, o2], x}
+        | o:TL.ConcreteClass p1:TL.Property Asserts.TConstraint x:TL.Operators o2:TL.ConcreteClass p2:TL.Property
+        => Constraint{ConcreteClassPropertyMapping{ConcreteClasses[o,o2],Properties[Property{Name{p1}},Property{Name{p2}}]}, x}
         | p:TL.Property TConstraint x:TL.Operators v:TL.Value
         => Constraint{Property{Name{p}, x, v}}
         | o:TL.ConcreteClass p:TL.Property TConstraint x:TL.Operators v:TL.Value
@@ -70,7 +72,6 @@ module Test
         token TConstraint = ' '? ("should be" | "should" | "should have" | "should have");
     }
     
-    @{CaseInsensitive}
     language TestLanguage
     {    
         syntax Main = item:Test => [item]
@@ -114,10 +115,13 @@ module Test
             => ProperyList[Property{Name{item}, DefaultValue{v}}]
             | list:PropertyList Connectives.TAnd? Connectives.TMany item:Property v:Value 
             => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}, Relation{"ManyToOne"}}];
+           
             
         syntax WhenStatement 
             = TWhen tl:TargetList TEach l:Loop
             => When{tl, l}
+            | TWhen tl:TargetList c:Asserts.Constraints Connectives.TAnd TEach l:Loop
+            => When{tl, c, l}
             | TWhen tl:TargetList c:Asserts.Constraints
             => When{tl, c}
             | TWhen tl:TargetList if:IfStatement
@@ -184,7 +188,7 @@ module Test
         | "I want" TMethod;
         token TMethod = " to be able to " | " the ability to ";
         token TProperty = "to have " ("a"|"an") " ";
-        token TEqual = " of " | "equal to " | " as " | " is ";
+        token TEqual = " of " | "equal to " | " as " | " is " | " the same as ";
         token TContains = " contain" "s"?;
         token TNotContains = "does"? " not contain";
         token TGreater = (" is"?) (" greater than " | " later than " | " more than ");
@@ -208,7 +212,7 @@ module Test
               
         syntax StringLiteral = val:Language.Grammar.TextLiteral => val;    
                        
-        interleave whitespace = Common.WhiteSpace | CommentToken | '\t' | (' ');  
+        interleave whitespace = Common.WhiteSpace | CommentToken | '\t'+ | ' ';  
         
         @{Classification["Comment"]}
         token CommentToken 

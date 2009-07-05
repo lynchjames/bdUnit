@@ -39,59 +39,75 @@ namespace bdUnit.Core.Generators
             {
                 var constraint = constraints[i];
                 var property = constraint.Property;
-                if (string.IsNullOrEmpty(property.Relation))
+                  if (constraint.ConcreteClassPropertyMapping != null)
                 {
-                    var assert = string.Empty;
-                    var assertBody = string.Empty;
-                    if (property.Count != null && property.Value == null)
-                    {
-                        var countValue = Int32.Parse(property.Count.Value);
-                        var countOperator = property.Count.Operators.Count > 0
-                                                   ? property.Count.Operators[0].Value
-                                                   : "==";
-                        assert = string.Format("{0}.{1}.Count {2} {3}",
-                                               _concreteClass.Instance.Value, property.Name, countOperator, countValue);
-                        assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
-                    }
-                    else if (RegexUtility.IsBool(property.Value))
-                    {
-                        var value = Boolean.Parse(property.Value);
-                        var boolQualifier = value ? string.Empty : "!";
-                        assert = string.Format("{0}{1}.{2}", boolQualifier, _concreteClass.Instance.Value, property.Name);
-                        assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
-                    }
-                    else if (RegexUtility.IsDateTime(property.Value))
-                    {
-                        var dtInstance = "dateTime" + InstanceIdentifier;
-                        var dateTimeStatement =
-                            new Dictionary<string, object> {{"instance", dtInstance}, {"value", property.Value}}.
-                                AsNVelocityTemplate(TemplateEnum.DateTimeVariable);
-                        text.AppendLine(dateTimeStatement);
-                        assert = string.Format("{0}.{1} {2} {3}", _concreteClass.Instance.Value,
-                                               property.Name, property.Operators[0].Value,
-                                               dtInstance);
-                        assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
-                        InstanceIdentifier++;
-                    }
-                    else if (property.Operators[0].Value.Contains("contains"))
-                    {
-                        var boolQualifier = property.Operators[0].Value == "contains" ? "" : "!";
-                        assert = string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
-                                               _concreteClass.Instance.Value, property.Name,
-                                               property.Value);
-                        assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
-                    }
-                    else
-                    {
-                        assert = string.Format("{0}.{1} {2} {3}", _concreteClass.Instance.Value,
-                                               property.Name, property.Operators[0].Value,
-                                               property.Value);
-                        assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
-                    }
-                    text.AppendLine(assertBody);
+                    var classes = constraint.ConcreteClassPropertyMapping.ConcreteClasses;
+                    var properties = constraint.ConcreteClassPropertyMapping.Properties;
+                    var @operator = constraint.Operators[0].Value;
+                    var assert = string.Format("{0}.{1} {2} {3}.{4}", classes[0].Instance.Value, properties[0].Name, @operator, classes[1].Instance.Value, properties[1].Name);
+                    text.AppendLine(AssertText.Replace("##clause##", WriteAssertMessage(assert)));
+                }
+                else
+                {
+                    GenerateSingleAssert(property, _concreteClass, text);
                 }
             }
             return text.ToString();
+        }
+
+        private void GenerateSingleAssert(Property property, ConcreteClass _concreteClass, StringBuilder text)
+        {
+            if (string.IsNullOrEmpty(property.Relation))
+            {
+                var assert = string.Empty;
+                var assertBody = string.Empty;
+                if (property.Count != null && property.Value == null)
+                {
+                    var countValue = Int32.Parse(property.Count.Value);
+                    var countOperator = property.Count.Operators.Count > 0
+                                            ? property.Count.Operators[0].Value
+                                            : "==";
+                    assert = string.Format("{0}.{1}.Count {2} {3}",
+                                           _concreteClass.Instance.Value, property.Name, countOperator, countValue);
+                    assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
+                }
+                else if (RegexUtility.IsBool(property.Value))
+                {
+                    var value = Boolean.Parse(property.Value);
+                    var boolQualifier = value ? string.Empty : "!";
+                    assert = string.Format("{0}{1}.{2}", boolQualifier, _concreteClass.Instance.Value, property.Name);
+                    assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
+                }
+                else if (RegexUtility.IsDateTime(property.Value))
+                {
+                    var dtInstance = "dateTime" + InstanceIdentifier;
+                    var dateTimeStatement =
+                        new Dictionary<string, object> {{"instance", dtInstance}, {"value", property.Value}}.
+                            AsNVelocityTemplate(TemplateEnum.DateTimeVariable);
+                    text.AppendLine(dateTimeStatement);
+                    assert = string.Format("{0}.{1} {2} {3}", _concreteClass.Instance.Value,
+                                           property.Name, property.Operators[0].Value,
+                                           dtInstance);
+                    assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
+                    InstanceIdentifier++;
+                }
+                else if (property.Operators[0].Value.Contains("contains"))
+                {
+                    var boolQualifier = property.Operators[0].Value == "contains" ? "" : "!";
+                    assert = string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
+                                           _concreteClass.Instance.Value, property.Name,
+                                           property.Value);
+                    assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
+                }
+                else
+                {
+                    assert = string.Format("{0}.{1} {2} {3}", _concreteClass.Instance.Value,
+                                           property.Name, property.Operators[0].Value,
+                                           property.Value);
+                    assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
+                }
+                text.AppendLine(assertBody);
+            }
         }
 
         public StringBuilder GenerateForLoop(When whenStatement, StringBuilder stringBuilder)

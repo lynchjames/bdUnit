@@ -21,5 +21,6 @@ namespace bdUnit.Core.AST
         public List<ConcreteClass> ConcreteClasses { get; set; }
         public List<Operator> Operators { get; set; }
         public Property Property { get; set; }
+        public ConcreteClassPropertyMapping ConcreteClassPropertyMapping { get; set; }
     }
 }

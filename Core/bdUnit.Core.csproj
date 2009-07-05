@@ -82,6 +82,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AST\Objects\ConcreteClassPropertyMapping.cs" />
     <Compile Include="AST\Objects\Count.cs" />
     <Compile Include="AST\Objects\DefaultValue.cs" />
     <Compile Include="AST\Objects\Instance.cs" />

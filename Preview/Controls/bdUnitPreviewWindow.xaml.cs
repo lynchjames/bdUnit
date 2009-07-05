@@ -297,8 +297,8 @@ namespace bdUnit.Preview.Controls
         {
             if (!InputEditor.Dispatcher.CheckAccess())
             {
-                InputEditor.Dispatcher.Invoke(DispatcherPriority.SystemIdle, new Action(HighlightInputSyntax));
-                InputEditor.Dispatcher.Invoke(DispatcherPriority.SystemIdle, new Action(Update));
+                InputEditor.Dispatcher.Invoke(DispatcherPriority.Background, new Action(HighlightInputSyntax));
+                InputEditor.Dispatcher.Invoke(DispatcherPriority.Background, new Action(Update));
             }
             else
             {

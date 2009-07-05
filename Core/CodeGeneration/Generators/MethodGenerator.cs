@@ -80,6 +80,11 @@ namespace bdUnit.Core.Generators
                                                                             c.Property.ConcreteClass,
                                                                             new List<Constraint> {c}));
                                                                 }
+                                                                else if (c.ConcreteClassPropertyMapping != null)
+                                                                {
+
+                                                                        stringBuilder.Append(_assertGenerator.Generate(null, new List<Constraint> {c}));
+                                                                }
                                                             });
                     }
                     
