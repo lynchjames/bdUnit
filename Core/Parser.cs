@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Dataflow;
-using System.Diagnostics;
 using System.IO;
 using bdUnit.Core.AST;
 using bdUnit.Core.Enum;

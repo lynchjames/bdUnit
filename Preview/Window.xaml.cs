@@ -176,7 +176,6 @@ namespace bdUnit.Preview
                             tabControl.Items.Add(openTab);
                             tabControl.SelectedIndex = tabControl.Items.Count - 1;
                             bdUnitPreview.InputEditor.TextChanged -= bdUnitPreview.InputEditor_TextChanged;
-                            bdUnitPreview.UpdatePreview();
                         }
                     }
                     break;

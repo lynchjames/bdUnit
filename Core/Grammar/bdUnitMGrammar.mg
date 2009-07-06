@@ -50,11 +50,11 @@ module Test
         | cons:Constraints Connectives.TAnd c:Constraint => Constraints[valuesof(cons),c];
         
         syntax Constraint 
-        = TConstraint p:TL.Property Connectives.TOther o:TestLanguage.ConcreteClass
+        = TConstraint p:TL.Property Connectives.TOther o:TL.ConcreteClass
         => Constraint{ConcreteClasss[o],Property[p]}
-        | TConstraint p:TL.Property x:TL.Operators Connectives.TOther o:TestLanguage.ConcreteClass
+        | TConstraint p:TL.Property x:TL.Operators Connectives.TOther o:TL.ConcreteClass
         => Constraint{Property{Name{p},o,x,Relation{"Reciprocal"}}}
-        | TConstraint p:TL.Property x:TestLanguage.Operators v:TestLanguage.Value
+        | TConstraint p:TL.Property x:TL.Operators v:TL.Value
         => Constraint{Property{Name{p},v,x}}
         | o:TL.ConcreteClass TConstraint p:TL.Property x:TL.Operators v:TL.Value 
         => Constraint{Property{Name{p},v,o,x}}

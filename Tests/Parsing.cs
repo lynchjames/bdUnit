@@ -1,3 +1,5 @@
+#region Using Statements
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,6 +8,8 @@ using bdUnit.Core;
 using bdUnit.Core.Enum;
 using bdUnit.Core.Utility;
 using NUnit.Framework;
+
+#endregion
 
 namespace bdUnit.Tests
 {

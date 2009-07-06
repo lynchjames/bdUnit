@@ -1,9 +1,12 @@
-using System;
+#region Using Statements
+
 using System.Collections.Generic;
 using System.Text;
 using bdUnit.Core.AST;
-using bdUnit.Core.Templates;
 using bdUnit.Core.Extensions;
+using bdUnit.Core.Templates;
+
+#endregion
 
 namespace bdUnit.Core.Generators
 {
@@ -51,7 +54,7 @@ namespace bdUnit.Core.Generators
             constraintText = GenerateConstraints(ifStatement.Then.Constraints, constraintText);
             elseConstraintText = GenerateConstraints(ifStatement.Else.Constraints, elseConstraintText);
 
-            var templateParams = new Dictionary<string, object>()
+            var templateParams = new Dictionary<string, object>
                                      {
                                          {"condition", conditionText},
                                          {"constraints", constraintText.ToString()},

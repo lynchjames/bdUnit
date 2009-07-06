@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Text;
 using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
-using bdUnit.Core.Generators;
 using bdUnit.Core.Extensions;
+using bdUnit.Core.Generators;
 using bdUnit.Core.Templates;
 
 #endregion
