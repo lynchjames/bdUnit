@@ -2,6 +2,7 @@ begin story "LogansRun":
     begin setup 
         @User to have a ~Spouse(@User) 
             and a ~Name
+            and a ~LastName
             and an ~UnMarried(true)
             and an ~IsDead(false)
             and an ~Age(0)
@@ -26,7 +27,7 @@ begin story "LogansRun":
         and @User(Peter) #Marry another @User(Patty)
         and @User(Peter) ~Name is ("Peter")
         and @User(Patty) ~Name is ("Patty"),
-        @User(user) ~Name should be the same as @User(user1) ~Name 
+        @User(Peter) ~LastName should be the same as @User(Patty) ~LastName 
         and each @User should have ~Spouse as the other @User 
             and should have ~UnMarried as (false) 
             and should have ~Age less than (21)
@@ -37,11 +38,12 @@ begin story "LogansRun":
 	    and @User(user) ~CreatedDate should be earlier than ("22/04/2010")
 	    and @User(user) should have less than 3 ~Children
     
-    When a @User(user) ~Name is ("Logan"),
+    When a @User(user) ~Name is ("Logan") and @User(user1) ~Name is ("Blah"),
         if @User(user) ~IsDead is (true) and @User(user) ~CreatedDate is later than ("22/04/2020")
             then @User(user) should have ~IsDead as (true)
-        	     and @User(user) ~Name should contain ("Log") 
-                    and @User(user) ~Children should contain @User(user1) ~Name
+        	     and @User(user) ~Name should not contain ("Log") 
+                 and @User(user) ~Children should not contain @User(user1)
+                 and @User(user) ~Name should not be the same as @User(user1) ~Name
         else 
             if @User(user) ~CreatedDate is ("22/04/2010")
                 then @User(user) should have less than 3 ~Children   

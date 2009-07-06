@@ -62,6 +62,8 @@ module Test
         => Constraint{ConcreteClass[o, o2], x}
         | o:TL.ConcreteClass p1:TL.Property Asserts.TConstraint x:TL.Operators o2:TL.ConcreteClass p2:TL.Property
         => Constraint{ConcreteClassPropertyMapping{ConcreteClasses[o,o2],Properties[Property{Name{p1}},Property{Name{p2}}]}, x}
+        | o:TL.ConcreteClass p:TL.Property TConstraint x:TL.Operators o2:TL.ConcreteClass
+        => Constraint{ConcreteClassPropertyMapping{ConcreteClasses[o,o2],Properties[Property{Name{p}}]}, x}
         | p:TL.Property TConstraint x:TL.Operators v:TL.Value
         => Constraint{Property{Name{p}, x, v}}
         | o:TL.ConcreteClass p:TL.Property TConstraint x:TL.Operators v:TL.Value
@@ -170,9 +172,10 @@ module Test
         | '(' p:Property ')' => Value{p};
         syntax Loop = o:ConcreteClass c:Asserts.Constraints 
         => Loop{ConcreteClasses[o],c};
-        syntax Operators = x:Equal | x:Contains | x:NotContains | x:Greater | x:GreaterOrEqual | x:Lesser | x:LesserOrEqual
+        syntax Operators = x:Equal | x:NotEqual | x:Contains | x:NotContains | x:Greater | x:GreaterOrEqual | x:Lesser | x:LesserOrEqual
          => x;
         syntax Equal = TEqual => Operator{Value{"=="}};
+        syntax NotEqual = TNotEqual => Operator{Value{"!="}};
         syntax Contains = TContains => Operator{Value{"contains"}};
         syntax NotContains = TNotContains => Operator{Value{"notcontains"}};
         syntax Greater = TGreater => Operator{Value{">"}};
@@ -186,7 +189,8 @@ module Test
         | "I want" TMethod;
         token TMethod = " to be able to " | " the ability to ";
         token TProperty = "to have " ("a"|"an") " ";
-        token TEqual = " of " | "equal to " | " as " | " is " | " the same as ";
+        token TEqual = " of " | "equal to " | " as " | " is " | " the same as " | "have";
+        token TNotEqual = "not be" TEqual | "is not";
         token TContains = " contain" "s"?;
         token TNotContains = "does"? " not contain";
         token TGreater = (" is"?) (" greater than " | " later than " | " more than ");

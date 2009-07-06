@@ -44,7 +44,18 @@ namespace bdUnit.Core.Generators
                     var classes = constraint.ConcreteClassPropertyMapping.ConcreteClasses;
                     var properties = constraint.ConcreteClassPropertyMapping.Properties;
                     var @operator = constraint.Operators[0].Value;
-                    var assert = string.Format("{0}.{1} {2} {3}.{4}", classes[0].Instance.Value, properties[0].Name, @operator, classes[1].Instance.Value, properties[1].Name);
+                    var assert = string.Empty;
+                    if (@operator.Contains("contains"))
+                    {
+                        var boolQualifier = @operator.ToLower() == "contains" ? "" : "!";
+                        assert = string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
+                                               classes[0].Instance.Value, properties[0].Name,
+                                               classes[1].Instance.Value);
+                    }
+                    else
+                    {
+                        assert = string.Format("{0}.{1} {2} {3}.{4}", classes[0].Instance.Value, properties[0].Name, @operator, classes[1].Instance.Value, properties[1].Name);   
+                    }
                     text.AppendLine(AssertText.Replace("##clause##", WriteAssertMessage(assert)));
                 }
                 else
@@ -53,6 +64,16 @@ namespace bdUnit.Core.Generators
                 }
             }
             return text.ToString();
+        }
+
+        private string GetContainsAssert(string @operator, ConcreteClass _concreteClass, Property property)
+        {
+            string assert;
+            var boolQualifier = @operator.ToLower() == "contains" ? "" : "!";
+            assert = string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
+                                   _concreteClass.Instance.Value, property.Name,
+                                   property.Value);
+            return assert;
         }
 
         private void GenerateSingleAssert(Property property, ConcreteClass _concreteClass, StringBuilder text)
@@ -93,11 +114,7 @@ namespace bdUnit.Core.Generators
                 }
                 else if (property.Operators[0].Value.Contains("contains"))
                 {
-                    var boolQualifier = property.Operators[0].Value == "contains" ? "" : "!";
-                    assert = string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
-                                           _concreteClass.Instance.Value, property.Name,
-                                           property.Value);
-                    assertBody = AssertText.Replace("##clause##", WriteAssertMessage(assert));
+                    assertBody = AssertText.Replace("##clause##", WriteAssertMessage(GetContainsAssert(property.Operators[0].Value, _concreteClass, property)));
                 }
                 else
                 {

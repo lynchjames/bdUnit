@@ -110,6 +110,7 @@ namespace bdUnit.Preview.Controls
         private void bdPreviewWindow_Loaded(object sender, RoutedEventArgs e)
         {
             InputEditor.TextChanged += InputEditor_TextChanged;
+            InputEditor.KeyDown += InputEditor_KeyDown;
             ErrorOutput.MouseLeftButtonDown += ErrorOutput_MouseLeftButtonDown;
             ErrorOutput.MouseEnter += ErrorOutput_MouseEnter;
             ErrorOutput.MouseLeave += ErrorOutput_MouseLeave;
@@ -149,6 +150,14 @@ namespace bdUnit.Preview.Controls
             {
                 InputEditor.ScrollToVerticalOffset(ErrorVerticalOffset);
                 InputEditor.CaretPosition = ErrorPoint;
+            }
+        }
+
+        public void InputEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F5)
+            {
+                Update();
             }
         }
 
@@ -298,12 +307,10 @@ namespace bdUnit.Preview.Controls
             if (!InputEditor.Dispatcher.CheckAccess())
             {
                 InputEditor.Dispatcher.Invoke(DispatcherPriority.Background, new Action(HighlightInputSyntax));
-                InputEditor.Dispatcher.Invoke(DispatcherPriority.Background, new Action(Update));
             }
             else
             {
                 HighlightInputSyntax();
-                Update();
             }
             BackgroundThreadIsRunning = false;
             LastUpdated = DateTime.Now;

@@ -1,99 +1,128 @@
-//#region Using Statements
-//using System.Collections.Generic;
-//using System.Diagnostics;
-//using bdUnit.Interfaces;
-//using NUnit.Framework;
-//using StructureMap;
-//using System;
-//#endregion
+#region Using Statements
 
-//namespace bdUnit.Interfaces
-//{
+using System.Collections.Generic;
+using System.Diagnostics;
+using bdUnit.Interfaces;
+using NUnit.Framework;
+using Rhino.Mocks;
+using StructureMap;
+using System;
 
-//    [PluginFamily("bdUnit")]
-//    public partial interface IUser
-//    {
-//        IUser Spouse { get; set; }
-//        string Name { get; set; }
-//        bool IsARunner { get; set; }
-//        int Age { get; set; }
-//        DateTime IsDead { get; set; }
-//        IList<IUser> Children { get; set; }
-//        void Kill(IUser user);
-//        void Marry(IUser user);
-//        void Visit(ISleepShop sleepshop);
-//        void Find();
-//    }
+#endregion
 
-//    [PluginFamily("bdUnit")]
-//    public partial interface ISleepShop
-//    {
-//        ILocation Location { get; set; }
-//        bool IsOpen { get; set; }
-//        void Find();
-//    }
+namespace bdUnit.Interfaces
+{
 
-//    [PluginFamily("bdUnit")]
-//    public partial interface ILocation
-//    {
-//        decimal Latitude { get; set; }
-//        decimal Longitude { get; set; }
-//    }
-//}
 
-//namespace bdUnit.Tests
-//{
-//    [TestFixture]
-//    public class LogansRun
-//    {
-//        [TestFixtureSetUp]
-//        public void Setup()
-//        {
-//            ObjectFactory.Initialize(
-//            x => x.Scan(scanner =>
-//            {
-//                var location = AppDomain.CurrentDomain.BaseDirectory;
-//                scanner.AssembliesFromPath(location);
-//                scanner.WithDefaultConventions();
-//            }));
-//        }
+    public partial interface IUser
+    {
+        IUser Spouse { get; set; }
+        string Name { get; set; }
+        string LastName { get; set; }
+        bool UnMarried { get; set; }
+        bool IsDead { get; set; }
+        int Age { get; set; }
+        DateTime CreatedDate { get; set; }
+        ILocation Location { get; set; }
+        IList<IUser> Children { get; set; }
+        void Kill(IUser user);
+        void ProposeTo(IUser user);
+        void Marry(IUser user);
+        void Meet(IList<IUser> user);
+        void Locate();
+        void Find();
+    }
 
-//        [Test]
-//        public void When_User_Marry_User()
-//        {
-//            IUser Peter = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
-//            IUser Eve = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
-//            Peter.Marry(Eve);
-//            Debug.WriteLine("Assert.IsTrue(!Peter.IsARunner);");
-//            Assert.IsTrue(!Peter.IsARunner);
-//            Debug.WriteLine("Assert.IsTrue(Peter.Age < 21);");
-//            Assert.IsTrue(Peter.Age < 21);
-//            Debug.WriteLine("Assert.IsTrue(Peter.Spouse == Eve);Assert.IsTrue(Eve.Spouse == Peter);");
-//            Assert.IsTrue(Peter.Spouse == Eve);
-//            Assert.IsTrue(Eve.Spouse == Peter);
-//        }
+    public partial interface ISleepShop
+    {
+        ILocation Location { get; set; }
+        bool IsOpen { get; set; }
+        void Find();
+    }
 
-//        [Test]
-//        public void When_User_Name_Is_Set()
-//        {
-//            IUser a = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
-//            a.Name = "kjh";
-//            Debug.WriteLine("Assert.IsTrue(a.IsDead);");
+    public partial interface ILocation
+    {
+        double Latitude { get; set; }
+        double Longitude { get; set; }
+    }
+}
 
-//            Debug.WriteLine("var dateTime1 = DateTime.Parse(\"22/04/1983\");");
-//            var dateTime1 = DateTime.Parse("22/04/1983");
-//            Debug.WriteLine("Assert.IsTrue(a.IsDead < dateTime1);");
-//            Assert.IsTrue(a.IsDead < dateTime1);
-//        }
+namespace bdUnit.Tests
+{
+    [TestFixture]
+    public class LogansRun
+    {
+        [TestFixtureSetUp]
+        public void Setup()
+        {
+            StructureMapInitializer.Initialize();
+        }
 
-//        [Test]
-//        public void When_User_Visit_SleepShop()
-//        {
-//            IUser John = ObjectFactory.GetNamedInstance<IUser>("bdUnit");
-//            ISleepShop CentralSleepShop = ObjectFactory.GetNamedInstance<ISleepShop>("bdUnit");
-//            John.Visit(CentralSleepShop);
-//            Debug.WriteLine("Assert.IsTrue(John.IsDead);");
-//            Assert.IsTrue(John.IsDead);
-//        }
-//    }
-//}
+
+        [Test]
+        public void When_User_ProposeTo_User()
+        {
+            IUser Peter = ObjectFactory.GetInstance<IUser>();
+            IUser Patty = ObjectFactory.GetInstance<IUser>();
+            Peter.ProposeTo(Patty);
+            Peter.Marry(Patty);
+            Peter.Name = "Peter";
+            Patty.Name = "Patty";
+            Assert.IsTrue(Peter.LastName == Patty.LastName, "Failed: Peter.LastName == Patty.LastName");
+            Assert.IsTrue(!Peter.UnMarried, "Failed: !Peter.UnMarried");
+            Assert.IsTrue(Peter.Age < 21, "Failed: Peter.Age < 21");
+            Assert.IsTrue(!Patty.UnMarried, "Failed: !Patty.UnMarried");
+            Assert.IsTrue(Patty.Age < 21, "Failed: Patty.Age < 21");
+            Assert.IsTrue(Peter.Spouse == Patty, "Failed: Peter.Spouse == Patty");
+            Assert.IsTrue(Patty.Spouse == Peter, "Failed: Patty.Spouse == Peter");
+        }
+
+        [Test]
+        public void When_UnMarried_Is_Set()
+        {
+            IUser user = ObjectFactory.GetInstance<IUser>();
+
+            user.UnMarried = true;
+            IUser user1 = ObjectFactory.GetInstance<IUser>();
+
+            user1.Name = "James";
+            Assert.IsTrue(user.IsDead, "Failed: user.IsDead");
+            var dateTime0 = DateTime.Parse("22/04/2010");
+            Assert.IsTrue(user.CreatedDate < dateTime0, "Failed: user.CreatedDate < dateTime0");
+            Assert.IsTrue(user.Children.Count < 3, "Failed: user.Children.Count < 3");
+        }
+
+        [Test]
+        public void When_Name_Is_Set()
+        {
+            IUser user = ObjectFactory.GetInstance<IUser>();
+
+            user.Name = "Logan";
+            IUser user1 = ObjectFactory.GetInstance<IUser>();
+
+            user1.Name = "Blah";
+            var dateTime20 = DateTime.Parse("22/04/2010");
+            var dateTime21 = DateTime.Parse("22/04/2020");
+            if (user.IsDead && user.CreatedDate > dateTime21)
+            {
+                Assert.IsTrue(user.IsDead, "Failed: user.IsDead");
+                Assert.IsTrue(user.Name.Contains("Log"), "Failed: user.Name.Contains(\"Log\")");
+                Assert.IsTrue(user.Children.Contains(user1), "Failed: user.Children.Contains(user1)");
+
+            }
+            else if (user.CreatedDate == dateTime20)
+            {
+                Assert.IsTrue(user.Children.Count < 3, "Failed: user.Children.Count < 3");
+
+            }
+            else
+            {
+                Assert.IsTrue(user.Children.Count > 3, "Failed: user.Children.Count > 3");
+
+            }
+
+
+        }
+
+    }
+}
