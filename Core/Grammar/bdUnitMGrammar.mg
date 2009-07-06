@@ -163,8 +163,6 @@ module Test
                    
         syntax ConcreteClass = name:ConcreteClassId => ConcreteClass{Name{name}}
         | name:ConcreteClassId v:Value => ConcreteClass{Name{name}, Instance{v}};
-        syntax Method = name:MethodId => name;
-        syntax Property = name:PropertyId => name;
         syntax Count = op:Operators? c:CountId => Count{Value{c}, op};
         syntax Value = " " '(' v:ValueId ')'=> Value{v}
         | '(' v:ValueId ')'=> Value{v}
@@ -204,9 +202,9 @@ module Test
         @{Classification["TestOperator"]} token TEnd = "end story";
         @{Classification["TestOperator"]} token TSetupStart = "begin setup";
         @{Classification["TestOperator"]} token TSetupEnd = "end setup";
-        @{Classification["Type"]} token ConcreteClassId = '@' (Base.Letter|'-'|'_')+;
-        @{Classification["Method"]} token MethodId = '#' (Base.Letter|'-'|'_')+;
-        @{Classification["Property"]} token PropertyId = '~' (Base.Letter|'-'|'_'|Base.Digit)+;
+        @{Classification["Type"]} token ConcreteClassId = '@' cc:(Base.Letter|'-'|'_')+ => cc;
+        @{Classification["Method"]} token Method = '#' m:(Base.Letter|'-'|'_')+ => m;
+        @{Classification["Property"]} token Property = '~' p:(Base.Letter|'-'|'_'|Base.Digit)+ => p;
         @{Classification["Value"]} token ValueId = (Base.Letter|'_'|Base.Digit|'.')+ | Common.SingleQuotedText;
         token CountId = Base.Digit+;
               

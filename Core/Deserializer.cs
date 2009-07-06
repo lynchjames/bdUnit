@@ -111,8 +111,7 @@ namespace bdUnit.Core
         {
             if (str.Contains("\""))
             {
-                str = str.TrimStart('\"');
-                str = str.TrimEnd('\"');
+                str = str.TrimStart('\"').TrimEnd('\"');
                 return str;
             }
             if (str.Contains("#") || str.Contains("~") || str.Contains("@"))
