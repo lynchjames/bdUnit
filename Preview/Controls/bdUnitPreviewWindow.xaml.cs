@@ -212,9 +212,9 @@ namespace bdUnit.Preview.Controls
             if (InputEditor.Document == null)
                 return;
             IsUpdating = true;
-            if (!InputEditor.Dispatcher.CheckAccess())
+            if (InputEditor.Dispatcher.CheckAccess())
             {
-                InputEditor.Dispatcher.Invoke(DispatcherPriority.SystemIdle, new Action(Highlight));
+                InputEditor.Dispatcher.Invoke(DispatcherPriority.Background, new Action(Highlight));
             }
             else
             {

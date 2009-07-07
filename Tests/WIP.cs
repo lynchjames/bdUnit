@@ -1,12 +1,10 @@
 #region Using Statements
 
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using bdUnit.Interfaces;
 using NUnit.Framework;
-using Rhino.Mocks;
 using StructureMap;
-using System;
 
 #endregion
 
@@ -14,7 +12,7 @@ namespace bdUnit.Interfaces
 {
 
 
-    public partial interface IUser
+    public interface IUser
     {
         IUser Spouse { get; set; }
         string Name { get; set; }
@@ -33,14 +31,14 @@ namespace bdUnit.Interfaces
         void Find();
     }
 
-    public partial interface ISleepShop
+    public interface ISleepShop
     {
         ILocation Location { get; set; }
         bool IsOpen { get; set; }
         void Find();
     }
 
-    public partial interface ILocation
+    public interface ILocation
     {
         double Latitude { get; set; }
         double Longitude { get; set; }
@@ -62,8 +60,8 @@ namespace bdUnit.Tests
         [Test]
         public void When_User_ProposeTo_User()
         {
-            IUser Peter = ObjectFactory.GetInstance<IUser>();
-            IUser Patty = ObjectFactory.GetInstance<IUser>();
+            var Peter = ObjectFactory.GetInstance<IUser>();
+            var Patty = ObjectFactory.GetInstance<IUser>();
             Peter.ProposeTo(Patty);
             Peter.Marry(Patty);
             Peter.Name = "Peter";
@@ -80,10 +78,10 @@ namespace bdUnit.Tests
         [Test]
         public void When_UnMarried_Is_Set()
         {
-            IUser user = ObjectFactory.GetInstance<IUser>();
+            var user = ObjectFactory.GetInstance<IUser>();
 
             user.UnMarried = true;
-            IUser user1 = ObjectFactory.GetInstance<IUser>();
+            var user1 = ObjectFactory.GetInstance<IUser>();
 
             user1.Name = "James";
             Assert.IsTrue(user.IsDead, "Failed: user.IsDead");
@@ -95,10 +93,10 @@ namespace bdUnit.Tests
         [Test]
         public void When_Name_Is_Set()
         {
-            IUser user = ObjectFactory.GetInstance<IUser>();
+            var user = ObjectFactory.GetInstance<IUser>();
 
             user.Name = "Logan";
-            IUser user1 = ObjectFactory.GetInstance<IUser>();
+            var user1 = ObjectFactory.GetInstance<IUser>();
 
             user1.Name = "Blah";
             var dateTime20 = DateTime.Parse("22/04/2010");
