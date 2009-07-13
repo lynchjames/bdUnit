@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using bdUnit.Core.AST;
 using bdUnit.Core.Templates;
+using System.Linq;
 
 #endregion
 
@@ -40,11 +41,11 @@ namespace bdUnit.Core
 
         #endregion
 
-        public string GenerateTestFixture(List<Test> tests, string fileName)
+        public string GenerateTestFixture(IEnumerable<Test> tests, string fileName)
         {
             var generator = new CodeGenerator(TemplateEnum.XUnitTestFixture, TestText, MethodText, PropertyText, TypeText,
                                               AssertText);
-            var code = generator.GenerateTestFixture(tests, fileName);
+            var code = generator.GenerateTestFixture(tests.ToList(), fileName);
             return code;
         }
     }

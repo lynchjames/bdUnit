@@ -1,9 +1,0 @@
-begin story "LogansRun":
-
-    begin setup 
-        ##setup-contents##
-    end setup
-
-    ##test-contents##
-
-end story

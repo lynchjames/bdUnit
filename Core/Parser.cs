@@ -8,6 +8,7 @@ using bdUnit.Core.AST;
 using bdUnit.Core.Enum;
 using bdUnit.Core.Utility;
 using Microsoft.M.Grammar;
+using System.Linq;
 
 #endregion
 
@@ -82,11 +83,31 @@ namespace bdUnit.Core
 
             var dynamicParser = new DynamicParser();
             compiler.LoadDynamicParser(dynamicParser);
-            compiler = null;
             _parser = dynamicParser;
         }
 
         public string Parse(UnitTestFrameworkEnum framework)
+        {
+            var tests = Parse();
+            if (tests != null)
+            {
+                switch (framework)
+                {
+                    case UnitTestFrameworkEnum.NUnit:
+                        var nUnit = new NUnitCodeGenerator();
+                        return nUnit.GenerateTestFixture(tests, TestFileName);
+                    case UnitTestFrameworkEnum.XUnit:
+                        var xUnit = new XUnitCodeGenerator();
+                        return xUnit.GenerateTestFixture(tests, TestFileName);
+                    case UnitTestFrameworkEnum.MbUnit:
+                        var mbUnit = new MbUnitCodeGenerator();
+                        return mbUnit.GenerateTestFixture(tests, TestFileName);
+                }
+            }
+            return string.Empty;
+        }
+
+        public IEnumerable<Test> Parse()
         {
             if (!IsGrammarLoaded)
             {
@@ -98,30 +119,15 @@ namespace bdUnit.Core
             var reporter = new DynamicParserExtensions.ExceptionErrorReporter();
 
             var root = Input != null
-                              ? _parser.Parse<object>(null, new StringReader(Input), reporter)
-                              : _parser.Parse<object>(InputPath, new StringReader(File.ReadAllText(InputPath)), reporter);
+                           ? _parser.Parse<object>(null, new StringReader(Input), reporter)
+                           : _parser.Parse<object>(InputPath, new StringReader(File.ReadAllText(InputPath)), reporter);
             var tests = deserializer.Deserialize(root) as IList<object>;
-            var list = new List<Test>();
             if (tests != null)
             {
-                foreach (var test in tests)
-                {
-                    list.Add((Test) test);
-                }
-                switch (framework)
-                {
-                    case UnitTestFrameworkEnum.NUnit:
-                        var nUnit = new NUnitCodeGenerator();
-                        return nUnit.GenerateTestFixture(list, TestFileName);
-                    case UnitTestFrameworkEnum.XUnit:
-                        var xUnit = new XUnitCodeGenerator();
-                        return xUnit.GenerateTestFixture(list, TestFileName);
-                    case UnitTestFrameworkEnum.MbUnit:
-                        var mbUnit = new MbUnitCodeGenerator();
-                        return mbUnit.GenerateTestFixture(list, TestFileName);
-                }
+                var list = tests.Cast<Test>();
+                return list;
             }
-            return string.Empty;
+            return new List<Test>();
         }
     }
 }

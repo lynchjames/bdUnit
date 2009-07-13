@@ -10,6 +10,7 @@ namespace bdUnit.Core.Templates
         XUnitTestFixture,
         MbUnitTestFixture,
         IfStatement,
-        IfElseStatement
+        IfElseStatement,
+        InputWrapper
     }
 }

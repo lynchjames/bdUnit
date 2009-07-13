@@ -7,6 +7,7 @@ using System.IO;
 using bdUnit.Core;
 using bdUnit.Core.Enum;
 using bdUnit.Core.Utility;
+using bdUnit.Tests.Base;
 using NUnit.Framework;
 
 #endregion
@@ -14,7 +15,7 @@ using NUnit.Framework;
 namespace bdUnit.Tests
 {
     [TestFixture]
-    public class Parsing
+    public class Parsing : TestBase
     {
         [Test]
         public void Incremental_Parsed_But_Fails_To_Map_To_AST1()
@@ -42,7 +43,6 @@ namespace bdUnit.Tests
 
         private void IncrementalParse(int start, int end)
         {
-            var input = File.ReadAllText("../../Input Files/Incremental/LogansRun_Wrapper.bdunit");
             var setupText = File.ReadAllText("../../Input Files/Incremental/LogansRun_Setup.bdunit");
             var testText = File.ReadAllText("../../Input Files/Incremental/LogansRun_Tests.bdunit");
             var setupCharacters = setupText.ToCharArray();
@@ -54,13 +54,13 @@ namespace bdUnit.Tests
             for (var i = 0; i < setupCount; i++)
             {
                 setupInput = string.Concat(setupInput, setupCharacters[i]);
-                testInputs.Add(input.Replace("##setup-contents##", setupInput).Replace("##test-contents##", string.Empty));
+                testInputs.Add(CreateInput(setupInput, null));
             }
             var testInput = string.Empty;
             for (var i = 0; i < testCount; i++)
             {
                 testInput = string.Concat(testInput, testCharacters[i]);
-                testInputs.Add(input.Replace("##setup-contents##", string.Empty).Replace("##test-contents##", testInput));
+                testInputs.Add(CreateInput(null, testInput));
             }
             var total = testInputs.Count;
             for (var i = start; i < end; i++)

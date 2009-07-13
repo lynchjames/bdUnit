@@ -154,6 +154,7 @@
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\IfElseStatement.vm" />
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\IfStatement.vm" />
     <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\NUnit\NUnitTest.vm" />
+    <EmbeddedResource Include="CodeGeneration\NVelocity\Templates\Input\InputWrapper.vm" />
     <None Include="Inputs\LogansRun.bdunit" />
   </ItemGroup>
   <ItemGroup>

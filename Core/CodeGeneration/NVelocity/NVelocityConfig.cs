@@ -13,7 +13,7 @@ namespace bdUnit.Core.Templates
     {
         private static readonly string[] TemplateResourceLocations = {
                                                                          "Templates", "Templates.NUnit", "Templates.XUnit",
-                                                                         "Templates.MbUnit", "Templates.StructureMap"
+                                                                         "Templates.MbUnit", "Templates.StructureMap", "Templates.Input"
                                                                      };
         private static readonly VelocityEngine velocity;
 
