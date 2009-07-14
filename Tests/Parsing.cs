@@ -54,13 +54,13 @@ namespace bdUnit.Tests
             for (var i = 0; i < setupCount; i++)
             {
                 setupInput = string.Concat(setupInput, setupCharacters[i]);
-                testInputs.Add(CreateInput(setupInput, null));
+                testInputs.Add(CreateInput(setupInput, null, "User"));
             }
             var testInput = string.Empty;
             for (var i = 0; i < testCount; i++)
             {
                 testInput = string.Concat(testInput, testCharacters[i]);
-                testInputs.Add(CreateInput(null, testInput));
+                testInputs.Add(CreateInput(null, testInput, "User"));
             }
             var total = testInputs.Count;
             for (var i = start; i < end; i++)

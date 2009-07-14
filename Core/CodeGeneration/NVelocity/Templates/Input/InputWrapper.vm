@@ -1,10 +1,10 @@
 begin story "TestStory":
 
     begin setup 
-        @User to have a ~Name
-        $setup-contents
+        @$concreteClass to have a ~Name
+        $setupContents
     end setup
 
-    $test-contents
+    $testContents
 
 end story
