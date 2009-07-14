@@ -15,6 +15,7 @@ using NUnit.Framework;
 namespace bdUnit.Tests
 {
     [TestFixture]
+    [Ignore]
     public class Parsing : TestBase
     {
         [Test]

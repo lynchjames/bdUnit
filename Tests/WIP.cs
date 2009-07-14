@@ -48,6 +48,7 @@ namespace bdUnit.Interfaces
 namespace bdUnit.Tests
 {
     [TestFixture]
+    [Ignore]
     public class LogansRun
     {
         [TestFixtureSetUp]

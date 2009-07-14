@@ -49,7 +49,7 @@ namespace bdUnit.Tests.Interfaces
             CreateInputAndConfigure(input, null, "Person");
             var test = _parser.Parse().ElementAt(0);
             var defaultValue = test.TypeList[0].PropertyList[1].DefaultValue.Value;
-            Assert.IsTrue(RegexUtility.IsDateTime((defaultValue)));
+            Assert.IsTrue(RegexUtility.IsDateTime(defaultValue));
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace bdUnit.Tests.Interfaces
             CreateInputAndConfigure(input, null, "Person");
             var test = _parser.Parse().ElementAt(0);
             var defaultValue = test.TypeList[0].PropertyList[1].DefaultValue.Value;
-            Assert.IsTrue(RegexUtility.IsDateTime((defaultValue)));
+            Assert.IsTrue(RegexUtility.IsDateTime(defaultValue));
         }
 
         [Test]
