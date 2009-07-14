@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using bdUnit.Core;
+using bdUnit.Core.AST;
 using bdUnit.Core.Extensions;
 using bdUnit.Core.Templates;
 using NUnit.Framework;
@@ -15,6 +16,14 @@ namespace bdUnit.Tests.Base
     {
         protected Parser _parser;
         protected string _input;
+
+        protected Constraint Constraint
+        {
+            get
+            {
+                return ((When) _parser.Parse().ElementAt(0).StatementList.ElementAt(0)).Constraints[0];
+            }
+        }
 
         public void CreateInputAndConfigure(string setupText, string testText, string concreteClass)
         {

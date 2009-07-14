@@ -2,6 +2,7 @@
 
 using System.Linq;
 using bdUnit.Core.AST;
+using bdUnit.Core.Enum;
 using bdUnit.Tests.Base;
 using NUnit.Framework;
 
@@ -39,6 +40,7 @@ namespace bdUnit.Tests.Interfaces
             var typeEntry = tests[0].TypeList[0];
             Assert.IsInstanceOf(typeof(CreateMethod), typeEntry.StatementList[0]);
             var statement = typeEntry.StatementList[0] as CreateMethod;
+            Assert.IsNotNull(statement);
             Assert.AreEqual(statement.TargetMethod.ConcreteClasses.Count, 2);
         }
     }
