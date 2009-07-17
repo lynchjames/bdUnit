@@ -1,12 +1,12 @@
 #region Using Statements
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using bdUnit.Interfaces;
 using NUnit.Framework;
 using Rhino.Mocks;
 using StructureMap;
 using System;
+using System.Linq;
 
 #endregion
 

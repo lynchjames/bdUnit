@@ -1,10 +1,12 @@
 #region Using Statements
 
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using bdUnit.Interfaces;
 using NUnit.Framework;
 using StructureMap;
+using System;
 
 #endregion
 
@@ -12,7 +14,7 @@ namespace bdUnit.Interfaces
 {
 
 
-    public interface IUser
+    public partial interface IUser
     {
         IUser Spouse { get; set; }
         string Name { get; set; }
@@ -31,14 +33,14 @@ namespace bdUnit.Interfaces
         void Find();
     }
 
-    public interface ISleepShop
+    public partial interface ISleepShop
     {
         ILocation Location { get; set; }
         bool IsOpen { get; set; }
         void Find();
     }
 
-    public interface ILocation
+    public partial interface ILocation
     {
         double Latitude { get; set; }
         double Longitude { get; set; }
@@ -61,8 +63,8 @@ namespace bdUnit.Tests
         [Test]
         public void When_User_ProposeTo_User()
         {
-            var Peter = ObjectFactory.GetInstance<IUser>();
-            var Patty = ObjectFactory.GetInstance<IUser>();
+            IUser Peter = ObjectFactory.GetInstance<IUser>();
+            IUser Patty = ObjectFactory.GetInstance<IUser>();
             Peter.ProposeTo(Patty);
             Peter.Marry(Patty);
             Peter.Name = "Peter";
@@ -79,10 +81,10 @@ namespace bdUnit.Tests
         [Test]
         public void When_UnMarried_Is_Set()
         {
-            var user = ObjectFactory.GetInstance<IUser>();
+            IUser user = ObjectFactory.GetInstance<IUser>();
 
             user.UnMarried = true;
-            var user1 = ObjectFactory.GetInstance<IUser>();
+            IUser user1 = ObjectFactory.GetInstance<IUser>();
 
             user1.Name = "James";
             Assert.IsTrue(user.IsDead, "Failed: user.IsDead");
@@ -94,10 +96,10 @@ namespace bdUnit.Tests
         [Test]
         public void When_Name_Is_Set()
         {
-            var user = ObjectFactory.GetInstance<IUser>();
+            IUser user = ObjectFactory.GetInstance<IUser>();
 
             user.Name = "Logan";
-            var user1 = ObjectFactory.GetInstance<IUser>();
+            IUser user1 = ObjectFactory.GetInstance<IUser>();
 
             user1.Name = "Blah";
             var dateTime20 = DateTime.Parse("22/04/2010");
@@ -105,8 +107,10 @@ namespace bdUnit.Tests
             if (user.IsDead && user.CreatedDate > dateTime21)
             {
                 Assert.IsTrue(user.IsDead, "Failed: user.IsDead");
-                Assert.IsTrue(user.Name.Contains("Log"), "Failed: user.Name.Contains(\"Log\")");
-                Assert.IsTrue(user.Children.Contains(user1), "Failed: user.Children.Contains(user1)");
+                Assert.IsTrue(!user.Name.Contains("Log"), "Failed: !user.Name.Contains(\"Log\")");
+                Assert.IsTrue(!user.Children.Contains(user1), "Failed: !user.Children.Contains(user1)");
+                Assert.IsTrue(!user.Children.Any(x => x.Name == user1.Name), "Failed: !user.Children.Any(x => x.Name == user1.Name)");
+                Assert.IsTrue(user.Name != user1.Name, "Failed: user.Name != user1.Name");
 
             }
             else if (user.CreatedDate == dateTime20)

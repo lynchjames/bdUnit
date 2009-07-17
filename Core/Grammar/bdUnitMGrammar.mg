@@ -64,6 +64,8 @@ module Test
         => Constraint{ConcreteClassPropertyMapping{ConcreteClasses[o,o2],Properties[Property{Name{p1}},Property{Name{p2}}]}, x}
         | o:TL.ConcreteClass p:TL.Property TConstraint x:TL.Operators o2:TL.ConcreteClass
         => Constraint{ConcreteClassPropertyMapping{ConcreteClasses[o,o2],Properties[Property{Name{p}}]}, x}
+        | o:TL.ConcreteClass p:TL.Property TConstraint x:TL.Operators " a " o2:TL.ConcreteClass p2:TL.Property
+        => Constraint{ConcreteClassPropertyMapping{ConcreteClasses[o,o2],Properties[Property{Name{p}},Property{Name{p2}, Relation{"LinqSubset"}}]}, x}
         | p:TL.Property TConstraint x:TL.Operators v:TL.Value
         => Constraint{Property{Name{p}, x, v}}
         | o:TL.ConcreteClass p:TL.Property TConstraint x:TL.Operators v:TL.Value
@@ -164,7 +166,8 @@ module Test
             => CreateMethod{TargetMethod{Name{m},ConcreteClasses[o,o2], Relation{"ManyToOne"}}};
                    
         syntax ConcreteClass = name:ConcreteClassId => ConcreteClass{Name{name}}
-        | name:ConcreteClassId v:Value => ConcreteClass{Name{name}, Instance{v}};
+        | name:ConcreteClassId v:Value => ConcreteClass{Name{name}, Instance{v}}
+        | name:ConcreteClassId " with " v:Value => ConcreteClass{Name{name}, Instance{v}};
         syntax Count = op:Operators? c:CountId => Count{Value{c}, op};
         syntax Value = " " '(' v:ValueId ')'=> Value{v}
         | '(' v:ValueId ')'=> Value{v}

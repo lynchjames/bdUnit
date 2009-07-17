@@ -7,6 +7,7 @@
         ManyToOne,
         ManyToMany,
         Reciprocal,
+        LinqSubset,
         None
     }
 }

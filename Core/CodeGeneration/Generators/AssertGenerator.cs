@@ -48,9 +48,18 @@ namespace bdUnit.Core.Generators
                     if (@operator.Contains("contains"))
                     {
                         var boolQualifier = @operator.ToLower() == "contains" ? "" : "!";
-                        assert = string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
+                        if (properties.Count() > 1 && properties[1].GetRelationQualifiedEnum() == RelationQualifiedEnum.LinqSubset)
+                        {
+                            assert = string.Format("{0}{1}.{2}.Any(x => x.{3} == {4}.{3})", boolQualifier,
+                                               classes[0].Instance.Value, properties[0].Name,
+                                               properties[1].Name, classes[1].Instance.Value);
+                        }
+                        else
+                        {
+                            assert = string.Format("{0}{1}.{2}.Contains({3})", boolQualifier,
                                                classes[0].Instance.Value, properties[0].Name,
                                                classes[1].Instance.Value);
+                        }
                     }
                     else
                     {

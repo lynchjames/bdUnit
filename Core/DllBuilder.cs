@@ -22,7 +22,7 @@ namespace bdUnit.Core
             new[]
                 {
                     "Rhino.Mocks", "nunit.core", "nunit.core.interfaces", "nunit.framework",
-                    "xunit", "MbUnit.Framework", "StructureMap", "StructureMap.AutoMocking"
+                    "xunit", "MbUnit.Framework", "StructureMap", "StructureMap.AutoMocking",
                 };
 
         public DllBuilder(Parser parser)
@@ -43,7 +43,7 @@ namespace bdUnit.Core
                                      GenerateExecutable = false,
                                      IncludeDebugInformation = true,
                                      OutputAssembly = string.Format("bdUnit_{0}.dll", currentFramework),
-                                     ReferencedAssemblies = {"System.dll"}
+                                     ReferencedAssemblies = {"System.dll", "System.Core.dll"}
                                  };
 
             foreach (var reference in References)
