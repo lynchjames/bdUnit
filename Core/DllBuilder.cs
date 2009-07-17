@@ -70,7 +70,6 @@ namespace bdUnit.Core
             }
             catch (Exception ex)
             {
-                throw ex;
                 return "One or more documents could not be parsed. Please check and try again. Exception: " + ex.Message;
             }
         }
