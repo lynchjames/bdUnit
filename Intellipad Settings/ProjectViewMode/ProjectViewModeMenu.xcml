@@ -1,0 +1,20 @@
+<!--
+  Copyright (c) Microsoft Corporation.  All rights reserved.
+-->
+
+<act:Exports
+      xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
+      xmlns:act='clr-namespace:Microsoft.Intellipad.Composition;assembly=Microsoft.Intellipad.Framework'
+      xmlns:mis='clr-namespace:Microsoft.Intellipad.Shell;assembly=Microsoft.Intellipad.Framework'
+      xmlns:mti='Microsoft.Intellipad'
+      >
+  <act:Export Name='{}{Microsoft.Intellipad}ModeMenuItem' >
+    <MenuItem Header='_Project'>
+      <MenuItem Header='_Build Project' Command='{mis:NamedCommand Name=mti:BuildProject}'/>
+      <MenuItem Header='_Toggle Project View' Command='{mis:NamedCommand Name=mti:ToggleProjectView}' />
+      <Separator />
+      <MenuItem Header='Add Project _File...' Command='{mis:NamedCommand Name=mti:AddProjectItem}' />
+      <MenuItem Header='Add Project _Reference...' Command='{mis:NamedCommand Name=mti:AddProjectReference}' />
+    </MenuItem>
+  </act:Export>
+</act:Exports>

@@ -1,0 +1,249 @@
+﻿<act:Exports xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
+             xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
+             xmlns:act='clr-namespace:Microsoft.Intellipad.Composition;assembly=Microsoft.Intellipad.Framework'
+             xmlns:ls='clr-namespace:Microsoft.Intellipad.LanguageServices;assembly=Microsoft.Intellipad.Core'
+             >
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='text' 
+                             FontSize='13' 
+                             FontFamily='Consolas' 
+                             Foreground='#FF333333' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Unknown' 
+                             FontSize='13' 
+                             FontFamily='Consolas' 
+                             Foreground='#FF333333' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+      <ls:ClassificationFormat Name='StaleText'
+                               Foreground='#FF808080'
+                               FontFamily='Consolas' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Numeric' 
+                             Foreground='#FF808080' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Keyword' 
+                             FontFamily='Consolas' 
+                             FontWeight='Bold' 
+                             Foreground='#708090' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Connective' 
+                             FontFamily='Consolas' 
+                             FontWeight='Bold' 
+                             Foreground='#F47A00' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='TestOperator' 
+                             FontFamily='Consolas' 
+                             FontWeight='Bold'
+                             Foreground='#C00000' />
+  </act:Export>
+<act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Method' 
+                             FontFamily='Consolas' 
+                             Foreground='#344FCB'
+			     FontWeight='Bold' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Property' 
+                             FontFamily='Consolas' 
+                             Foreground='#CD96CD'
+		 	     FontWeight='Bold'/>
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Operator' 
+                             FontFamily='Consolas' 
+                             Foreground='#FFFFFF' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Value' 
+                             FontFamily='Consolas' 
+                             Foreground='#FFFFFF'
+			     FontStyle='Italic' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Comment' 
+                             Foreground='#FF808080' 
+                             FontFamily='Consolas' 
+                             FontStyle='Italic' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='String' 
+                             Foreground='#FF666666' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Delimiter' 
+                             Foreground='#FF808080' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Type' 
+                             FontFamily='Consolas' 
+                             Foreground='#FFFF00' 
+                             FontWeight='Bold' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Operator' 
+                             FontFamily='Consolas' 
+                             Foreground='#FF808080' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='Hyperlink'
+                             FontFamily='Consolas'
+                             Foreground='#FF3333ff' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='line number'
+                             FontFamily='Consolas'
+                             Foreground='#FFCCCCCC'
+                             Background='#FFF9F9F9'/>
+  </act:Export>
+
+  <!-- *********** Paragraph Formatting *************** -->
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='heading1'
+                             FontFamily='Cambria'
+                             Foreground='#365F91'
+                             FontSize='19'
+                             FontWeight='Bold' />
+  </act:Export>
+
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='heading2'
+                             FontFamily='Cambria'
+                             Foreground='#4A82BD'
+                             FontSize='17'
+                             FontWeight='Bold' />
+  </act:Export>
+
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='heading3'
+                             FontFamily='Consolas'
+                             Foreground='#4F81BD'
+                             FontSize='15'
+                             FontWeight='Bold' />
+  </act:Export>
+
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='heading4'
+                             FontFamily='Cambria'
+                             Foreground='#C6DF18'
+                             FontSize='15'
+                             FontWeight='Bold'
+                             FontStyle='Italic'/>
+  </act:Export>
+
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='paragraph'
+                             FontFamily='Calibri'
+                             Foreground='#333333'
+                             FontSize='14' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='code'
+                             FontFamily='Consolas'
+                             Foreground='#333333'
+                             FontSize='14' />
+  </act:Export>
+
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='link'
+                             FontFamily='Calibri'
+                             Foreground='#3333aa'
+                             FontSize='14' />
+  </act:Export>
+
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='subtle'
+                             FontFamily='Consolas'
+                             Foreground='#808080'
+                             FontSize='15' />
+  </act:Export>
+  
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='subtleEmphasis'
+                             FontFamily='Consolas'
+                             Foreground='#808080'
+                             FontSize='15'
+                             FontStyle='Italic' />
+  </act:Export>
+
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='normal'
+                             FontFamily='Calibri'
+                             Foreground='#000000'
+                             FontSize='15' />
+  </act:Export>
+
+  <!-- *********** Classifications for the Intellipad Primer *************** -->
+  
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='ipadPrimerTitle'
+                             FontFamily='Georgia'
+                             Foreground='#000000'
+                             FontSize='22'
+                             FontWeight='Bold' />
+  </act:Export>
+  
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+   <ls:ClassificationFormat Name='ipadPrimerDateText'
+                            FontFamily='Georgia'
+                            Foreground='#000000'
+                            FontSize='13'
+                            FontStyle='Italic' />
+  </act:Export>
+  
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+   <ls:ClassificationFormat Name='ipadPrimerNormal'
+                            FontFamily='Georgia'
+                            Foreground='#000000'
+                            FontSize='13' />
+  </act:Export>
+
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+   <ls:ClassificationFormat Name='ipadPrimerHeading1'
+                            FontFamily='Georgia'
+                            Foreground='#000000'
+                            FontSize='19'
+                            FontWeight='Bold'/>
+  </act:Export>
+                            
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+   <ls:ClassificationFormat Name='ipadPrimerHeading2'
+                            FontFamily='Georgia'
+                            Foreground='#000000'
+                            FontSize='16'
+                            FontWeight='Bold' />
+  </act:Export>
+                            
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+   <ls:ClassificationFormat Name='ipadPrimerCode'
+                            FontFamily='Consolas'
+                            Foreground='#000000'
+                            FontSize='12' />
+  </act:Export>
+                            
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+   <ls:ClassificationFormat Name='ipadPrimerBoldCode'
+                            FontFamily='Consolas'
+                            Foreground='#000000'
+                            FontSize='12'
+                            FontWeight='Bold' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='ipadPrimerSubtleCode'
+                             FontFamily='Consolas'
+                             Foreground='#595959'
+                             FontSize='12' />
+  </act:Export>
+  <act:Export Name='{}{Microsoft.Intellipad}ClassificationFormat'>
+    <ls:ClassificationFormat Name='ipadPrimerMicroHeading'
+                             FontFamily='Georgia'
+                             Foreground='#000000'
+                             FontSize='13'
+                             FontWeight='Bold' />
+  </act:Export>
+</act:Exports>

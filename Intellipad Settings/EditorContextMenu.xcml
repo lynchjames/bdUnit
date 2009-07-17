@@ -1,0 +1,19 @@
+﻿<act:Exports
+      xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
+      xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
+      xmlns:act='clr-namespace:Microsoft.Intellipad.Composition;assembly=Microsoft.Intellipad.Framework'
+      xmlns:mis='clr-namespace:Microsoft.Intellipad.Shell;assembly=Microsoft.Intellipad.Framework'
+      xmlns:mi='clr-namespace:Microsoft.Intellipad;assembly=Microsoft.Intellipad.Core'
+      xmlns:mih='clr-namespace:Microsoft.Intellipad.Host;assembly=Microsoft.Intellipad.Core'
+      >
+  <act:Export Name='{}{Microsoft.Intellipad}EditorContextMenu' xmlns:mti='Microsoft.Intellipad'>
+    <ContextMenu Background='White' MinWidth='120'>
+      <MenuItem Header='_Undo' Command='{mis:NamedCommand Name=mti:Undo}' />
+      <MenuItem Header='_Redo' Command='{mis:NamedCommand Name=mti:Redo}' />
+      <Separator />
+      <MenuItem Header='Cu_t' Command='{mis:NamedCommand Name=mti:CutSelection}' />
+      <MenuItem Header='_Copy' Command='{mis:NamedCommand Name=mti:CopySelection}' />
+      <MenuItem Header='_Paste' Command='{mis:NamedCommand Name=mti:Paste}' />
+    </ContextMenu>
+  </act:Export>
+</act:Exports>

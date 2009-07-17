@@ -1,0 +1,16 @@
+﻿<act:Exports xmlns:wpf='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
+             xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
+             xmlns:s='clr-namespace:System;assembly=mscorlib'
+             xmlns:ipadxaml='clr-namespace:Microsoft.Intellipad.Xaml;assembly=Microsoft.Intellipad.Framework'
+             xmlns:act='clr-namespace:Microsoft.Intellipad.Composition;assembly=Microsoft.Intellipad.Framework'
+             xmlns:mis='clr-namespace:Microsoft.Intellipad.Shell;assembly=Microsoft.Intellipad.Framework'
+             xmlns:ls='clr-namespace:Microsoft.Intellipad.LanguageServices;assembly=Microsoft.Intellipad.Core'>
+    <act:Export Name='{}{Microsoft.Intellipad.Host}ColumnIndicatorLocation'>
+        <s:Int32>120</s:Int32>
+    </act:Export>
+    <act:Export Name='{}{Microsoft.Intellipad.Host}ColumnIndicatorTemplate'>
+        <wpf:DataTemplate>
+            <wpf:Border Background='#FFF9F9F9' />
+        </wpf:DataTemplate>
+    </act:Export>
+</act:Exports>

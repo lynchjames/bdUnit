@@ -1,0 +1,13 @@
+﻿<act:Exports
+      xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
+      xmlns:scg='clr-namespace:System.Collections.Generic;assembly=mscorlib'
+      xmlns:mis='clr-namespace:Microsoft.Intellipad.Shell;assembly=Microsoft.Intellipad.Framework'
+      xmlns:xl='clr-namespace:System.Xml.Linq;assembly=System.Xml.Linq'
+      xmlns:act='clr-namespace:Microsoft.Intellipad.Composition;assembly=Microsoft.Intellipad.Framework'
+      >
+  <act:Export Name='{}{Microsoft.Intellipad}KeyboardBindings' xmlns:mg='Microsoft.G' xmlns:mi='Microsoft.Intellipad'>
+    <scg:Dictionary x:TypeArguments='xl:XName,mis:KeyChordGestureCollection'>
+      <mis:KeyChordGestureCollection x:Key='mi:ToggleMiniBuffer'>Ctrl+Shift+D|Ctrl+OemQuestion</mis:KeyChordGestureCollection>
+  </scg:Dictionary>
+  </act:Export>
+</act:Exports>
