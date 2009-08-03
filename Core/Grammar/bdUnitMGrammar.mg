@@ -106,19 +106,17 @@ module Test
             => Type{o, prop, sl};
             
         syntax PropertyList 
-            = (' ')* TProperty item:Property => PropertyList[Property{Name{item}}]
+            = TProperty item:Property => PropertyList[Property{Name{item}}]
             | list:PropertyList Connectives.TAnd? item:Property 
             => PropertyList[valuesof(list), Property{Name{item}}]
-            | (' ')* TProperty item:Property v:Value 
+            | TProperty item:Property v:Value 
             => PropertyList[Property{Name{item}, DefaultValue{v}}]
             | list:PropertyList Connectives.TAnd? item:Property v:Value 
             => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}}]
-            | list:PropertyList Connectives.TAnd Connectives.TMany item:Property
-            => PropertyList[valuesof(list), Property{Name{item}}]
-            | (' ')* TProperty Connectives.TAnd? Connectives.TMany item:Property v:Value 
-            => ProperyList[Property{Name{item}, DefaultValue{v}}]
-            | list:PropertyList Connectives.TAnd? Connectives.TMany item:Property v:Value 
-            => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}, Relation{"ManyToOne"}}];
+            | list:PropertyList Connectives.TAnd? Connectives.TMany item:Property v:Value
+            => PropertyList[valuesof(list), Property{Name{item}, DefaultValue{v}, Relation{"ManyToOne"}}]
+            | list:PropertyList Connectives.TAnd? Connectives.TMany item:Property
+            => PropertyList[valuesof(list), Property{Name{item}, Relation{"ManyToOne"}}];
            
             
         syntax WhenStatement 

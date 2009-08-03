@@ -1,0 +1,17 @@
+begin story "A_Contrived_Example":
+    begin setup 
+        @Blog to have a ~Title 
+            and many ~Entries(@Post)
+            and an ~Administrator(@User)
+            and several ~Commenters(@User) 
+        @Post to have a ~Title
+            and an ~Author(@User)
+            and several ~Comments(@Comment)
+            and several ~Tags
+            I want a @User to be able to #Publish a @Post
+            I want a @User to be able to #UnPublish several @Post
+            I want a @User to be able to #CommentOn a @Post
+        @User
+        @Comment 
+    end setup
+end story

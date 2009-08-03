@@ -17,21 +17,23 @@ namespace bdUnit.Core.Utility
                                           List<ConcreteClass> objects)
         {
             var output = new StringBuilder();
+            var className = properties.ElementAt(0).DefaultValue.ConcreteClass.Name;
             switch (relation)
             {
                 case RelationQualifiedEnum.OneToOne:
                     output.Append(input.Replace("##typename##",
                                                 string.Format("I{0}",
-                                                              properties.ElementAt(0).DefaultValue.ConcreteClass.Name)));
+                                                              className)));
                     break;
 
                 case RelationQualifiedEnum.OneToMany:
                     break;
 
                 case RelationQualifiedEnum.ManyToOne:
+                    className = string.IsNullOrEmpty(className) ? "string" : "I" + className;
                     output.Append(input.Replace("##typename##",
-                                                string.Format("IList<I{0}>",
-                                                              properties.ElementAt(0).DefaultValue.ConcreteClass.Name)));
+                                                string.Format("IList<{0}>",
+                                                              className)));
                     break;
 
                 case RelationQualifiedEnum.ManyToMany:
