@@ -1,0 +1,23 @@
+Intro/Oslo as A Tool for Ext DSLs - What is Oslo? Don't ask me!
+Background - Show Example Input and Output
+
+The Good (The Parser)
+	Intellipad
+	Tokens and Syntaxes
+	Functional Similarities
+		List Generation (The Head and the Tail)	
+		Pattern Matching
+
+The Bad (Deserializing)
+	Parsing -> Structured Data
+	Create AST
+	Create or Implement A Tree Walker
+	Dev Cycle
+
+The Ugly (Code Generation)
+	Using Object Graph with String Manipulation & Regex
+	Added NVelocity Templates
+	Refactoring from Procedural Code
+
+Wrap-Up/Conclusion - Oslo -> MGrammar Provides some great tooling to create a parser but it would be unsuitable for a number of projects due to the post-parsing work it requires - this may be improved in later CTPs of Oslo.
+Assembla Details, Email, Blog and Twitter

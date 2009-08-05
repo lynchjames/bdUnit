@@ -10,11 +10,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("bdUnit Preview")]
+[assembly: AssemblyTitle("bdUnit IDE")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Storm Ideas")]
-[assembly: AssemblyProduct("bdUnit Preview")]
+[assembly: AssemblyProduct("bdUnit IDE")]
 [assembly: AssemblyCopyright("Copyright ©  2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

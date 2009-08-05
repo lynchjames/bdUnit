@@ -16,6 +16,7 @@
                 <MenuItem x:Name="_Copy" Header="Copy" Command="ApplicationCommands.Copy" IsCheckable="False"/>
                 <MenuItem x:Name="_Paste" Header="Paste" Command="ApplicationCommands.Paste" IsCheckable="False"/>
                 <MenuItem x:Name="_SelectAll" Header="SelectAll" Command="ApplicationCommands.SelectAll" IsCheckable="False"/>
+                <MenuItem x:Name="ChangeFont" Header="Font" IsCheckable="False"/>
             </MenuItem>
             <MenuItem Header="Tools" x:Name="MenuTools" Width="50" Height="Auto" HorizontalAlignment="Center">
                 <MenuItem Header="Unit Test Framework">

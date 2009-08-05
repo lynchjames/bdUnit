@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Controls="clr-namespace:bdUnit.Preview.Controls"
     x:Class="bdUnit.Preview.Window1"
-    Title="bdUnit Preview" Height="Auto" MinHeight="600"  Width="Auto" MinWidth="800" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" WindowStyle="ThreeDBorderWindow">
+    Title="bdUnit" Height="Auto" MinHeight="600"  Width="Auto" MinWidth="800" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" WindowStyle="ThreeDBorderWindow">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.New" Executed="Command_Executed" CanExecute="Command_CanExecute"/>
         <CommandBinding Command="ApplicationCommands.Close" Executed="Command_Executed" CanExecute="Command_CanExecute"/>

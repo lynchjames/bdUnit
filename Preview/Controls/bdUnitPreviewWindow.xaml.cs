@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -9,6 +10,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -18,6 +20,10 @@ using bdUnit.Core.Enum;
 using bdUnit.Core.Utility;
 using bdUnit.Preview.Code;
 using ScintillaNet;
+using Brushes=System.Windows.Media.Brushes;
+using Cursors=System.Windows.Input.Cursors;
+using KeyEventArgs=System.Windows.Input.KeyEventArgs;
+using MouseEventArgs=System.Windows.Input.MouseEventArgs;
 using TextRange=System.Windows.Documents.TextRange;
 using Timer=System.Timers.Timer;
 
@@ -368,6 +374,19 @@ namespace bdUnit.Preview.Controls
                 }
             }
             CurrentFramework = framework;
+        }
+
+        public void ChangeFont()
+        {
+            var fontDialog = new FontDialog {FontMustExist = true};
+            if (fontDialog.ShowDialog(this.Parent as IWin32Window) != DialogResult.None)
+            {
+                var host = (Preview.Content as WindowsFormsHost) ??
+                                            new WindowsFormsHost { Child = ScintillaEditor };
+                var sciEditor = host.Child as Scintilla;
+                sciEditor.Font = fontDialog.Font;
+                sciEditor.Refresh();
+            } 
         }
 
         #endregion

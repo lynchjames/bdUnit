@@ -1,17 +1,35 @@
 begin story "A_Contrived_Example":
     begin setup 
         @Blog to have a ~Title 
+            and a ~CreatedDate("01/08/2009")
             and many ~Entries(@Post)
-            and an ~Administrator(@User)
+            and an ~Author(@User)
             and several ~Commenters(@User) 
         @Post to have a ~Title
-            and an ~Author(@User)
+            and ~Content
+            and a ~PublicationDate("01/08/2009")
             and several ~Comments(@Comment)
             and several ~Tags
+        @User to have a ~Username
+            and a ~Password
+            and an ~EmailAddress
+            and a ~PostCount(0)
             I want a @User to be able to #Publish a @Post
             I want a @User to be able to #UnPublish several @Post
             I want a @User to be able to #CommentOn a @Post
-        @User
-        @Comment 
+        @Comment to have an ~Author(@User)
+            and ~Content
+            and a ~CreatedDate("01/08/2009")
     end setup
+    
+    When a @User(Chris) ~Username is "chriscanal" 
+        and a @Post(DSLs) ~Title is "An Evening of DSLs"
+        and @Blog(ScotAltNet) ~Author is Chris
+        and @User(Chris) #Publish a @Post(DSLs)
+            
+        @Blog(ScotAltNet) should have more than 0 ~Entries
+            and @Blog(ScotAltNet) ~Entries should contain a @Post with DSLs ~Title
+            and @Post(DSLs) ~PublicationDate should be later than @Blog(ScotAltNet) ~CreatedDate
+            and @User(Chris) ~PostCount should be equal to 1
+
 end story

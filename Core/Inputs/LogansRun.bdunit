@@ -25,28 +25,28 @@ begin story "LogansRun":
 
     When a @User(Peter) #ProposeTo another @User(Patty) 
         and @User(Peter) #Marry another @User(Patty)
-        and @User(Peter) ~Name is ("Peter")
-        and @User(Patty) ~Name is ("Patty"),
+        and @User(Peter) ~Name is "Peter"
+        and @User(Patty) ~Name is "Patty",
         @User(Peter) ~LastName should be the same as @User(Patty) ~LastName 
         and each @User should have ~Spouse as the other @User 
-            and should have ~UnMarried as (false) 
-            and should have ~Age less than (21)
+            and should have ~UnMarried as false
+            and should have ~Age less than 21
         
-    When a @User(user) ~UnMarried is (true)
-        and @User(user1) ~Name is ("James"), 
-        @User(user) should have ~IsDead as (true)
-	    and @User(user) ~CreatedDate should be earlier than ("22/04/2010")
+    When a @User(user) ~UnMarried is true
+        and @User(user1) ~Name is "James", 
+        @User(user) should have ~IsDead as true
+	    and @User(user) ~CreatedDate should be earlier than "22/04/2010"
 	    and @User(user) should have less than 3 ~Children
     
-    When a @User(user) ~Name is ("Logan") and @User(user1) ~Name is ("Blah"),
-        if @User(user) ~IsDead is (true) and @User(user) ~CreatedDate is later than ("22/04/2020")
-            then @User(user) should have ~IsDead as (true)
-        	     and @User(user) ~Name should not contain ("Log") 
+    When a @User(user) ~Name is "Logan" and @User(user1) ~Name is "Blah",
+        if @User(user) ~IsDead is true and @User(user) ~CreatedDate is later than "22/04/2020"
+            then @User(user) should have ~IsDead as true
+        	     and @User(user) ~Name should not contain "Log"
                  and @User(user) ~Children should not contain @User(user1)
                  and @User(user) ~Children should not contain a @User with (user1) ~Name
                  and @User(user) ~Name should not be the same as @User(user1) ~Name
         else 
-            if @User(user) ~CreatedDate is ("22/04/2010")
+            if @User(user) ~CreatedDate is "22/04/2010"
                 then @User(user) should have less than 3 ~Children   
             else @User(user) should have more than 3 ~Children
 end story

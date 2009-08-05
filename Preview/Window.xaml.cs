@@ -71,8 +71,15 @@ namespace bdUnit.Preview
             tabControl.SelectedIndex = tabControl.Items.Count - 1;
             Closing += Window1_Closing;
             Menu.GenerateDll.Click += GenerateDll_Click;
+            Menu.ChangeFont.Click += ChangeFont_Click;
             EventBus.TextChanged += EventBus_TextChanged;
             EventBus.AppExit += EventBus_AppExit;
+        }
+
+        private void ChangeFont_Click(object sender, RoutedEventArgs e)
+        {
+            var preview = ((TabItem) tabControl.SelectedItem).Content as bdUnitPreviewWindow;
+            if (preview != null) preview.ChangeFont();
         }
 
         private void EventBus_AppExit(object sender, EventArgs e)
