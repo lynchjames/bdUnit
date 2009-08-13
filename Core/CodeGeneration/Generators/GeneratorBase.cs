@@ -9,6 +9,17 @@ namespace bdUnit.Core.Generators
 {
     public class GeneratorBase
     {
+        private int _index;
+        protected int Index
+        {
+            get
+            {
+                var index = _index;
+                _index++;
+                return index;
+            }
+        }
+
         #region TextTemplates
 
         public string AssertText;

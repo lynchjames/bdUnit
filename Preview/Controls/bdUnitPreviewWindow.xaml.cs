@@ -272,7 +272,7 @@ namespace bdUnit.Preview.Controls
                     if (i > 0 &&
                         !(Char.IsWhiteSpace(text[i - 1]) | bdUnitSyntaxProvider.GetSpecials.Contains(text[i - 1])))
                     {
-                        if (text.Contains("//"))
+                        if (text.Contains("//") && !text.Contains("://"))
                         {
                             var t = new bdUnitSyntaxProvider.Tag();
                             t.StartPosition = run.ContentStart;

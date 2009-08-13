@@ -73,7 +73,7 @@ namespace bdUnit.Core.Utility
 
         public static SolidColorBrush GetBrushColor(string tag)
         {
-            if (tag.Contains("//"))
+            if (tag.Contains("//") && !tag.Contains("://"))
             {
                 return CommentColor;
             }

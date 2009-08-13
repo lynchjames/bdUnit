@@ -109,7 +109,7 @@ namespace bdUnit.Core.Generators
                                      var obj = property.ConcreteClasses[0];
                                      if (!titleSet)
                                      {
-                                         var title = string.Format("When_{0}_Is_Set", property.Name);
+                                         var title = string.Format("When_{0}_Is_Set{1}", property.Name, Index);
                                          stringBuilder.AppendLine(TestText.Replace("##testname##", title));
                                          stringBuilder.AppendLine("\t\t{");
                                          titleSet = true;
@@ -149,8 +149,8 @@ namespace bdUnit.Core.Generators
 
                                      if (!titleSet)
                                      {
-                                         var title = string.Format("When_{0}_{1}_{2}", obj.Name, target.Name,
-                                                                      otherObj.Name);
+                                         var title = string.Format("When_{0}_{1}_{2}{3}", obj.Name, target.Name,
+                                                                      otherObj.Name, Index);
                                          stringBuilder.AppendLine(TestText.Replace("##testname##", title));
                                          stringBuilder.AppendLine("\t\t{");
                                          titleSet = true;
@@ -165,7 +165,7 @@ namespace bdUnit.Core.Generators
         private void GenerateForTargetProperty(TargetProperty property, ref StringBuilder stringBuilder)
         {
             var obj = property.ConcreteClasses[0];
-            var title = string.Format("When_{0}_{1}_Is_Set", obj.Name, property.Name);
+            var title = string.Format("When_{0}_{1}_Is_Set{2}", obj.Name, property.Name, Index);
             stringBuilder.AppendLine(TestText.Replace("##testname##", title));
             stringBuilder.AppendLine("\t\t{");
             stringBuilder.AppendLine(obj.AsNVelocityTemplate(TemplateEnum.StructureMapInstance));

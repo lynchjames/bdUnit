@@ -52,7 +52,11 @@ namespace bdUnit.Core.Generators
             
             conditionText = _booleanGenerator.Generate(ifStatement.TargetList, ref builder);
             constraintText = GenerateConstraints(ifStatement.Then.Constraints, constraintText);
-            elseConstraintText = GenerateConstraints(ifStatement.Else.Constraints, elseConstraintText);
+
+            if (ifStatement.Else != null)
+            {
+                elseConstraintText = GenerateConstraints(ifStatement.Else.Constraints, elseConstraintText);
+            }
 
             var templateParams = new Dictionary<string, object>
                                      {

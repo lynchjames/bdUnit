@@ -6,9 +6,10 @@ begin story "LogansRun":
             and an ~UnMarried(true)
             and an ~IsDead(false)
             and an ~Age(0)
+            and an ~Height(1.71)
             and a ~CreatedDate("01/01/1700")
             and a ~Location(@Location)
-            and several ~Children(@User) 
+            and many ~Children(@User) 
             I want a @User to be able to #Kill another @User
             I want a @User to be able to #ProposeTo another @User
             I want a @User to be able to #Marry another @User 
@@ -44,7 +45,7 @@ begin story "LogansRun":
         	     and @User(user) ~Name should not contain "Log"
                  and @User(user) ~Children should not contain @User(user1)
                  and @User(user) ~Children should not contain a @User with (user1) ~Name
-                 and @User(user) ~Name should not be the same as @User(user1) ~Name
+                 and @User(user) ~Name should not be the same as @Location(user1) ~Title
         else 
             if @User(user) ~CreatedDate is "22/04/2010"
                 then @User(user) should have less than 3 ~Children   
